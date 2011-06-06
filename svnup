@@ -1,1 +1,86 @@
-/home/egan/bin/svnup
+#!/bin/bash
+
+##
+# svnup -- sync svn source trees to svn server
+#
+# usage -- svnup [-h|--help]|[-o|--only][DIR...]
+#
+# notes -- default repos are newline-delimited in ~/bin/.svnlist
+#
+# written -- 2008 by Egan McComb
+#
+# revised -- 22 August, 2010 by author
+##
+
+IFS=":"
+ERR_VARGS=5
+
+LFILE="$HOME/bin/.svnlist"
+SLINE="\E[01;34m::\033[0m Updating:"
+TLINE="\E[01;34m>\033[0m"
+
+usage()
+{
+	echo "Usage: $(basename $0) [-h|--help]|[-o|--only][DIR...]" >&2
+	echo -e "\t-Directory arguments are concatenated" >&2
+	echo -e "\t to newline-delimited default list $LFILE" >&2
+	echo -e "\t unless the '-o' option is passed" >&2
+}
+
+chkfile()
+{
+	if [ ! -d "$1" ]
+	then
+		echo "Error: Nonexistent directory '$1'" >&2
+		exit $ERR_VARGS
+	else
+		if [ ! -d "$1"/.svn ]
+		then
+			echo "Error: Invalid svn repo '$1'" >&2
+			exit $ERR_VARGS
+		fi
+	fi
+}
+
+chkargs()
+{
+	if [ $# -ne 0 ]
+	then
+		if [ $1 = "-h" ] || [ $1 = "--help" ]
+		then
+			usage
+			exit 0
+		elif [ $1 = "-o" ] || [ $1 = "--only" ]
+		then
+			shift
+			for ARG in "$@"
+			do
+				chkfile "$ARG"
+				REPOS="$REPOS $ARG"
+			done
+		else
+			REPOS="$(cat $LFILE | tr '\n' ' ')"
+			for ARG in "$@"
+			do
+				chkfile "$ARG"
+				REPOS="$REPOS $ARG"
+			done
+		fi
+	else
+		REPOS=$(cat $LFILE | tr '\n' ':')
+	fi
+}
+
+##----MAIN----##
+chkargs "$@"
+
+for DIR in "$REPOS"
+do
+	echo -e "$SLINE ${DIR/\/home\/egan/~}"
+	cd "$DIR" && svn up && cd
+	echo -ne "$TLINE "
+	date +%T\ on\ %D
+	echo
+done
+
+exit 0

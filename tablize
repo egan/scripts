@@ -1,1 +1,79 @@
-/home/egan/bin/tablize
+#!/bin/bash
+
+##
+# tablize -- convert labeled tsv files to latex tables
+#
+# usage -- tablize [FILE ...]
+#
+# written -- 30 April, 2010 by Egan McComb
+#
+# revised --
+##
+
+ERR_NARGS=3
+ERR_VARGS=5
+
+TE="tabular"
+CS=" l |"
+
+usage()
+{
+	echo "$(basename $0) [FILE ...]" >&2
+}
+
+chkargs()
+{
+	if [ -z "$1" ]
+	then
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+	fi
+}
+
+chkfile()
+{
+	if [ ! -e "$1" ]
+	then
+		echo "Error: Invalid file: '$1'" >&2
+		usage
+		exit $ERR_VARGS
+	fi
+}
+
+name()
+{
+	IN="$1"
+	OUT=$(sed 's/\..*$/.tex/' <<< $IN)
+}
+
+column()
+{
+	NF=$(awk 'END{printf "%s", NF}' < $IN)
+	CSP=" |"$CS
+	i="1"
+	while [ $i -lt $NF ]
+	do
+		CSP=${CSP}$CS
+		let i+=1
+	done
+}
+
+convert()
+{
+	echo -e "\\\begin{$TE}{$CSP }\n\\hline" > $OUT
+	sed "s/	/ \& /g;s/$/ \\\\\\\\\n\\\\hline/g" < $1 >> $OUT
+	echo "\end{$TE}" >> $OUT
+}
+
+##---MAIN---##
+chkargs "$@"
+for FILE in "$@"
+do
+	chkfile "$FILE"
+	name "$FILE"
+	column "$FILE"
+	convert "$FILE"
+done
+
+exit 0

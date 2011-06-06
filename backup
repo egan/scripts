@@ -1,1 +1,28 @@
-/home/egan/bin/backup
+#!/bin/bash
+
+##
+# backup -- rsync home directory to external hard disk
+#
+# usage -- backup
+#
+# notes -- pertinent partition must be mounted
+#
+# written -- 2008 by Egan McComb
+#
+# revised -- 11 July, 2009 by author
+##
+
+DSK=Pangolin
+DIR=arch-backup
+
+# Check that $DSK is mounted
+if mountpoint -q /media/$DSK
+then
+	# sync recursively, deleting old files
+	rsync -av --delete --exclude-from="/home/egan/.rsync/exclude" --include-from="/home/egan/.rsync/include" $HOME /media/$DSK/$DIR
+else
+	echo "Error: '$DSK' is not mounted"
+	exit 1
+fi
+
+exit 0

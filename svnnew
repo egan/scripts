@@ -1,1 +1,28 @@
-/home/egan/bin/svnnew
+#!/bin/bash
+
+##
+# svnnew -- obtain fresh svn commit logs and view them
+#
+# usage -- svnlog
+#
+# notes -- finds last revision in file $PWD/.svn/revision.info
+#
+# written -- 1 March 2009 by Egan McComb
+#
+# revised -- 22 August, 2010 by author
+##
+
+NFILE=".svn/revision.info"
+LFILE=".svn/revision.log"
+
+if [ ! -s $NFILE ]
+then
+	echo "Error: No revision file found, exiting" >&2
+	exit 1
+fi
+
+READ=$(cat $NFILE)
+svn log --incremental -r $(( $READ + 1 )):BASE | tee -a $LFILE | less
+svn info | sed -n '5p' | cut -d " " -f 2 | sponge $NFILE
+
+exit 0

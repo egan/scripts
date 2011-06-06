@@ -1,1 +1,116 @@
-/home/egan/bin/tex2img
+#!/bin/bash
+
+##
+# tex2img -- quickly get png output from latex code (for math)
+#
+# usage -- tex2img [SIZE] STRING
+#
+# notes -- not many measures to prevent stupidity are in place
+#
+# written -- 25 August, 2010 by Egan McComb
+#
+# revised --
+##
+
+ERR_NARGS=3
+ERR_VARGS=5
+
+FILE=$(mktemp $(basename $0).XXX.tex)
+SIZE="\LARGE"
+LCOMMAND="latex -interaction=batchmode"
+DCOMMAND="dvipng -q -T tight -o ${FILE/%tex/png}"
+
+usage()
+{
+	echo "Usage: $(basename $0) [SIZE] STRING" >&2
+	echo -e "\t-SIZE is standard LaTeX size command name" >&2
+	echo -e "\t without any substring 'size'" >&2
+	echo -e "\t-Few measures preventing stupidity" >&2
+	echo -e "\t are in place" >&2
+	echo -e "\t-Single-quoting is recommended" >&2
+}
+
+chkargs()
+{
+	if [ $# -eq 0 ]
+	then
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif [ $# -eq 2 ]
+	then
+		case $1 in
+			tiny)
+				SIZE="\tiny";;
+			script)
+				SIZE="\scriptsize";;
+			footnote)
+				SIZE="\footnotesize";;
+			small)
+				SIZE="\small";;
+			normal)
+				SIZE="\normal";;
+			large)
+				SIZE="\large";;
+			Large)
+				SIZE="\Large";;
+			LARGE)
+				SIZE="\LARGE";;
+			huge)
+				SIZE="\huge";;
+			Huge)
+				SIZE="\Huge";;
+			*)
+				echo "Error: Invalid argument '$1'" >&2
+				usage
+				exit $ERR_VARGS
+		esac
+		TEXT="$2"
+	elif [ $# -gt 2 ]
+	then
+		echo "Error: Too many arguments" >&2
+		usage
+		exit $ERR_NARGS
+	else
+		TEXT="$*"
+	fi
+}
+
+convert()
+{
+	$LCOMMAND $FILE > /dev/null
+	if [ $? -ne 0 ]
+	then
+		echo "Error: Unable to compile LaTeX code" >&2
+		exit 1
+	fi
+	$DCOMMAND ${FILE/%tex/dvi} > /dev/null
+}
+
+clean()
+{
+	rm -f ${FILE/%tex/aux} ${FILE/%tex/dvi} ${FILE/%tex/log} $FILE
+}
+
+##----MAIN----##
+chkargs $*
+cat > $FILE <<- EOF
+	\documentclass{article}
+	\usepackage[american]{babel}
+	\usepackage{amsmath}
+	\usepackage{amssymb}
+	\usepackage{amsfonts}
+	\pagestyle{empty}
+	\newcommand{\abs}[1]{\lvert#1\rvert}
+	\newcommand{\s}{\Rightarrow}
+	\begin{document}
+	$SIZE
+	\$\$${TEXT}\$\$
+	\end{document}
+	EOF
+convert
+clean
+
+echo "${FILE/%tex/png}"
+
+exit 0

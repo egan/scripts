@@ -1,1 +1,53 @@
-/home/egan/bin/lnmv
+#!/bin/bash
+
+##
+# lnmv -- replace a file with a symbolic link to its new location
+#
+# usage -- lnmv OLDFILE NEWFILE
+#
+# written -- 7 April, 2011 by Egan McComb
+#
+# revised --
+##
+
+ERR_NARGS=3
+ERR_VARGS=5
+
+usage()
+{
+	echo "Usage: $(basename $0) OLDFILE NEWFILE" >&2
+	echo -e "\t-Note: The new filename must be given" >&2
+	echo -e "\t       even if it is not to be renamed." >&2
+}
+
+chkargs()
+{
+	if [ $# -ne 2 ]
+	then
+		echo "Error: Wrong number of arguments" >&2
+		usage
+		exit $ERR_NARGS
+	fi
+	if [ -d "$2" ]
+	then
+		echo "Error: Invalid filename '$2'">&2
+		usage
+		exit $ERR_VARGS
+	fi
+}
+
+##----MAIN----##
+chkargs "$@"
+
+OLDFILE="$1"
+NEWFILE=$(readlink -f "$2")
+
+mv "$1" "$2" && ln -s "$NEWFILE" "$OLDFILE"
+
+if [ $? -ne 0 ]
+then
+	echo "Error: Unable to make link." >&2
+	exit 1
+fi
+
+exit 0

@@ -1,1 +1,64 @@
-/home/egan/bin/mkoff
+#!/bin/bash
+
+##
+# mkoff -- prepare a website for offline use
+#
+# usage -- mkoff -s STRING [FILE]
+#
+# notes -- obviously the resources should be downloaded
+#
+# written -- 4 July, 2009 by Egan McComb
+##
+
+ERR_NARGS=3
+ERR_NARGS=5
+
+usage()
+{
+	echo "Usage: $(basename $0) -s STRING [FILE]" >&2
+}
+
+chkfile()
+{
+	if [ -z "$1" ]
+	then
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif [ ! -e "$1" ]
+	then
+		echo "Error: Nonexistent file: $1" >&2
+		usage
+		exit $ERR_VARGS
+	elif [ ! -f "$1" ]
+	then
+		echo "Error: Wrong type of file: $1" >&2
+		usage
+		exit $ERR_VARGS
+	else
+		FILE="$1"
+	fi
+}
+
+##----MAIN----##
+
+if [ $1 = "-s" ]
+then
+	if [ ! -z "$2" ]
+	then
+		STRING="$2"
+		chkfile "$3"
+		cp "$FILE" "$FILE"~
+		sed "s|${STRING}||g" "$FILE" | sponge "$FILE"
+	else
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+	fi
+else
+	chkfile "$1"
+	cp "$FILE" "$FILE"~
+	perl -p0e 's|<a href="(.*://.*?/)(.*")|<a href="./$2|g' "$FILE" | sponge "$FILE"
+fi
+
+exit 0

@@ -1,1 +1,48 @@
-/home/egan/bin/radar
+#!/bin/bash
+
+##
+# radar -- obtain radar reflectivity data using nws
+#
+# usage -- radar
+#
+# written -- 11 December, 2010 by Egan McComb
+#
+# revised --
+##
+
+ERR_NARGS=3
+ERR_VARGS=5
+
+CURL="curl -so"
+MERGE="convert -layers merge"
+
+LOCID="dax"
+M_DIR="$HOME/bin/.radar"
+M_OUT="$M_DIR/${LOCID}_comp-t.gif"
+
+M_TOPO="$M_DIR/${LOCID}_topo.gif"
+M_CNTY="$M_DIR/${LOCID}_county.gif"
+M_RIVR="$M_DIR/${LOCID}_river.gif"
+M_HYWY="$M_DIR/${LOCID}_hwy.gif"
+M_CITY="$M_DIR/${LOCID}_city.gif"
+
+M_WARN="$M_DIR/${LOCID}_warn-t.gif"
+M_RADR="$M_DIR/${LOCID}_radar-t.gif"
+M_OVER="$M_DIR/${LOCID}_legend-t.gif"
+
+M_EVRY="$M_DIR/${LOCID}_all.gif"
+
+M_WARN_U="http://radar.weather.gov/Warnings/Short/DAX_Warnings_0.gif"
+M_RADR_U="http://radar.weather.gov/ridge/RadarImg/N0R/DAX_N0R_0.gif"
+M_OVER_U="http://radar.weather.gov/Legend/N0R/DAX_N0R_Legend_0.gif"
+
+$CURL $M_WARN $M_WARN_U &
+PIDS=$!
+$CURL $M_RADR $M_RADR_U &
+PIDS="$PIDS $!"
+$CURL $M_OVER $M_OVER_U &
+PIDS="$PIDS $!"
+
+wait $PIDS
+$MERGE $M_EVRY $M_WARN $M_RADR $M_OVER $M_OUT
+qiv $M_OUT

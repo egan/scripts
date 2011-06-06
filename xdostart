@@ -1,1 +1,47 @@
-/home/egan/bin/xdostart
+#!/bin/bash
+
+##
+# xdostart -- rudimentary startup routine implemented with xdotool
+#
+# usage -- typically run by ~/.xinitrc or through a run dialog
+# 
+# notes -- very specialized for personal use
+#
+# written -- 3 December, 2010 by Egan McComb
+#
+# revised --
+##
+
+xdotool key super+1 super+x super+x super+x super+j type 'nettest
+'
+xdotool key super+k
+
+xdotool key super+2 super+x super+x super+v super+x
+
+xdotool key super+j type ':cd notes/
+'
+xdotool key super+k type 'ls
+'
+xdotool key super+j type ':e todo.txt
+'
+xdotool key super+k type 'la
+'
+xdotool key super+3 super+x super+x super+x
+
+xdotool key super+j type 'exec mutt
+'
+xdotool key super+k type 'exec weechat
+'
+xdotool key super+5 super+x super+x super+x
+
+xdotool key super+j type 'cd music/rec/
+'
+xdotool key super+j super+j type 'cd music/rec/
+'
+xdotool key super+j type 'ls
+'
+xdotool key super+k
+
+xdotool key super+1
+
+exit 0

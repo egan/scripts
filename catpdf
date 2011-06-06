@@ -1,1 +1,56 @@
-/home/egan/bin/catpdf
+#!/bin/bash
+
+##
+# catpdf -- cat pdfs together with ghostscript
+#
+# usage -- catpdf OUTFILE INFILES
+#
+# written -- 6 June, 2011 by Egan McComb
+#
+# revised --
+##
+
+ERR_NARGS=3
+ERR_VARGS=5
+
+COMMAND="gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite"
+
+usage()
+{
+	echo "Usage: $(basename $0) OUTFILE INFILES" >&2
+}
+
+chkargs()
+{
+	if [ $# -lt 3 ]
+	then
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+	fi
+	if [ -f $1 ]
+	then
+		echo "Warning: Output file exists" >&2
+		echo -n "Continue? [y/N] " >&2
+		read RESPONSE
+		if [ "$RESPONSE" != "y" ]
+		then
+			exit 1
+		fi
+	fi
+	OUT="$1"
+	shift
+	for FILE in "$@"
+	do
+		if [ ! -e "$FILE" ]
+		then
+			echo "Error: Invalid file '$FILE'" >&2
+			exit $ERR_VARGS
+		fi
+	done
+}
+
+##----MAIN----##
+chkargs "$@"
+$COMMAND  -sOutputFile="$OUT" "$@"
+exit 0

@@ -1,1 +1,63 @@
-/home/egan/bin/gweather
+#!/bin/bash
+
+##
+# gweather -- obtain weather data using google api
+#
+# usage -- gweather [-c|--current]|[-f|--forecast][LOCID]
+#
+# note -- no protection against invalid LOCID
+#
+# written -- 12 September, 2010 by Egan McComb
+#
+# revised --
+##
+
+ERR_NARGS=3
+ERR_VARGS=5
+
+CURRENT="$HOME/bin/.current.xslt"
+FORECAST="$HOME/bin/.forecast.xslt"
+LOCID="Mountain+View"
+
+usage()
+{
+	echo "Usage: $(basename $0) [-c|--current]|[-f|--forecast] [LOCID]" >&2
+	echo -e "\t-When unspecified, LOCID=$LOCID" >&2
+	echo -e "\t-LOCID can be given as a string or zip code" >&2
+}
+
+chkargs()
+{
+	if [ $# == 0 ]
+	then
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+
+	elif [ $1 = "-f" ] || [ $1 = "--forecast" ]
+	then
+		FILTER=$FORECAST
+	elif [ $1 = "-c" ] || [ $1 = "--current" ]
+	then
+		FILTER=$CURRENT
+	elif [ $# -gt 1 ]
+	then
+		echo "Error: Too many arguments" >&2
+		usage
+		exit $ERR_NARGS
+	else
+		echo "Error: Invalid arguments" >&2
+		usage
+		exit $ERR_VARGS
+	fi
+	if [ ! -z "$2" ]
+	then
+		LOCID="$2"
+	fi
+}
+
+##----MAIN---##
+chkargs "$@"
+curl -s http://www.google.com/ig/api?weather="$LOCID" | xsltproc $FILTER -
+
+exit 0

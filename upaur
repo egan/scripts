@@ -1,1 +1,63 @@
-/home/egan/bin/upaur
+#!/bin/bash
+
+##
+# upaur -- check arch user repositor for updates to foreign packages
+#
+# usage -- upaur
+#
+# notes -- should be migrated to AUR RPC
+#
+# written -- 2 October, 2010 by Egan McComb
+#
+# revised -- 7 November, 2010 by author
+##
+
+AURL="http://aur.archlinux.org/packages"
+AURQ=$(pacman -Qm | tr " " ";")
+DEST="$HOME/src/aur"
+CURL="curl -s"
+WGET="wget -qP $DEST"
+GREP="grep -m1"
+
+extern()
+{
+	PKGBF=$($CURL $AURL/$PKGNM/PKGBUILD)
+	EXTRN=$($GREP "pkgver" <<< "$PKGBF" | cut -d "=" -f 2)-$($GREP "pkgrel" <<< "$PKGBF" | cut -d "=" -f 2)
+}
+
+output()
+{
+	printf "%-30s -- %s\n" $PKGNM $STATUS
+	if [ $STATUS = "OUTDATED" ]
+	then
+		echo -ne "\E[01;34m::\033[0m Retrieve tarball? [Y/n] "
+		read REPLY
+		if [ $REPLY = "Y" ] || [ $REPLY = "y" ]
+		then
+			$WGET $AURL/$PKGNM/$PKGNM.tar.gz
+		fi
+	fi
+}
+
+##----MAIN----##
+for PKG in $AURQ
+do
+	PKGNM=$(cut -d ";" -f 1 <<< $PKG)
+	LOCAL=$(cut -d ";" -f 2 <<< $PKG)
+	extern
+
+	if $(grep -q "git clone" <<< "$PKGBF")
+	then
+		STATUS="UNKNOWN"
+	else
+		if [ $LOCAL = "$EXTRN" ]
+		then
+			STATUS="CURRENT"
+		else
+			STATUS="OUTDATED"
+		fi
+	fi
+	output
+done
+
+exit 0

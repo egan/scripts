@@ -1,1 +1,18 @@
-/home/egan/bin/tclip
+#!/bin/bash
+
+##
+# tclip -- tee stdin to clipboard and stdout
+#
+# usage -- tclip
+#
+# written -- 7 July, 2010 by Egan McComb
+#
+# revised --
+##
+
+INPUT=$(cat -)
+
+echo -n "$INPUT" | xclip
+echo "$INPUT"
+
+exit 0

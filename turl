@@ -1,1 +1,54 @@
-/home/egan/bin/turl
+#!/bin/bash
+
+##
+# turl -- shorten a url using tinyurl.com
+#
+# usage -- turl URL
+#
+# notes -- watch out for problematic characters
+#
+# todo -- accept stdin
+#
+# written -- 4 July 2010 by Egan McComb
+#
+# revised -- 7 July 2010 by author
+##
+
+ERR_NARGS=3
+
+COMMAND="wget"
+COPTION=" -q -O -"
+PSTDATA='--post-data="url=$URL"'
+SERVICE="http://tinyurl.com/create.php"
+
+usage()
+{
+	echo "Usage: $(basename $0) URL" >&2
+	echo -e "\t-Watch out for ampersands" >&2
+}
+
+chkargs()
+{
+	if [ -z "$1" ]
+	then
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif [ $# -gt 1 ]
+	then
+		echo "Error: Too many arguments" >&2
+		usage
+		exit $ERR_NARGS
+	else
+		URL="$1"
+	fi
+}
+
+##----MAIN----##
+chkargs "$@"
+
+OUT=$(eval $COMMAND $COPTION $PSTDATA $SERVICE | sed -n 's/.*\(http:\/\/tinyurl.com\/[a-z0-9][a-z0-9]*\).*/\1/p' | uniq)
+echo -n $OUT | xclip
+echo $OUT
+
+exit 0

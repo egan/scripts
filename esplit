@@ -1,1 +1,103 @@
-/home/egan/bin/esplit
+#!/bin/bash
+
+##
+# esplit -- split a file into pieces
+#
+# usage -- esplit -m | -c COUNT [FILE ...]
+#
+# written -- 27 May, 2009 by Egan McComb
+#
+# revised -- 12 July, 2009 by author
+##
+
+ERR_NARGS=3
+ERR_VARGS=5
+
+SIZE=16777216
+
+usage()
+{
+	echo "Usage: $(basename $0) -m | -c COUNT FILE..." >&2
+}
+
+chkargs()
+{
+	if [ $# -lt 2 ]
+	then
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif [ ! $1 = "-m" ] && [ ! $1 = "-c" ]
+	then
+		echo "Error: Invalid argument '$1'" >&2
+		usage
+		exit $ERR_VARGS
+	fi
+}
+
+chkfile()
+{
+	if [ ! -e "$1" ]
+	then
+		echo "Error: Nonexistant file '$1'" >&2
+		echo "Skipping..." >&2
+		continue
+	elif [ ! -f "$1" ]
+	then
+		echo "Error: Bad file '$1'" >&2
+		echo "Skipping..." >&2
+		continue
+	fi
+}
+
+methodc()
+{
+	if [ "$1" = "-m" ]
+	then
+		METHOD=magic
+		NSHIFT=shift
+	else
+		METHOD=nsplit
+		if [ -z "$2" ]
+		then
+			echo "Error: Too few arguments" >&2
+			usage
+			exit $ERR_NARGS
+		elif $(grep -q [^[:digit:]] <<< $2)
+		then
+			echo "Error: Invalid argument '$2'" >&2
+			usage
+			exit $ERR_VARGS
+		else
+			METHOD="nsplit $2"
+			NSHIFT="shift && shift"
+		fi
+	fi
+}
+
+
+magic()
+{
+	split -b $SIZE "$1" "$1".
+	echo "Split file $FILE into pieces of $SIZE bytes"
+}
+
+nsplit()
+{
+	FSIZE=$(command ls -l "$2" | cut -d " " -f 5)
+	SSIZE=$(($FSIZE/$1))
+	split -b $SSIZE "$2" "$2".
+	echo "Split file $2 into $1 pieces of $SSIZE bytes"
+}
+
+###----MAIN----###
+chkargs "$@"
+methodc "$@"
+$NSHIFT
+for FILE in "$@"
+do
+	chkfile "$FILE"
+	$METHOD "$FILE"
+done
+
+exit 0

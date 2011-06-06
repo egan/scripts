@@ -1,1 +1,48 @@
-/home/egan/bin/blog
+#!/bin/bash
+
+##
+# blog -- obtain fresh blender commit logs and view them.
+#
+# usage -- blog
+#
+# notes -- more repositories can be added as cases for $1
+#	   will ultimately be replaced with svnnew
+#
+# written -- 1 March, 2009 by Egan McComb
+#
+# revised -- 11 July, 2009 by author
+##
+
+ERR_NARGS=3
+ERR_VARGS=5
+
+BTK=$HOME/src/blender/blender
+
+NFILE=".svn/revision.info"
+
+if [ $# -lt 2 ]
+then
+	case "$1" in
+		'')		cd $BTK;;
+		*)		echo "Error: Not a valid repository '$1'" >&2
+				exit $ERR_VARGS;;
+	esac
+else
+	echo "Error: Too many arguments" >&2
+	exit $ERR_NARGS
+fi
+
+if [ ! -s $NFILE ]
+then
+	echo "Error: Data file does not exist or is empty: Creating" >&2
+	echo -n "Enter a revison number to begin: " >&2
+	read RESPONSE
+	echo $RESPONSE > $NFILE
+	echo "Created $PWD/revision.info" >&2
+fi
+
+READ=$(cat $NFILE)
+svn log --incremental -r $(( $READ + 1 )):BASE | less
+svn info | sed -n '5p' | cut -d " " -f 2 | sponge $NFILE
+
+exit 0

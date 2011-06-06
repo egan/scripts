@@ -1,1 +1,49 @@
-/home/egan/bin/swap
+#!/bin/bash
+
+##
+# trade -- swap file names
+#
+# usage -- swap FILE1 FILE2
+#
+# written -- 12 Dec, 2009 by Egan McComb
+#
+# revised -- 25 Dec, 2010 by author
+##
+
+ERR_NARGS=3
+ERR_VARGS=5
+
+usage()
+{
+	echo "Usage: $(basename $0) FILE1 FILE2" >&2
+}
+
+chkargs()
+{
+	if [ $# -ne 2 ]
+	then
+		echo "Error: Wrong number of arguments" >&2
+		usage
+		exit $ERR_NARGS
+	fi
+}
+
+chkfile()
+{
+	for FILE in "$@"
+	do
+		if [ ! -e "$1" ]
+		then
+			echo "Error: File '$1' does not exist" >&2
+			usage
+			exit $ERR_VARGS
+		fi
+	done
+}
+
+##----MAIN----##
+chkargs "$@"
+chkfile "$@"
+
+TEMP=$(mktemp swap.XXX)
+mv "$1" $TEMP && mv "$2" "$1" && mv $TEMP "$2" && exit 0

@@ -1,1 +1,20 @@
-/home/egan/bin/statmirrors
+#!/bin/bash
+
+##
+# statmirrors -- output update status of pacman mirrors
+#
+# usage -- statmirrors
+#
+# written -- 26 July, 2010 by Egan McComb
+#
+# revised -- 9 April, 2011 by author
+##
+
+STATURL="https://www.archlinux.de/?page=MirrorStatusReflector"
+MIRRORL="/etc/pacman.d/mirrorlist"
+SERVERL=$(sed '/^ *Server *= *\([^\$]*\)\$repo.*$/!d;s//\1/' /etc/pacman.d/mirrorlist | tr '\n' '|' | sed 's/|$//')
+
+##----MAIN----$$
+grep -E "$SERVERL" <(curl -s $STATURL)
+
+exit 0
