@@ -12,36 +12,34 @@
 # revised --
 ##
 
-xdotool key super+1 super+x super+x super+x super+j type 'nettest
-'
-xdotool key super+k
+DELAY=40
 
-xdotool key super+2 super+x super+x super+v super+x
-
-xdotool key super+j type ':cd notes/
+xdotool key --delay $DELAY super+1 super+x super+x super+x
+xdotool key --delay $DELAY super+2 super+x super+x super+v super+x
+xdotool key --delay $DELAY super+3 super+x super+x super+x
+xdotool key --delay $DELAY super+5 super+x super+x super+x
+xdotool key --delay $DELAY super+1 super+j type 'nettest
 '
-xdotool key super+k type 'ls
+xdotool key --delay $DELAY super+k super+2 type 'ls
 '
-xdotool key super+j type ':e todo.txt
+xdotool key --delay $DELAY super+j type ':cd notes/
 '
-xdotool key super+k type 'la
+xdotool key --delay $DELAY super+k type 'la
 '
-xdotool key super+3 super+x super+x super+x
-
-xdotool key super+j type 'exec mutt
+xdotool key --delay $DELAY super+j type ':e todo.txt
 '
-xdotool key super+k type 'exec weechat
+xdotool key --delay $DELAY super+k super+3 type 'exec ssh paijanne
 '
-xdotool key super+5 super+x super+x super+x
-
-xdotool key super+j type 'cd music/rec/
+xdotool key --delay $DELAY super+j type 'exec mutt
 '
-xdotool key super+j super+j type 'cd music/rec/
+xdotool key --delay $DELAY super+k super+5 type 'cd music/rec/
 '
-xdotool key super+j type 'ls
+xdotool key --delay $DELAY super+j type 'cd music/rec/
 '
-xdotool key super+k
-
-xdotool key super+1
+xdotool key --delay $DELAY super+j type 'cd var/
+'
+xdotool key --delay $DELAY super+k type 'ls
+'
+xdotool key --delay $DELAY super+k super+1
 
 exit 0
