@@ -5,24 +5,22 @@
 #
 # usage -- upaur
 #
-# notes -- should be migrated to AUR RPC
-#
 # written -- 2 October, 2010 by Egan McComb
 #
 # revised -- 7 November, 2010 by author
+#            6 June, 2011 by author
 ##
 
 AURL="http://aur.archlinux.org/packages"
-AURQ=$(pacman -Qm | tr " " ";")
+AURQ="http://aur.archlinux.org/rpc.php?type=info&arg="
+PACQ=$(pacman -Qm | tr " " ";")
 DEST="$HOME/src/aur"
 CURL="curl -s"
 WGET="wget -qP $DEST"
-GREP="grep -m1"
 
 extern()
 {
-	PKGBF=$($CURL $AURL/$PKGNM/PKGBUILD)
-	EXTRN=$($GREP "pkgver" <<< "$PKGBF" | cut -d "=" -f 2)-$($GREP "pkgrel" <<< "$PKGBF" | cut -d "=" -f 2)
+	EXTRN=$($CURL ${AURQ}$PKGNM | jshon -e results -e Version -u)
 }
 
 output()
@@ -40,7 +38,7 @@ output()
 }
 
 ##----MAIN----##
-for PKG in $AURQ
+for PKG in $PACQ
 do
 	PKGNM=$(cut -d ";" -f 1 <<< $PKG)
 	LOCAL=$(cut -d ";" -f 2 <<< $PKG)
