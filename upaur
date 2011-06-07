@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-# upaur -- check arch user repositor for updates to foreign packages
+# upaur -- check arch user repository for updates to foreign packages
 #
 # usage -- upaur
 #
@@ -44,7 +44,7 @@ do
 	LOCAL=$(cut -d ";" -f 2 <<< $PKG)
 	extern
 
-	if $(grep -q "git clone" <<< "$PKGBF")
+	if $(grep -q "git" <<< "$PKGBF")
 	then
 		STATUS="UNKNOWN"
 	else
