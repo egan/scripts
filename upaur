@@ -44,7 +44,7 @@ do
 	LOCAL=$(cut -d ";" -f 2 <<< $PKG)
 	extern
 
-	if $(grep -q "git" <<< "$PKGBF")
+	if $(grep -q "git" <<< "$PKGNM")
 	then
 		STATUS="UNKNOWN"
 	else
