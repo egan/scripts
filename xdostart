@@ -12,7 +12,7 @@
 # revised --
 ##
 
-DELAY=40
+DELAY=100
 
 xdotool key --delay $DELAY super+1 super+x super+x super+x
 xdotool key --delay $DELAY super+2 super+x super+x super+v super+x
