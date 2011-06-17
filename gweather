@@ -18,6 +18,7 @@ ERR_VARGS=5
 CURRENT="$HOME/bin/.current.xslt"
 FORECAST="$HOME/bin/.forecast.xslt"
 LOCID="Mountain+View"
+#LOCID="95616"
 
 usage()
 {
@@ -58,6 +59,6 @@ chkargs()
 
 ##----MAIN---##
 chkargs "$@"
-curl -s http://www.google.com/ig/api?weather="$LOCID" | xsltproc $FILTER -
+curl -s http://www.google.com/ig/api?weather="$LOCID" | iconv -f ISO-8859-1 -t UTF-8 | xsltproc $FILTER -
 
 exit 0
