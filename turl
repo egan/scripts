@@ -3,11 +3,9 @@
 ##
 # turl -- shorten a url using tinyurl.com
 #
-# usage -- turl URL
+# usage -- turl URL, accepts stdin
 #
 # notes -- watch out for problematic characters
-#
-# todo -- accept stdin
 #
 # written -- 4 July 2010 by Egan McComb
 #
@@ -16,31 +14,36 @@
 
 ERR_NARGS=3
 
-COMMAND="wget"
-COPTION=" -q -O -"
-PSTDATA='--post-data="url=$URL"'
+COMMAND="curl"
+COPTION=" -s -d"
+PSTDATA='url="$URL"'
 SERVICE="http://tinyurl.com/create.php"
 
 usage()
 {
 	echo "Usage: $(basename $0) URL" >&2
+	echo -e "\t-Alternatively, accepts stdin" >&2
 	echo -e "\t-Watch out for ampersands" >&2
+	echo -e "\t and other special characters" >&2
 }
 
 chkargs()
 {
-	if [ -z "$1" ]
+	if [ -z "$1" ] && [ -t 0 ] 
 	then
-		echo "Error: Too few arguments" >&2
+		echo "Error: No input given" >&2
 		usage
 		exit $ERR_NARGS
-	elif [ $# -gt 1 ]
+	elif [ $# -gt 1 ] || [ ! -z "$1" ] && [ ! -t 0 ]
 	then
-		echo "Error: Too many arguments" >&2
+		echo "Error: Excess input" >&2
 		usage
 		exit $ERR_NARGS
-	else
+	elif [ ! -z "$1" ]
+	then
 		URL="$1"
+	else
+		read -r URL
 	fi
 }
 
