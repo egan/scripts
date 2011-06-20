@@ -7,9 +7,9 @@
 #
 # notes -- watch out for problematic characters
 #
-# written -- 4 July 2010 by Egan McComb
+# written -- 4 July, 2010 by Egan McComb
 #
-# revised -- 7 July 2010 by author
+# revised -- 20 June, 2011 by author
 ##
 
 ERR_NARGS=3
