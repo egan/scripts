@@ -3,23 +3,58 @@
 ##
 # wcshot -- take live webcam shots via mplayer
 #
-# usage -- wcshot
+# usage -- wcshot [WxH]
 #		-Press s to take a shot
 #		-Press S to start/stop taking
 #		 continuous shots
-#		-Press q to quit.
+#		-Press q to quit
 #
 # notes -- assumes webcam is at /dev/video0
-#	   and has 640x480 resolution
 #
 # written -- 20 June, 2011 by Egan McComb
 #
 # revised --
 ##
 
+ERR_NARGS=3
+ERR_VARGS=5
+
 COMMAND="mplayer"
 COPTION="-msglevel all=-1:cplayer=-1:statusline=-1 -vf screenshot"
 VDEVICE="tv:// -tv driver=v4l2:width=640:height=480:device=/dev/video0"
+
+usage()
+{
+	echo "Usage: $(basename $0) [WxH]" >&2
+	echo -e "\t-Press s to take a shot" >&2
+	echo -e "\t-Press S to start/stop taking" >&2
+	echo -e "\t continuous shots" >&2
+	echo -e "\t-Press q to quit" >&2
+	echo "Note: Assumes webcam is at /dev/video0" >&2
+	echo -e "\t-Default resolution is 640x480" >&2
+}
+
+chkargs()
+{
+	if [ $# -gt 1 ]
+	then
+		echo "Error: Too many arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif [ ! -z $1 ] && [ ! $(grep [[:digit:]]x[[:digit:]] <<< $1) ]
+	then
+		echo "Error: Invalid resolution" >&2
+		usage
+		exit $ERR_VARGS
+	elif [ ! -z $1 ]
+	then
+		VDEVICE=${VDEVICE/640/$(cut -d x -f 1 <<< $1)}
+		VDEVICE=${VDEVICE/480/$(cut -d x -f 2 <<< $1)}
+	fi
+}
+
+###----MAIN----###
+chkargs "$@"
 
 echo "Wait a few seconds for the device to be opened" >&2
 echo "==============================================" >&2
@@ -28,4 +63,5 @@ echo "Shots will be saved in current directory as shotNNNN.png" >&2
 echo
 echo "Press q to quit" >&2
 $COMMAND $COPTION $VDEVICE &> /dev/null || echo "Error: Mplayer crashed" >&2 && exit 1
+
 exit 0
