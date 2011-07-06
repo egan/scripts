@@ -63,7 +63,7 @@ loop()
 			eval $COMMAND $COPTION
 		done &
 		trap "kill $! && echo 'Caught SIGINT: Break'; exit 1" SIGINT SIGKILL
-		read -sn 1 $PRESS
+		read -sn 1
 		kill $!
 	else
 		i=$1
