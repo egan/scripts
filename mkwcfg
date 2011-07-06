@@ -3,23 +3,24 @@
 ##
 # mkwcfg -- creates wireless network profile
 #
-# usage -- wconn ESSID [TYPE] [KEY]
-#
-# todo -- autodetect network type and prompt for key
+# usage -- mkwcfg ESSID [TYPE] [KEY]
 #
 # written -- 1 January, 2011 by Greg Dwulet
 #
-# revised -- 13 March, 2011 by Egan McComb
+# revised -- 6 July, 2011 by Egan McComb
 ##
 
 ERR_NARGS=3
 ERR_VARGS=5
 
+IWLIST="sudo iwlist wlan0 scan | piwlist.py -n"
 NETDIR="/etc/network.d"
 
 usage()
 {
 	echo "Usage: $(basename $0) ESSID [wep|wpa] [KEY]" >&2
+	echo -e "\t-Will detect network type and prompt" >&2
+	echo -e "\t for a key if given only one argument" >&2
 }
 
 chkargs()
@@ -41,10 +42,18 @@ doargs()
 {
 	if [ $# -eq 1 ]
 	then
-		if $(sudo iwlist wlan0 scan | piwlist.py | grep -q "$1")
+		if $(grep -q "$1" <<< "$IWSCAN")
 		then
 			ESSID="$1"
 			FILE="$NETDIR/$ESSID-wireless"
+			if $(! grep -q "$ESSID|Open" <<< "$IWSCAN")
+			then
+				IWSCAN=$(grep -m 1 "$ESSID" <<< "$IWSCAN")
+				TYPE=$(cut -d "|" -f 5 <<< "$IWSCAN" | cut -d " " -f 1 | tr "[A-Z]" "[a-z]")
+				echo -n "Please enter $TYPE key for '$ESSID' network: "
+				read KEY
+
+			fi
 		else
 			echo "Error: Unknown wireless network '$1'" >&2
 			usage
@@ -65,7 +74,7 @@ doargs()
 			TYPE=$2
 			KEY="$3"
 		fi
-		if $(sudo iwlist wlan0 scan | piwlist.py | grep -q "$1")
+		if $(grep -q "$1" <<< "$IWSCAN")
 		then
 			ESSID="$1"
 			FILE="$NETDIR/$ESSID-wireless"
@@ -83,6 +92,8 @@ makeprofile()
 	then
 		cp $NETDIR/examples/wireless-$TYPE "$FILE"
 		editprofile "$ESSID" $TYPE "$KEY"
+	else
+		echo "Warning: File exits, doing nothing" >&2
 	fi
 }
 
@@ -103,10 +114,11 @@ editprofile()
 if [ $EUID != "0" ]
 then
 	echo "Error: Must be root"
-	exit 1
+exit 1
 fi
 
 chkargs "$@"
+IWSCAN=$(eval $IWLIST)
 doargs "$@"
 makeprofile
 
