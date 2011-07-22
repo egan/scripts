@@ -3,7 +3,7 @@
 ##
 # tablize -- convert labeled tsv files to latex tables
 #
-# usage -- tablize [FILE ...]
+# usage -- tablize [[-e ENVIRONMENT] [-c COLUMNSPEC] [-f FIELDSEP]] [FILE ...]
 #
 # written -- 30 April, 2010 by Egan McComb
 #
@@ -14,11 +14,12 @@ ERR_NARGS=3
 ERR_VARGS=5
 
 TE="tabular"
-CS=" l |"
+CS="l"
+FS="	"
 
 usage()
 {
-	echo "$(basename $0) [FILE ...]" >&2
+	echo "$(basename $0) [[-e ENVIRONMENT] [-c COLUMNSPEC] [-f FIELDSEP]] [FILE ...]" >&2
 }
 
 chkargs()
@@ -28,6 +29,18 @@ chkargs()
 		echo "Error: Too few arguments" >&2
 		usage
 		exit $ERR_NARGS
+	fi
+	if [ $# -gt 1 ]
+	then
+		while getopt "e:c:f:" OPT
+		do
+			case $OPT in
+				e) TE=$OPTARG;;
+				c) CS=$OPTARG;;
+				f) FS=$OPTARG;;
+				?) except $OPTARG;;
+			esac
+		done
 	fi
 }
 
@@ -39,12 +52,6 @@ chkfile()
 		usage
 		exit $ERR_VARGS
 	fi
-}
-
-name()
-{
-	IN="$1"
-	OUT=$(sed 's/\..*$/.tex/' <<< $IN)
 }
 
 column()
@@ -61,9 +68,9 @@ column()
 
 convert()
 {
-	echo -e "\\\begin{$TE}{$CSP }\n\\hline" > $OUT
-	sed "s/	/ \& /g;s/$/ \\\\\\\\\n\\\\hline/g" < $1 >> $OUT
-	echo "\end{$TE}" >> $OUT
+	echo -e "\\\begin{$TE}{$CSP}\n\\toprule" > ${1/%.*/.tex}
+	sed "s/$FS/ \& /g;s/$/ \\\\\\\\\n\\\\midrule/g" < $1 >> ${1/%.*/.tex}
+	echo "\end{$TE}" >> ${1/%.*/.tex}
 }
 
 ##---MAIN---##
@@ -71,7 +78,6 @@ chkargs "$@"
 for FILE in "$@"
 do
 	chkfile "$FILE"
-	name "$FILE"
 	column "$FILE"
 	convert "$FILE"
 done

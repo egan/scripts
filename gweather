@@ -34,7 +34,6 @@ chkargs()
 		echo "Error: Too few arguments" >&2
 		usage
 		exit $ERR_NARGS
-
 	elif [ $1 = "-f" ] || [ $1 = "--forecast" ]
 	then
 		FILTER=$FORECAST
