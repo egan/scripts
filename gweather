@@ -17,8 +17,7 @@ ERR_VARGS=5
 
 CURRENT="$HOME/bin/.current.xslt"
 FORECAST="$HOME/bin/.forecast.xslt"
-LOCID="Mountain+View"
-#LOCID="95616"
+LOCID="95616"
 
 usage()
 {
