@@ -16,6 +16,7 @@ ERR_VARGS=5
 SNDFILE="$HOME/bin/.beep.wav"
 COMMAND="aplay"
 COPTION="$SNDFILE &>/dev/null"
+SDEVICE="Master"
 
 usage()
 {
@@ -75,6 +76,14 @@ loop()
 	fi
 }
 
+unmute()
+{
+	if $(amixer | grep -A 4 \'$SDEVICE\' | awk {'print $6'} | grep -q  "\[off\]")
+	then
+		amixer -q set $SDEVICE toggle
+	fi
+}
+
 ##----MAIN----##
 if [ ! -e $SNDFILE ]
 then
@@ -83,6 +92,7 @@ then
 fi
 
 chkargs $*
+unmute
 $BCFUNCT
 
 exit 0
