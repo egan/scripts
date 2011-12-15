@@ -41,8 +41,8 @@ then
 	echo "Created $PWD/revision.info" >&2
 fi
 
-READ=$(cat $NFILE)
-svn log --incremental -r $(( $READ + 1 )):BASE | less
-svn info | sed -n '5p' | cut -d " " -f 2 | sponge $NFILE
+READ=$(($(cat $NFILE)+1))
+svn log --incremental -r $READ:BASE | less
+svn info | grep 'Revision' | cut -d " " -f 2 | sponge $NFILE
 
 exit 0
