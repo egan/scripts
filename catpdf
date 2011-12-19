@@ -28,7 +28,7 @@ chkargs()
 		usage
 		exit $ERR_NARGS
 	fi
-	if [ -f ${!#} ]
+	if [ -f "${!#}" ]
 	then
 		echo "Warning: Output file exists" >&2
 		echo -n "Continue? [y/N] " >&2
