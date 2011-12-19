@@ -12,8 +12,11 @@
 # revised -- 11 July, 2009 by author
 ##
 
-DSK=Pangolin
-DIR=arch-backup
+DSK="Pangolin"
+DIR="arch-backup"
+ETC="$HOME/code/config/etc"
+
+cp -R $(< $HOME/bin/.backup tr '\n' ' ')  $ETC
 
 # Check that $DSK is mounted
 if mountpoint -q /media/$DSK
