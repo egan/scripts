@@ -1,0 +1,85 @@
+#!/bin/bash
+
+##
+# excpdf -- remove pages from pdfs with ghostscript
+#
+# usage -- excpdf PAGERANGE INFILE OUTFILE
+#
+# written -- 19 December, 2011 by Egan McComb
+#
+# revised --
+##
+
+ERR_NARGS=3
+ERR_VARGS=5
+
+TRIMCOM="tr ':\-,' '\n'"
+COMMAND="gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite"
+
+usage()
+{
+	echo "Usage: $(basename $0) PAGERANGE INFILE OUTFILE" >&2
+	echo -e "\t-PAGERANGE is given with ranges" >&2
+	echo -e "\t e.g. 3-5:7:9-15 keeps those pages" >&2
+	echo -e "\t-Pages must be in numerical order" >&2
+}
+
+chkargs()
+{
+	if [ $# -ne 3 ]
+	then
+		echo "Error: Wrong number of arguments" >&2
+		usage
+		exit $ERR_NARGS
+	fi
+	chkfile "$2" && IN="$2"
+	OUT="$3"
+	if $(grep -q "[^[:digit:]:-]" <<< "$1") && $(grep -q "[^[:digit:],]" <<< "$1")
+	then
+		echo "Error: Invalid page range syntax" >&2
+		usage
+		exit $ERR_VARGS
+	elif ! $(sort -nC <(eval $TRIMCOM <<< $1)) || [ ! -z $(uniq -d <(eval $TRIMCOM <<< $1)) ]
+	then
+		echo "Error: Invalid page range collation" >&2
+		usage
+		exit $ERR_VARGS
+	fi
+}
+
+chkfile()
+{
+	if [ ! -f "$1" ] || ! $(grep -q "PDF" <<< $(file "$1"))
+	then
+		echo "Error: Invalid input file '$1'" >&2
+		exit $ERR_VARGS
+	fi
+}
+
+range()
+{
+	IFS=":"
+	RANGES=($@)
+	TFILES=()
+	for RANGE in ${RANGES[@]}
+	do
+		if [ $(awk 'BEGIN { FS="-"} ; { print NF }' <<< $RANGE) -gt 2 ]
+		then
+			echo "Error: Invalid subrange '$RANGE'" >&2
+			usage
+			exit $ERR_VARGS
+		fi
+		IFS="-"
+		SUBRANGE=(${RANGE[@]})
+		TFILES[${#TFILES[@]}]=$(mktemp)
+		IFS=" "
+		eval $COMMAND -dFirstPage=${SUBRANGE[0]} -dLastPage=${SUBRANGE[-1]} -sOutputFile="${TFILES[-1]}" "$IN"
+	done
+	catpdf ${TFILES[@]} "$OUT"
+	rm ${TFILES[@]}
+}
+
+chkargs "$@"
+range $1
+
+exit 0
