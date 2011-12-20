@@ -43,6 +43,6 @@ fi
 
 READ=$(($(cat $NFILE)+1))
 svn log --incremental -r $READ:BASE | less
-svn info | grep 'Revision' | cut -d " " -f 2 | sponge $NFILE
+svn info | grep 'Revision' | cut -d " " -f 2 > $NFILE
 
 exit 0
