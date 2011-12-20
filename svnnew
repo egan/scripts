@@ -21,8 +21,8 @@ then
 	exit 1
 fi
 
-READ=$(cat $NFILE)
-svn log --incremental -r $(( $READ + 1 )):BASE | tee -a $LFILE | less
-svn info | sed -n '5p' | cut -d " " -f 2 | sponge $NFILE
+READ=$(($(cat $NFILE)+1))
+svn log --incremental -r $READ:BASE | tee -a $LFILE | less
+svn info | grep 'Revision' | cut -d " " -f 2 > $NFILE
 
 exit 0
