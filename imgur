@@ -1,21 +1,19 @@
 #!/bin/bash
 
 ##
-# imgur -- upload image to imgur.com
+# imgur		-- upload image to imgur.com
 #
-# usage -- imgur FILE
+# usage		-- imgur FILE
 #
-# notes -- stores history in ~/bin/.imgur_history
+# notes		-- requires tclip
+#		-- stores history in $hfile
 #
-# todo -- thumbnail link?
+# todo		-- thumbnail link?
 #
-# written -- 25 August, 2010 by Egan McComb
+# written	-- 25 August, 2010 by Egan McComb
 #
 # revised --
 ##
-
-err_nargs=3
-err_vargs=5
 
 apikey="4f22353fbb8473a442bf708ecd553ffb"
 
@@ -28,50 +26,55 @@ usage()
 
 chkargs()
 {
-	if [ $# -ne 1 ]
+	if [[ $# != 1 ]]
 	then
-		if [ $# == 0 ]
+		if (( ! $# ))
 		then
 			echo "Error: Too few arguments" >&2
 			usage
-			exit $err_nargs
+			exit $ERR_NARGS
 		else
 			echo "Error: Too many arguments" >&2
 			usage
-			exit $err_nargs
+			exit $ERR_NARGS
 		fi
-	elif [ ! -f "$1" ]
+	elif [[ ! -f "$1" ]]
 	then
 		echo "Error: Invalid file '$1'" >&2
 		usage
-		exit $err_vargs
+		exit $ERR_VARGS
 	else
 		image="$1"
 	fi
 }
 
 ##----MAIN----##
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor" >&2
+	exit 1
+fi
+
 chkargs "$@"
 
 response=$(curl -sF "key=$apikey" -F "image=@$image" http://imgur.com/api/upload.xml)
 
-if [ $? -ne 0 ]
+if [[ $? != 0 ]]
 then
-	echo "Upload failed" >&2
+	echo "Error: Upload failed" >&2
 	exit 1
-elif [ $(grep -c "<error_msg>" <<< $response) -gt 0 ]
+elif [[ $(grep -c "<error_msg>" <<< $response) > 0 ]]
 then
 	echo "Error: imgur says:" >&2
 	echo $response | sed -r 's/.*<error_msg>(.*)<\/error_msg>.*/\1/' >&2
-	exit 1
+	exit 2
 fi
 
 iurl=$(sed -r 's/.*<original_image>(.*)<\/original_image>.*/\1/' <<< $response)
 durl=$(sed -r 's/.*<delete_page>(.*)<\/delete_page>.*/\1/' <<< $response)
 
-echo -n "$iurl" | xclip
 date +%T\ on\ %D >> $hfile
-echo "$iurl" | tee -a $hfile
+echo "$iurl" | tee -a $hfile | tclip
 echo "$durl" >> $hfile
 
 exit 0
