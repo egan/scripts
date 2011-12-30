@@ -1,20 +1,27 @@
 #!/bin/bash
 
 ##
-# statmirrors -- output update status of pacman mirrors
+# statmirrors	-- output update status of pacman mirrors
 #
-# usage -- statmirrors
+# usage		-- statmirrors
 #
-# written -- 26 July, 2010 by Egan McComb
+# written	-- 26 July, 2010 by Egan McComb
 #
-# revised -- 9 April, 2011 by author
+# revised	-- 9 April, 2011 by author
 ##
 
 staturl="https://www.archlinux.de/?page=MirrorStatusReflector"
-mirrorl="/etc/pacman.d/mirrorlist"
-serverl=$(sed '/^ *Server *= *\([^\$]*\)\$repo.*$/!d;s//\1/' /etc/pacman.d/mirrorlist | tr '\n' '|' | sed 's/|$//')
+mirrors="/etc/pacman.d/mirrorlist"
+regex="/^ *Server *= *\([^\$]*\)\$repo.*$/!d;s//\1/"
 
-##----MAIN----$$
-grep -E "$serverl" <(curl -s $staturl)
+
+##----MAIN----##
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor" >&2
+	exit 1
+fi
+
+grep -E "$(< $mirrors sed "$regex" | tr '\n' '|' | sed 's/|$//')" <(curl -s $staturl)
 
 exit 0
