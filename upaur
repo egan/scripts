@@ -39,8 +39,8 @@ output()
 	if [[ $status = OUTDATED ]]
 	then
 		echo -ne "\E[01;34m::\033[0m Retrieve tarball? [Y/n] "
-		read reply
-		if userbool.sh $reply
+		read response
+		if userbool.sh $response
 		then
 			wget $destdir $aurl/$pkgname/$pkgname.tar.gz
 		fi
