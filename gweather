@@ -35,10 +35,10 @@ chkargs()
 		exit $ERR_NARGS
 	elif [[ $1 = "-f" ]] || [[ $1 = "--forecast" ]]
 	then
-		FILTER=$forecast
+		filter=$forecast
 	elif [[ $1 = "-c" ]] || [[ $1 = "--current" ]]
 	then
-		FILTER=$current
+		filter=$current
 	elif (( $# > 1 ))
 	then
 		echo "Error: Too many arguments" >&2
