@@ -96,7 +96,6 @@ do
 	cd "$dir" && svn up && cd
 	echo -ne "$tline "
 	date +%T\ on\ %D
-	echo
 done
 
 exit 0
