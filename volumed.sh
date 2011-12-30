@@ -12,10 +12,10 @@
 # revised --
 ##
 
-SDEVICE="/dev/snd/controlC0"
+sdevice="/dev/snd/controlC0"
 
 while [[ $(ps s $PPID | grep xmobar) ]]
 do
 	volume
-	inotifywait $SDEVICE -e ACCESS -e CLOSE_WRITE > /dev/null 2> /dev/null
+	inotifywait $sdevice -e ACCESS -e CLOSE_WRITE > /dev/null 2> /dev/null
 done

@@ -10,9 +10,9 @@
 # revised --
 ##
 
-INPUT=$(cat -)
+input=$(cat -)
 
-echo -n "$INPUT" | xclip
-echo "$INPUT"
+echo -n "$input" | xclip
+echo "$input"
 
 exit 0

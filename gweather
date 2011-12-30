@@ -12,17 +12,18 @@
 # revised --
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
-CURRENT="$HOME/bin/.current.xslt"
-FORECAST="$HOME/bin/.forecast.xslt"
-LOCID="95616"
+current="$HOME/bin/.current.xslt"
+forecast="$HOME/bin/.forecast.xslt"
+locid="Mountain+View"
+#locid="95616"
 
 usage()
 {
 	echo "Usage: $(basename $0) [-c|--current]|[-f|--forecast] [LOCID]" >&2
-	echo -e "\t-When unspecified, LOCID=$LOCID" >&2
+	echo -e "\t-When unspecified, LOCID=$locid" >&2
 	echo -e "\t-LOCID can be given as a string or zip code" >&2
 }
 
@@ -32,31 +33,31 @@ chkargs()
 	then
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	elif [ $1 = "-f" ] || [ $1 = "--forecast" ]
 	then
-		FILTER=$FORECAST
+		FILTER=$forecast
 	elif [ $1 = "-c" ] || [ $1 = "--current" ]
 	then
-		FILTER=$CURRENT
+		FILTER=$current
 	elif [ $# -gt 1 ]
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	else
 		echo "Error: Invalid arguments" >&2
 		usage
-		exit $ERR_VARGS
+		exit $err_vargs
 	fi
 	if [ ! -z "$2" ]
 	then
-		LOCID="$2"
+		locid="$2"
 	fi
 }
 
 ##----MAIN---##
 chkargs "$@"
-curl -s http://www.google.com/ig/api?weather="$LOCID" | iconv -f ISO-8859-1 -t UTF-8 | xsltproc $FILTER -
+curl -s http://www.google.com/ig/api?weather="$locid" | iconv -f ISO-8859-1 -t UTF-8 | xsltproc $filter -
 
 exit 0

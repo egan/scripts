@@ -10,39 +10,39 @@
 # revised --
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
-CURL="curl -so"
-MERGE="convert -layers merge"
+curl="curl -so"
+merge="convert -layers merge"
 
-LOCID="dax"
-M_DIR="$HOME/bin/.radar"
-M_OUT="$M_DIR/${LOCID}_comp-t.gif"
+locid="dax"
+m_dir="$HOME/bin/.radar"
+m_out="$m_dir/${locid}_comp-t.gif"
 
-M_TOPO="$M_DIR/${LOCID}_topo.gif"
-M_CNTY="$M_DIR/${LOCID}_county.gif"
-M_RIVR="$M_DIR/${LOCID}_river.gif"
-M_HYWY="$M_DIR/${LOCID}_hwy.gif"
-M_CITY="$M_DIR/${LOCID}_city.gif"
+m_topo="$m_dir/${locid}_topo.gif"
+m_cnty="$m_dir/${locid}_county.gif"
+m_rivr="$m_dir/${locid}_river.gif"
+m_hywy="$m_dir/${locid}_hwy.gif"
+m_city="$m_dir/${locid}_city.gif"
 
-M_WARN="$M_DIR/${LOCID}_warn-t.gif"
-M_RADR="$M_DIR/${LOCID}_radar-t.gif"
-M_OVER="$M_DIR/${LOCID}_legend-t.gif"
+m_warn="$m_dir/${locid}_warn-t.gif"
+m_radr="$m_dir/${locid}_radar-t.gif"
+m_over="$m_dir/${locid}_legend-t.gif"
 
-M_EVRY="$M_DIR/${LOCID}_all.gif"
+m_evry="$m_dir/${locid}_all.gif"
 
-M_WARN_U="http://radar.weather.gov/Warnings/Short/DAX_Warnings_0.gif"
-M_RADR_U="http://radar.weather.gov/ridge/RadarImg/N0R/DAX_N0R_0.gif"
-M_OVER_U="http://radar.weather.gov/Legend/N0R/DAX_N0R_Legend_0.gif"
+m_warn_u="http://radar.weather.gov/Warnings/Short/DAX_Warnings_0.gif"
+m_radr_u="http://radar.weather.gov/ridge/RadarImg/N0R/DAX_N0R_0.gif"
+m_over_u="http://radar.weather.gov/Legend/N0R/DAX_N0R_Legend_0.gif"
 
-$CURL $M_WARN $M_WARN_U &
-PIDS=$!
-$CURL $M_RADR $M_RADR_U &
-PIDS="$PIDS $!"
-$CURL $M_OVER $M_OVER_U &
-PIDS="$PIDS $!"
+$curl $m_warn $m_warn_u &
+pids=$!
+$curl $m_radr $m_radr_u &
+pids="$pids $!"
+$curl $m_over $m_over_u &
+pids="$pids $!"
 
-wait $PIDS
-$MERGE $M_EVRY $M_WARN $M_RADR $M_OVER $M_OUT
-qiv $M_OUT
+wait $pids
+$merge $m_evry $m_warn $m_radr $m_over $m_out
+qiv $m_out

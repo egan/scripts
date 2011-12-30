@@ -10,13 +10,13 @@
 # revised --
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
-SNDFILE="$HOME/bin/.beep.wav"
-COMMAND="aplay"
-COPTION="$SNDFILE &>/dev/null"
-SDEVICE="Master"
+sndfile="$HOME/bin/.beep.wav"
+command="aplay"
+coption="$SNDFILE &>/dev/null"
+sdevice="Master"
 
 usage()
 {
@@ -27,31 +27,31 @@ chkargs()
 {
 	if [ -z "$1" ]
 	then
-		BCFUNCT="loop"
+		bcfunct="loop"
 	elif [ $1 = "-t" ]
 	then
 		if [ -z "$2" ]
 		then
 			echo "Error: Too few arguments" >&2
 			usage
-			exit $ERR_NARGS
+			exit $err_nargs
 		elif $(echo $2 | grep -q [^[:digit:]])
 		then
 			echo "Error: Invalid NUMBER '$2'" >&2
 			usage
-			exit $ERR_VARGS
+			exit $err_vargs
 		elif [ $# -gt 2 ]
 		then
 			echo "Error: Too many arguments" >&2
 			usage
-			exit $ERR_NARGS
+			exit $err_nargs
 		else
-			BCFUNCT="loop $2"
+			bcfunct="loop $2"
 		fi
 	else
 		echo "Error: Invalid argument '$1'" >&2
 		usage
-		exit $ERR_VARGS
+		exit $err_vargs
 	fi
 }
 
@@ -61,7 +61,7 @@ loop()
 	then
 		while true
 		do
-			eval $COMMAND $COPTION
+			eval $command $coption
 		done &
 		trap "kill $! && echo 'Caught SIGINT: Break'; exit 1" SIGINT SIGKILL
 		read -sn 1
@@ -70,7 +70,7 @@ loop()
 		i=$1
 		while [ $i -gt 0 ]
 		do
-			eval $COMMAND $COPTION
+			eval $command $coption
 			let i-=1
 		done
 	fi
@@ -78,21 +78,21 @@ loop()
 
 unmute()
 {
-	if $(amixer | grep -A 4 \'$SDEVICE\' | awk {'print $6'} | grep -q  "\[off\]")
+	if $(amixer | grep -A 4 \'$sdevice\' | awk {'print $6'} | grep -q  "\[off\]")
 	then
-		amixer -q set $SDEVICE toggle
+		amixer -q set $sdevice toggle
 	fi
 }
 
 ##----MAIN----##
-if [ ! -e $SNDFILE ]
+if [ ! -e $sndfile ]
 then
-	echo "Error: Missing resource '$SNDFILE'" >&2
+	echo "Error: Missing resource '$sndfile'" >&2
 	exit 1
 fi
 
 chkargs $*
 unmute
-$BCFUNCT
+$bcfunct
 
 exit 0

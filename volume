@@ -10,19 +10,19 @@
 # revised -- 15 June, 2010 by author
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
-COMMAND="amixer"
-COPTION=" -q set"
-SDEVICE="Master"
-VOLSTEP=3
+command="amixer"
+coption=" -q set"
+sdevice="Master"
+volstep=3
 
 usage()
 {
 	echo "Usage: $(basename $0) [[toggle|up|down|level LEVEL]|[t|u|d|l LEVEL]]" >&2
 	echo -e "\t-With no arguments, print volume level" >&2
-	echo -e "\t-Default step for up/down is $VOLSTEP%" >&2
+	echo -e "\t-Default step for up/down is $volstep%" >&2
 	echo -e "\t as indicated in $0" >&2
 	echo -e "\t-LEVEL is given as a percentage" >&2
 	echo -e "\t-Complex volume control can be done with alsamixer" >&2
@@ -34,7 +34,7 @@ chkargs()
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	fi
 }
 
@@ -42,37 +42,37 @@ doargs()
 {
 	if [ -z "$1" ]
 	then
-		STATE=$($COMMAND | grep -A 4 \'$SDEVICE\' | awk {'print $6'} | grep -m 1 "\[on\]\|\[off\]" | sed -e 's/[][]//g;s/o/O/')
-		VOLUME=$($COMMAND | grep -A 6 \'$SDEVICE\' | awk {'print $4'} | grep -m 1 % | sed -e 's/[][]//g')
-		printf "%-4s %3s\n" "$STATE:" $VOLUME
+		state=$($command | grep -A 4 \'$sdevice\' | awk {'print $6'} | grep -m 1 "\[on\]\|\[off\]" | sed -e 's/[][]//g;s/o/O/')
+		volume=$($command | grep -A 6 \'$sdevice\' | awk {'print $4'} | grep -m 1 % | sed -e 's/[][]//g')
+		printf "%-4s %3s\n" "$state:" $volume
 		exit 0
 	elif [ $1 = "toggle" ] || [ $1 = "t" ]
 	then
-		ARG="$SDEVICE toggle"
+		arg="$sdevice toggle"
 	elif [ $1 = "up" ] || [ $1 = "u" ]
 	then
-		ARG="$SDEVICE ${VOLSTEP}%+"
+		arg="$sdevice ${volstep}%+"
 	elif [ $1 = "down" ] || [ $1 = "d" ]
 	then
-		ARG="$SDEVICE ${VOLSTEP}%-"
+		arg="$sdevice ${volstep}%-"
 	elif [ $1 = "level" ] || [ $1 = "l" ]
 	then
 		if [ -z "$2" ]
 		then
 			echo "Error: Too few arguments" >&2
 			usage
-			exit $ERR_NARGS
+			exit $err_nargs
 		elif  $(grep -q [^[:digit:]] <<< $2) || [ $2 -gt 100 ]
 		then
 			echo "Error: Invalid LEVEL '$2'" >&2
 			usage
-			exit $ERR_VARGS
+			exit $err_vargs
 		fi
-		ARG="$SDEVICE ${2}%"
+		arg="$sdevice ${2}%"
 	else
 		echo "Error: Invalid argument '$1'" >&2
 		usage
-		exit $ERR_VARGS
+		exit $err_vargs
 	fi
 }
 
@@ -80,6 +80,6 @@ doargs()
 chkargs $*
 doargs $*
 
-$COMMAND $COPTION $ARG
+$command $coption $arg
 
 exit 0

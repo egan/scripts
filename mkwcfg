@@ -10,11 +10,11 @@
 # revised -- 6 July, 2011 by Egan McComb
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
-IWLIST="sudo iwlist wlan0 scan | piwlist.py -n"
-NETDIR="/etc/network.d"
+iwlist="sudo iwlist wlan0 scan | piwlist.py -n"
+netdir="/etc/network.d"
 
 usage()
 {
@@ -29,12 +29,12 @@ chkargs()
 	then
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	elif [ $# -gt 3 ]
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	fi
 }
 
@@ -42,56 +42,56 @@ doargs()
 {
 	if [ $# -eq 1 ]
 	then
-		if $(grep -q "$1" <<< "$IWSCAN")
+		if $(grep -q "$1" <<< "$iwscan")
 		then
-			ESSID="$1"
-			FILE="$NETDIR/$ESSID-wireless"
-			if $(! grep -q "$ESSID|Open" <<< "$IWSCAN")
+			essid="$1"
+			file="$netdir/$essid-wireless"
+			if $(! grep -q "$essid|Open" <<< "$iwscan")
 			then
-				IWSCAN=$(grep -m 1 "$ESSID" <<< "$IWSCAN")
-				TYPE=$(cut -d "|" -f 5 <<< "$IWSCAN" | cut -d " " -f 1 | tr "[A-Z]" "[a-z]")
-				echo -n "Please enter $TYPE key for '$ESSID' network: "
+				iwscan=$(grep -m 1 "$essid" <<< "$iwscan")
+				type=$(cut -d "|" -f 5 <<< "$iwscan" | cut -d " " -f 1 | tr "[A-Z]" "[a-z]")
+				echo -n "Please enter $type key for '$essid' network: "
 				read KEY
 
 			fi
 		else
 			echo "Error: Unknown wireless network '$1'" >&2
 			usage
-			exit $ERR_VARGS
+			exit $err_vargs
 		fi
 	elif [ $# -eq 2 ]
 	then
 		echo "Error: Incorrect arguments" >&2
 		usage
-		exit $ERR_VARGS
+		exit $err_vargs
 	else
 		if [ $2 != "wep" ] && [ $2 != "wpa" ]
 		then
 			echo "Error: Invalid network type '$2'" >&2
 			usage
-			exit $ERR_VARGS
+			exit $err_vargs
 		else
-			TYPE=$2
-			KEY="$3"
+			type=$2
+			key="$3"
 		fi
-		if $(grep -q "$1" <<< "$IWSCAN")
+		if $(grep -q "$1" <<< "$iwscan")
 		then
-			ESSID="$1"
-			FILE="$NETDIR/$ESSID-wireless"
+			essid="$1"
+			file="$netdir/$essid-wireless"
 		else
 			echo "Error: Unknown wireless network '$1'" >&2
 			usage
-			exit $ERR_NARGS
+			exit $err_nargs
 		fi
 	fi
 }
 
 makeprofile()
 {
-	if [ ! -e "$FILE" ]
+	if [ ! -e "$file" ]
 	then
-		cp $NETDIR/examples/wireless-$TYPE "$FILE"
-		editprofile "$ESSID" $TYPE "$KEY"
+		cp $netdir/examples/wireless-$type "$file"
+		editprofile "$essid" $type "$key"
 	else
 		echo "Warning: File exits, doing nothing" >&2
 	fi
@@ -99,15 +99,15 @@ makeprofile()
 
 editprofile()
 {
-	sed -i "s/MyNetwork/$ESSID/" "$FILE"
-	if [ $TYPE = "wep" ]
+	sed -i "s/MyNetwork/$essid/" "$file"
+	if [ $type = "wep" ]
 	then
-		sed -i "s/123456789/$KEY/" "$FILE"
-	elif [ $TYPE = "wpa" ]
+		sed -i "s/123456789/$key/" "$file"
+	elif [ $type = "wpa" ]
 	then
-		sed -i "s/WirelessKey/$KEY/" "$FILE"
+		sed -i "s/WirelessKey/$key/" "$file"
 	fi
-	echo "DHCP_TIMEOUT='3000'" >> "$FILE"
+	echo "DHCP_TIMEOUT='3000'" >> "$file"
 }
 
 ##----MAIN----##
@@ -118,7 +118,7 @@ exit 1
 fi
 
 chkargs "$@"
-IWSCAN=$(eval $IWLIST)
+iwscan=$(eval $iwlist)
 doargs "$@"
 makeprofile
 

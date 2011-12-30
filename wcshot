@@ -16,12 +16,12 @@
 # revised --
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
-COMMAND="mplayer"
-COPTION="-msglevel all=-1:cplayer=-1:statusline=-1 -vf screenshot"
-VDEVICE="tv:// -tv driver=v4l2:width=640:height=480:device=/dev/video0"
+command="mplayer"
+coption="-msglevel all=-1:cplayer=-1:statusline=-1 -vf screenshot"
+vdevice="tv:// -tv driver=v4l2:width=640:height=480:device=/dev/video0"
 
 usage()
 {
@@ -40,16 +40,16 @@ chkargs()
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	elif [ ! -z $1 ] && [ ! $(grep [[:digit:]]x[[:digit:]] <<< $1) ]
 	then
 		echo "Error: Invalid resolution" >&2
 		usage
-		exit $ERR_VARGS
+		exit $err_vargs
 	elif [ ! -z $1 ]
 	then
-		VDEVICE=${VDEVICE/640/$(cut -d x -f 1 <<< $1)}
-		VDEVICE=${VDEVICE/480/$(cut -d x -f 2 <<< $1)}
+		vdevice=${vdevice/640/$(cut -d x -f 1 <<< $1)}
+		vdevice=${vdevice/480/$(cut -d x -f 2 <<< $1)}
 	fi
 }
 
@@ -62,6 +62,6 @@ echo "Press s to take a shot, or S to start/stop taking continuous shots" >&2
 echo "Shots will be saved in current directory as shotNNNN.png" >&2
 echo
 echo "Press q to quit" >&2
-$COMMAND $COPTION $VDEVICE &> /dev/null || echo "Error: Mplayer crashed" >&2 && exit 1
+$command $coption $vdevice &> /dev/null || echo "Error: Mplayer crashed" >&2 && exit 1
 
 exit 0

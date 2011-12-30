@@ -12,13 +12,13 @@
 # revised --
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
-FILE=$(mktemp $(basename $0).XXX.tex)
-SIZE="\LARGE"
-LCOMMAND="latex -interaction=batchmode"
-DCOMMAND="dvipng -q -T tight -o ${FILE/%tex/png}"
+file=$(mktemp $(basename $0).XXX.tex)
+size="\LARGE"
+lcommand="latex -interaction=batchmode"
+dcommand="dvipng -q -T tight -o ${file/%tex/png}"
 
 usage()
 {
@@ -36,65 +36,65 @@ chkargs()
 	then
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	elif [ $# -eq 2 ]
 	then
 		case $1 in
 			tiny)
-				SIZE="\tiny";;
+				size="\tiny";;
 			script)
-				SIZE="\scriptsize";;
+				size="\scriptsize";;
 			footnote)
-				SIZE="\footnotesize";;
+				size="\footnotesize";;
 			small)
-				SIZE="\small";;
+				size="\small";;
 			normal)
-				SIZE="\normal";;
+				size="\normal";;
 			large)
-				SIZE="\large";;
+				size="\large";;
 			Large)
-				SIZE="\Large";;
+				size="\Large";;
 			LARGE)
-				SIZE="\LARGE";;
+				size="\LARGE";;
 			huge)
-				SIZE="\huge";;
+				size="\huge";;
 			Huge)
-				SIZE="\Huge";;
+				size="\Huge";;
 			*)
 				echo "Error: Invalid argument '$1'" >&2
 				usage
-				exit $ERR_VARGS
+				exit $err_vargs
 		esac
-		TEXT="$2"
+		text="$2"
 	elif [ $# -gt 2 ]
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	else
-		TEXT="$*"
+		text="$*"
 	fi
 }
 
 convert()
 {
-	$LCOMMAND $FILE > /dev/null
+	$lcommand $file > /dev/null
 	if [ $? -ne 0 ]
 	then
 		echo "Error: Unable to compile LaTeX code" >&2
 		exit 1
 	fi
-	$DCOMMAND ${FILE/%tex/dvi} > /dev/null
+	$dcommand ${file/%tex/dvi} > /dev/null
 }
 
 clean()
 {
-	rm -f ${FILE/%tex/aux} ${FILE/%tex/dvi} ${FILE/%tex/log} $FILE
+	rm -f ${file/%tex/aux} ${file/%tex/dvi} ${file/%tex/log} $file
 }
 
 ##----MAIN----##
 chkargs $*
-cat > $FILE <<- EOF
+cat > $file <<- EOF
 	\documentclass{article}
 	\usepackage[american]{babel}
 	\usepackage{amsmath}
@@ -104,13 +104,13 @@ cat > $FILE <<- EOF
 	\newcommand{\abs}[1]{\lvert#1\rvert}
 	\newcommand{\s}{\Rightarrow}
 	\begin{document}
-	$SIZE
-	\$\$${TEXT}\$\$
+	$size
+	\$\$${text}\$\$
 	\end{document}
 	EOF
 convert
 clean
 
-echo "${FILE/%tex/png}"
+echo "${file/%tex/png}"
 
 exit 0

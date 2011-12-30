@@ -12,12 +12,12 @@
 # revised -- 20 June, 2011 by author
 ##
 
-ERR_NARGS=3
+err_nargs=3
 
-COMMAND="curl"
-COPTION=" -s -d"
-PSTDATA='url="$URL"'
-SERVICE="http://tinyurl.com/create.php"
+command="curl"
+coption=" -s -d"
+pstdata='url="$URL"'
+service="http://tinyurl.com/create.php"
 
 usage()
 {
@@ -33,25 +33,25 @@ chkargs()
 	then
 		echo "Error: No input given" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	elif [ $# -gt 1 ] || [ ! -z "$1" ] && [ ! -t 0 ]
 	then
 		echo "Error: Excess input" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	elif [ ! -z "$1" ]
 	then
-		URL="$1"
+		url="$1"
 	else
-		read -r URL
+		read -r url
 	fi
 }
 
 ##----MAIN----##
 chkargs "$@"
 
-OUT=$(eval $COMMAND $COPTION $PSTDATA $SERVICE | sed -n 's/.*\(http:\/\/tinyurl.com\/[a-z0-9][a-z0-9]*\).*/\1/p' | uniq)
-echo -n $OUT | xclip
-echo $OUT
+out=$(eval $command $coption $pstdata $service | sed -n 's/.*\(http:\/\/tinyurl.com\/[a-z0-9][a-z0-9]*\).*/\1/p' | uniq)
+echo -n $out | xclip
+echo $out
 
 exit 0

@@ -10,10 +10,10 @@
 # revised -- 19 December, 2011 by author
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
-COMMAND="gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite"
+command="gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite"
 
 usage()
 {
@@ -26,30 +26,30 @@ chkargs()
 	then
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	fi
 	if [ -f "${!#}" ]
 	then
 		echo "Warning: Output file exists" >&2
 		echo -n "Continue? [y/N] " >&2
-		read RESPONSE
-		if [ "$RESPONSE" != "y" ]
+		read response
+		if [ "$response" != "y" ]
 		then
 			exit 1
 		fi
 	fi
-	OUT="${!#}"
-	for FILE in "${@:1:$(($#-1))}"
+	out="${!#}"
+	for file in "${@:1:$(($#-1))}"
 	do
-		if [ ! -e "$FILE" ]
+		if [ ! -e "$file" ]
 		then
-			echo "Error: Invalid file '$FILE'" >&2
-			exit $ERR_VARGS
+			echo "Error: Invalid file '$file'" >&2
+			exit $err_vargs
 		fi
 	done
 }
 
 ##----MAIN----##
 chkargs "$@"
-$COMMAND  -sOutputFile="$OUT" "${@:1:$(($#-1))}"
+$command  -sOutputFile="$out" "${@:1:$(($#-1))}"
 exit 0

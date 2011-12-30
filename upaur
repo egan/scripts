@@ -11,48 +11,48 @@
 #            6 June, 2011 by author
 ##
 
-AURL="http://aur.archlinux.org/packages"
-AURQ="http://aur.archlinux.org/rpc.php?type=info&arg="
-PACQ=$(pacman -Qm | tr " " ";")
-DEST="$HOME/src/aur"
-CURL="curl -s"
-WGET="wget -qP $DEST"
+aurl="http://aur.archlinux.org/packages"
+aurq="http://aur.archlinux.org/rpc.php?type=info&arg="
+pacq=$(pacman -Qm | tr " " ";")
+dest="$HOME/src/aur"
+curl="curl -s"
+wget="wget -qP $DEST"
 
 extern()
 {
-	EXTRN=$($CURL ${AURQ}$PKGNM | jshon -e results -e Version -u)
+	extrn=$($curl ${aurq}$pkgnm | jshon -e results -e Version -u)
 }
 
 output()
 {
-	printf "%-30s -- %s\n" $PKGNM $STATUS
-	if [ $STATUS = "OUTDATED" ]
+	printf "%-30s -- %s\n" $pkgnm $status
+	if [ $status = "OUTDATED" ]
 	then
 		echo -ne "\E[01;34m::\033[0m Retrieve tarball? [Y/n] "
-		read REPLY
-		if [ $REPLY = "Y" ] || [ $REPLY = "y" ]
+		read reply
+		if [ $reply = "Y" ] || [ $reply = "y" ]
 		then
-			$WGET $AURL/$PKGNM/$PKGNM.tar.gz
+			$wget $aurl/$pkgnm/$pkgnm.tar.gz
 		fi
 	fi
 }
 
 ##----MAIN----##
-for PKG in $PACQ
+for pkg in $pacq
 do
-	PKGNM=$(cut -d ";" -f 1 <<< $PKG)
-	LOCAL=$(cut -d ";" -f 2 <<< $PKG)
+	pkgnm=$(cut -d ";" -f 1 <<< $pkg)
+	local=$(cut -d ";" -f 2 <<< $pkg)
 	extern
 
-	if $(grep -q "git" <<< "$PKGNM")
+	if $(grep -q "git" <<< "$pkgnm")
 	then
-		STATUS="UNKNOWN"
+		status="UNKNOWN"
 	else
-		if [ $LOCAL = "$EXTRN" ]
+		if [ $local = "$EXTRN" ]
 		then
-			STATUS="CURRENT"
+			status="CURRENT"
 		else
-			STATUS="OUTDATED"
+			status="OUTDATED"
 		fi
 	fi
 	output

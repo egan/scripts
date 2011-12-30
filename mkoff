@@ -10,8 +10,8 @@
 # written -- 4 July, 2009 by Egan McComb
 ##
 
-ERR_NARGS=3
-ERR_NARGS=5
+err_nargs=3
+err_nargs=5
 
 usage()
 {
@@ -24,17 +24,17 @@ chkfile()
 	then
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	elif [ ! -e "$1" ]
 	then
 		echo "Error: Nonexistent file: $1" >&2
 		usage
-		exit $ERR_VARGS
+		exit $err_vargs
 	elif [ ! -f "$1" ]
 	then
 		echo "Error: Wrong type of file: $1" >&2
 		usage
-		exit $ERR_VARGS
+		exit $err_vargs
 	else
 		FILE="$1"
 	fi
@@ -46,19 +46,19 @@ if [ $1 = "-s" ]
 then
 	if [ ! -z "$2" ]
 	then
-		STRING="$2"
+		string="$2"
 		chkfile "$3"
-		cp "$FILE" "$FILE"~
-		sed "s|${STRING}||g" "$FILE" | sponge "$FILE"
+		cp "$file" "$file"~
+		sed "s|${string}||g" "$file" | sponge "$file"
 	else
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	fi
 else
 	chkfile "$1"
-	cp "$FILE" "$FILE"~
-	perl -p0e 's|<a href="(.*://.*?/)(.*")|<a href="./$2|g' "$FILE" | sponge "$FILE"
+	cp "$file" "$file"~
+	perl -p0e 's|<a href="(.*://.*?/)(.*")|<a href="./$2|g' "$file" | sponge "$file"
 fi
 
 exit 0

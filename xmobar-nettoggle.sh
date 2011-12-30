@@ -10,13 +10,13 @@
 # revised --
 ##
 
-XMOBARRC="$HOME/.xmobarrc"
+xmobarrc="$HOME/.xmobarrc"
 
-if $(grep -q "eth0" < $XMOBARRC)
+if $(grep -q "eth0" < $xmobarrc)
 then
-	sed -e "s/eth0/wlan0/g" < $XMOBARRC | sponge $XMOBARRC
+	sed -e "s/eth0/wlan0/g" < $xmobarrc | sponge $xmobarrc
 else
-	sed -e "s/wlan0/eth0/g" < $XMOBARRC | sponge $XMOBARRC
+	sed -e "s/wlan0/eth0/g" < $xmobarrc | sponge $xmobarrc
 fi
 
 pkill -x xmobar

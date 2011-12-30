@@ -10,8 +10,8 @@
 # revised -- 25 Dec, 2010 by author
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
 usage()
 {
@@ -24,19 +24,19 @@ chkargs()
 	then
 		echo "Error: Wrong number of arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	fi
 }
 
 chkfile()
 {
-	for FILE in "$@"
+	for file in "$@"
 	do
 		if [ ! -e "$1" ]
 		then
 			echo "Error: File '$1' does not exist" >&2
 			usage
-			exit $ERR_VARGS
+			exit $err_vargs
 		fi
 	done
 }
@@ -45,5 +45,5 @@ chkfile()
 chkargs "$@"
 chkfile "$@"
 
-TEMP=$(mktemp swap.XXX)
-mv "$1" $TEMP && mv "$2" "$1" && mv $TEMP "$2" && exit 0
+temp=$(mktemp swap.XXX)
+mv "$1" $temp && mv "$2" "$1" && mv $temp "$2" && exit 0

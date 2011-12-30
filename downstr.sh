@@ -10,8 +10,8 @@
 # revised --
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
 usage()
 {
@@ -22,26 +22,26 @@ chkargs()
 {
 	if [ -z "$1" ]
 	then
-		DIR=.
+		dir=.
 	elif [ $# -gt 1 ]
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	else
-		DIR=$(locate -n 1 -r $PWD.*/"$1"$)
+		dir=$(locate -n 1 -r $PWD.*/"$1"$)
 	fi
 }
 
 ##----MAIN----##
 chkargs "$@"
 
-if [ -z "$DIR" ]
+if [ -z "$dir" ]
 then
 	echo "Error: No match found for '$1'" >&2
-	exit $ERR_VARGS
+	exit $err_vargs
 else
-	echo "$DIR"
+	echo "$dir"
 fi
 
 exit 0

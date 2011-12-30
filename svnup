@@ -12,18 +12,18 @@
 # revised -- 22 August, 2010 by author
 ##
 
-IFS=":"
-ERR_VARGS=5
+ifs=":"
+err_vargs=5
 
-LFILE="$HOME/bin/.svnlist"
-SLINE="\E[01;34m::\033[0m Updating:"
-TLINE="\E[01;34m>\033[0m"
+lfile="$HOME/bin/.svnlist"
+sline="\E[01;34m::\033[0m Updating:"
+tline="\E[01;34m>\033[0m"
 
 usage()
 {
 	echo "Usage: $(basename $0) [-h|--help]|[-o|--only][DIR...]" >&2
 	echo -e "\t-Directory arguments are concatenated" >&2
-	echo -e "\t to newline-delimited default list $LFILE" >&2
+	echo -e "\t to newline-delimited default list $lfile" >&2
 	echo -e "\t unless the '-o' option is passed" >&2
 }
 
@@ -32,12 +32,12 @@ chkfile()
 	if [ ! -d "$1" ]
 	then
 		echo "Error: Nonexistent directory '$1'" >&2
-		exit $ERR_VARGS
+		exit $err_vargs
 	else
 		if [ ! -d "$1"/.svn ]
 		then
 			echo "Error: Invalid svn repo '$1'" >&2
-			exit $ERR_VARGS
+			exit $err_vargs
 		fi
 	fi
 }
@@ -53,32 +53,32 @@ chkargs()
 		elif [ $1 = "-o" ] || [ $1 = "--only" ]
 		then
 			shift
-			for ARG in "$@"
+			for arg in "$@"
 			do
-				chkfile "$ARG"
-				REPOS="$REPOS $ARG"
+				chkfile "$arg"
+				repos="$repos $arg"
 			done
 		else
-			REPOS="$(cat $LFILE | tr '\n' ' ')"
-			for ARG in "$@"
+			repos="$(cat $lfile | tr '\n' ' ')"
+			for arg in "$@"
 			do
-				chkfile "$ARG"
-				REPOS="$REPOS $ARG"
+				chkfile "$arg"
+				repos="$repos $arg"
 			done
 		fi
 	else
-		REPOS=$(cat $LFILE | tr '\n' ':')
+		repos=$(cat $lfile | tr '\n' ':')
 	fi
 }
 
 ##----MAIN----##
 chkargs "$@"
 
-for DIR in "$REPOS"
+for dir in "$repos"
 do
-	echo -e "$SLINE ${DIR/\/home\/egan/~}"
-	cd "$DIR" && svn up && cd
-	echo -ne "$TLINE "
+	echo -e "$sline ${dir/\/home\/egan/~}"
+	cd "$dir" && svn up && cd
+	echo -ne "$tline "
 	date +%T\ on\ %D
 	echo
 done

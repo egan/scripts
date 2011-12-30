@@ -12,19 +12,19 @@
 # revised -- 11 July, 2009 by author
 ##
 
-DSK="Pangolin"
-DIR="arch-backup"
-ETC="$HOME/code/config/etc"
+dsk="Pangolin"
+dir="arch-backup"
+etc="$HOME/code/config/etc"
 
-cp -R $(< $HOME/bin/.backup tr '\n' ' ')  $ETC
+cp -R $(< $HOME/bin/.backup tr '\n' ' ')  $etc
 
-# Check that $DSK is mounted
-if mountpoint -q /media/$DSK
+# Check that $dsk is mounted
+if mountpoint -q /media/$dsk
 then
 	# sync recursively, deleting old files
-	rsync -av --delete --exclude-from="/home/egan/.rsync/exclude" --include-from="/home/egan/.rsync/include" $HOME /media/$DSK/$DIR
+	rsync -av --delete --exclude-from="/home/egan/.rsync/exclude" --include-from="/home/egan/.rsync/include" $HOME /media/$dsk/$dir
 else
-	echo "Error: '$DSK' is not mounted"
+	echo "Error: '$dsk' is not mounted"
 	exit 1
 fi
 

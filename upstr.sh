@@ -10,8 +10,8 @@
 # revised --
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
 usage()
 {
@@ -22,20 +22,20 @@ chkargs()
 {
 	if [ -z "$1" ]
 	then
-		DIR=../
+		dir=../
 	elif [ $# -gt 1 ]
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	elif $(grep -q [^[:digit:]] <<< $1)
 	then
-		DIR=${PWD%/$1/*}/$1
+		dir=${PWD%/$1/*}/$1
 	else
 		x=0
 		while [ $x -lt ${1:-1} ]
 		do
-			DIR=${DIR}../
+			dir=${DIR}../
 			x=$(($x+1))
 		done
 	fi
@@ -44,12 +44,12 @@ chkargs()
 ##----MAIN----##
 chkargs "$@"
 
-if [ ! -e "$DIR" ]
+if [ ! -e "$dir" ]
 then
 	echo "Error: No match found for '$1'" >&2
-	exit $ERR_VARGS
+	exit $err_vargs
 else
-	echo "$DIR"
+	echo "$dir"
 fi
 
 exit 0

@@ -10,8 +10,8 @@
 # revised --
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
 usage()
 {
@@ -26,23 +26,23 @@ chkargs()
 	then
 		echo "Error: Wrong number of arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	fi
 	if [ -d "$2" ]
 	then
 		echo "Error: Invalid filename '$2'">&2
 		usage
-		exit $ERR_VARGS
+		exit $err_vargs
 	fi
 }
 
 ##----MAIN----##
 chkargs "$@"
 
-OLDFILE="$1"
-NEWFILE=$(readlink -f "$2")
+oldfile="$1"
+newfile=$(readlink -f "$2")
 
-mv "$1" "$2" && ln -s "$NEWFILE" "$OLDFILE"
+mv "$1" "$2" && ln -s "$newfile" "$oldfile"
 
 if [ $? -ne 0 ]
 then

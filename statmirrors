@@ -10,11 +10,11 @@
 # revised -- 9 April, 2011 by author
 ##
 
-STATURL="https://www.archlinux.de/?page=MirrorStatusReflector"
-MIRRORL="/etc/pacman.d/mirrorlist"
-SERVERL=$(sed '/^ *Server *= *\([^\$]*\)\$repo.*$/!d;s//\1/' /etc/pacman.d/mirrorlist | tr '\n' '|' | sed 's/|$//')
+staturl="https://www.archlinux.de/?page=MirrorStatusReflector"
+mirrorl="/etc/pacman.d/mirrorlist"
+serverl=$(sed '/^ *Server *= *\([^\$]*\)\$repo.*$/!d;s//\1/' /etc/pacman.d/mirrorlist | tr '\n' '|' | sed 's/|$//')
 
 ##----MAIN----$$
-grep -E "$SERVERL" <(curl -s $STATURL)
+grep -E "$serverl" <(curl -s $staturl)
 
 exit 0

@@ -10,17 +10,17 @@
 # revised --
 ##
 
-LOCKFILE=/tmp/dpms.lock
+lockfile=/tmp/dpms.lock
 
-if [ ! -e $LOCKFILE ]
+if [ ! -e $lockfile ]
 then
 	xset -dpms
 	xset s off
-	touch $LOCKFILE
+	touch $lockfile
 else
 	xset +dpms
 	xset s on
-	rm $LOCKFILE
+	rm $lockfile
 fi
 
 exit 0

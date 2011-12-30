@@ -14,12 +14,12 @@
 # revised --
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
-APIKEY="4f22353fbb8473a442bf708ecd553ffb"
+apikey="4f22353fbb8473a442bf708ecd553ffb"
 
-HFILE="$HOME/bin/.imgur_history"
+hfile="$HOME/bin/.imgur_history"
 
 usage()
 {
@@ -34,44 +34,44 @@ chkargs()
 		then
 			echo "Error: Too few arguments" >&2
 			usage
-			exit $ERR_NARGS
+			exit $err_nargs
 		else
 			echo "Error: Too many arguments" >&2
 			usage
-			exit $ERR_NARGS
+			exit $err_nargs
 		fi
 	elif [ ! -f "$1" ]
 	then
 		echo "Error: Invalid file '$1'" >&2
 		usage
-		exit $ERR_VARGS
+		exit $err_vargs
 	else
-		IMAGE="$1"
+		image="$1"
 	fi
 }
 
 ##----MAIN----##
 chkargs "$@"
 
-RESPONSE=$(curl -sF "key=$APIKEY" -F "image=@$IMAGE" http://imgur.com/api/upload.xml)
+response=$(curl -sF "key=$apikey" -F "image=@$image" http://imgur.com/api/upload.xml)
 
 if [ $? -ne 0 ]
 then
 	echo "Upload failed" >&2
 	exit 1
-elif [ $(grep -c "<error_msg>" <<< $RESPONSE) -gt 0 ]
+elif [ $(grep -c "<error_msg>" <<< $response) -gt 0 ]
 then
 	echo "Error: imgur says:" >&2
-	echo $RESPONSE | sed -r 's/.*<error_msg>(.*)<\/error_msg>.*/\1/' >&2
+	echo $response | sed -r 's/.*<error_msg>(.*)<\/error_msg>.*/\1/' >&2
 	exit 1
 fi
 
-IURL=$(sed -r 's/.*<original_image>(.*)<\/original_image>.*/\1/' <<< $RESPONSE)
-DURL=$(sed -r 's/.*<delete_page>(.*)<\/delete_page>.*/\1/' <<< $RESPONSE)
+iurl=$(sed -r 's/.*<original_image>(.*)<\/original_image>.*/\1/' <<< $response)
+durl=$(sed -r 's/.*<delete_page>(.*)<\/delete_page>.*/\1/' <<< $response)
 
-echo -n "$IURL" | xclip
-date +%T\ on\ %D >> $HFILE
-echo "$IURL" | tee -a $HFILE
-echo "$DURL" >> $HFILE
+echo -n "$iurl" | xclip
+date +%T\ on\ %D >> $hfile
+echo "$iurl" | tee -a $hfile
+echo "$durl" >> $hfile
 
 exit 0

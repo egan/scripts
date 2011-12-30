@@ -10,11 +10,11 @@
 # revised --
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
+err_nargs=3
+err_vargs=5
 
-TRIMCOM="tr ':\-,' '\n'"
-COMMAND="gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite"
+trimcom="tr ':\-,' '\n'"
+command="gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite"
 
 usage()
 {
@@ -30,20 +30,20 @@ chkargs()
 	then
 		echo "Error: Wrong number of arguments" >&2
 		usage
-		exit $ERR_NARGS
+		exit $err_nargs
 	fi
-	chkfile "$2" && IN="$2"
-	OUT="$3"
-	if $(grep -q "[^[:digit:]:-]" <<< "$1") && $(grep -q "[^[:digit:],]" <<< "$1")
+	chkfile "$2" && in="$2"
+	out="$3"
+	if $(grep -q "[^[:digit:]:-]" <<< "$1")
 	then
 		echo "Error: Invalid page range syntax" >&2
 		usage
-		exit $ERR_VARGS
-	elif ! $(sort -nC <(eval $TRIMCOM <<< $1)) || [ ! -z $(uniq -d <(eval $TRIMCOM <<< $1)) ]
+		exit $err_vargs
+	elif ! $(sort -nC <(eval $trimcom <<< $1)) || [ ! -z $(uniq -d <(eval $trimcom <<< $1)) ]
 	then
 		echo "Error: Invalid page range collation" >&2
 		usage
-		exit $ERR_VARGS
+		exit $err_vargs
 	fi
 }
 
@@ -52,31 +52,31 @@ chkfile()
 	if [ ! -f "$1" ] || ! $(grep -q "PDF" <<< $(file "$1"))
 	then
 		echo "Error: Invalid input file '$1'" >&2
-		exit $ERR_VARGS
+		exit $err_vargs
 	fi
 }
 
 range()
 {
 	IFS=":"
-	RANGES=($@)
-	TFILES=()
-	for RANGE in ${RANGES[@]}
+	ranges=($@)
+	tfiles=()
+	for range in ${ranges[@]}
 	do
-		if [ $(awk 'BEGIN { FS="-"} ; { print NF }' <<< $RANGE) -gt 2 ]
+		if [ $(awk 'BEGIN { FS="-"} ; { print NF }' <<< $range) -gt 2 ]
 		then
-			echo "Error: Invalid subrange '$RANGE'" >&2
+			echo "Error: Invalid subrange '$range'" >&2
 			usage
-			exit $ERR_VARGS
+			exit $err_vargs
 		fi
 		IFS="-"
-		SUBRANGE=(${RANGE[@]})
-		TFILES[${#TFILES[@]}]=$(mktemp)
+		subrange=(${range[@]})
+		tfiles[${#tfiles[@]}]=$(mktemp)
 		IFS=" "
-		eval $COMMAND -dFirstPage=${SUBRANGE[0]} -dLastPage=${SUBRANGE[-1]} -sOutputFile="${TFILES[-1]}" "$IN"
+		eval $command -dFirstPage=${subrange[0]} -dLastPage=${subrange[-1]} -sOutputFile="${tfiles[-1]}" "$in"
 	done
-	catpdf ${TFILES[@]} "$OUT"
-	rm ${TFILES[@]}
+	catpdf ${tfiles[@]} "$out"
+	rm ${tfiles[@]}
 }
 
 chkargs "$@"
