@@ -50,7 +50,7 @@ output()
 ##----MAIN----##
 if ! netbool.sh
 then
-	echo "Error: Internet connectivity poor"
+	echo "Error: Internet connectivity poor" >&2
 	exit 1
 fi
 
