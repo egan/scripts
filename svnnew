@@ -33,6 +33,12 @@ then
 	echo "Created $pwd/$nfile" >&2
 fi
 
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor" >&2
+	exit 1
+fi
+
 read=$(($(cat "$nfile")+1))
 svn log --incremental -r $read:BASE | less
 svn info | grep 'Revision' | cut -d " " -f 2 > "$nfile"
