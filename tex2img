@@ -1,24 +1,25 @@
 #!/bin/bash
 
 ##
-# tex2img -- quickly get png output from latex code (for math)
+# tex2img	-- quickly get png output from latex code (for math)
 #
-# usage -- tex2img [SIZE] STRING
+# usage		-- tex2img [SIZE] STRING
+#			-SIZE is standard LaTeX size command name
+#			 without any substring 'size'
+#			-Few measures preventing stupidity
+#			-Single-quoting is recommended
 #
-# notes -- not many measures to prevent stupidity are in place
+# notes		-- requires tclip
+#		-- uses $$ environment only
 #
-# written -- 25 August, 2010 by Egan McComb
+# todo		-- add safeguards
 #
-# revised --
+# written	-- 25 August, 2010 by Egan McComb
+#
+# revised	--
 ##
 
-err_nargs=3
-err_vargs=5
-
-file=$(mktemp $(basename $0).XXX.tex)
 size="\LARGE"
-lcommand="latex -interaction=batchmode"
-dcommand="dvipng -q -T tight -o ${file/%tex/png}"
 
 usage()
 {
@@ -30,16 +31,26 @@ usage()
 	echo -e "\t-Single-quoting is recommended" >&2
 }
 
+compile()
+{
+	latex -interaction=batchmode "$@"
+}
+
+convert()
+{
+	dvipng -q -T tight -o "$@"
+}
+
 chkargs()
 {
-	if [ $# -eq 0 ]
+	if (( ! $# ))
 	then
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $err_nargs
-	elif [ $# -eq 2 ]
+		exit $ERR_NARGS
+	elif (( $# == 2 ))
 	then
-		case $1 in
+		case "$1" in
 			tiny)
 				size="\tiny";;
 			script)
@@ -63,28 +74,17 @@ chkargs()
 			*)
 				echo "Error: Invalid argument '$1'" >&2
 				usage
-				exit $err_vargs
+				exit $ERR_VARGS
 		esac
 		text="$2"
-	elif [ $# -gt 2 ]
+	elif (( $# > 2 ))
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $err_nargs
+		exit $ERR_NARGS
 	else
-		text="$*"
+		text="$@"
 	fi
-}
-
-convert()
-{
-	$lcommand $file > /dev/null
-	if [ $? -ne 0 ]
-	then
-		echo "Error: Unable to compile LaTeX code" >&2
-		exit 1
-	fi
-	$dcommand ${file/%tex/dvi} > /dev/null
 }
 
 clean()
@@ -93,7 +93,8 @@ clean()
 }
 
 ##----MAIN----##
-chkargs $*
+chkargs "$@"
+file=$(mktemp $(basename $0).XXX.tex)
 cat > $file <<- EOF
 	\documentclass{article}
 	\usepackage[american]{babel}
@@ -108,9 +109,10 @@ cat > $file <<- EOF
 	\$\$${text}\$\$
 	\end{document}
 	EOF
-convert
+compile $file > /dev/null || { echo "Error: Unable to compile LaTeX code" >&2; clean; exit 2; }
+convert ${file/%tex/png} ${file/%tex/dvi} > /dev/null || { echo "Errors occurred in conversion" >&2; clean; exit 2; }
 clean
 
-echo "${file/%tex/png}"
+echo "${file/%tex/png}" | tclip
 
 exit 0
