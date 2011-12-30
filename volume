@@ -1,20 +1,20 @@
 #!/bin/bash
 
 ##
-# volume -- control alsa mixer levels
+# volume	-- control alsa mixer levels
 #
-# usage -- volume [[toggle|up|down|level LEVEL]|[t|u|d|l LEVEL]]
+# usage		-- volume [[toggle|up|down|level LEVEL]|[t|u|d|l LEVEL]]
+#			-With no arguments, print volume level
+#			-LEVEL is given as a percentage
+#			-Default step for up/down is $volstep
 #
-# written -- 30 July, 2009 by Egan McComb
+# notes		-- complex volume control can be done with alsamixer
 #
-# revised -- 15 June, 2010 by author
+# written	-- 30 July, 2009 by Egan McComb
+#
+# revised	-- 15 June, 2010 by author
 ##
 
-err_nargs=3
-err_vargs=5
-
-command="amixer"
-coption=" -q set"
 sdevice="Master"
 volstep=3
 
@@ -22,64 +22,63 @@ usage()
 {
 	echo "Usage: $(basename $0) [[toggle|up|down|level LEVEL]|[t|u|d|l LEVEL]]" >&2
 	echo -e "\t-With no arguments, print volume level" >&2
-	echo -e "\t-Default step for up/down is $volstep%" >&2
-	echo -e "\t as indicated in $0" >&2
 	echo -e "\t-LEVEL is given as a percentage" >&2
-	echo -e "\t-Complex volume control can be done with alsamixer" >&2
+	echo -e "\t-Default step for up/down is $volstep%" >&2
 }
+
+
+getvolume()
+{
+	state=$(amixer | grep -A 4 $sdevice | awk {'print $6'} | grep -m 1 "\[on\]\|\[off\]" | sed -e "s/[][]//g;s/o/O/")
+	volume=$(amixer | grep -A 6 $sdevice | awk {'print $4'} | grep -m 1 % | sed -e "s/[][]//g")
+	printf "%-4s %3s\n" "$state:" $volume
+	exit 0
+}
+
 
 chkargs()
 {
-	if [ $# -gt 1 ] && [ $1 != "level" ] && [ $1 != "l" ]
+	if (( ! $# ))
+	then
+		getvolume
+	elif (( $# > 1 )) && [[ $1 != "level" ]] && [[ $1 != "l" ]]
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $err_nargs
-	fi
-}
-
-doargs()
-{
-	if [ -z "$1" ]
-	then
-		state=$($command | grep -A 4 \'$sdevice\' | awk {'print $6'} | grep -m 1 "\[on\]\|\[off\]" | sed -e 's/[][]//g;s/o/O/')
-		volume=$($command | grep -A 6 \'$sdevice\' | awk {'print $4'} | grep -m 1 % | sed -e 's/[][]//g')
-		printf "%-4s %3s\n" "$state:" $volume
-		exit 0
-	elif [ $1 = "toggle" ] || [ $1 = "t" ]
+		exit $ERR_NARGS
+	elif [[ $1 = "toggle" ]] || [[ $1 = "t" ]]
 	then
 		arg="$sdevice toggle"
-	elif [ $1 = "up" ] || [ $1 = "u" ]
+	elif [[ $1 = "up" ]] || [[ $1 = "u" ]]
 	then
 		arg="$sdevice ${volstep}%+"
-	elif [ $1 = "down" ] || [ $1 = "d" ]
+	elif [[ $1 = "down" ]] || [[ $1 = "d" ]]
 	then
 		arg="$sdevice ${volstep}%-"
-	elif [ $1 = "level" ] || [ $1 = "l" ]
+	elif [[ $1 = "level" ]] || [[ $1 = "l" ]]
 	then
-		if [ -z "$2" ]
+		if [[ -z "$2" ]]
 		then
 			echo "Error: Too few arguments" >&2
 			usage
-			exit $err_nargs
-		elif  $(grep -q [^[:digit:]] <<< $2) || [ $2 -gt 100 ]
+			exit $ERR_NARGS
+		elif grep -q [^[:digit:]] <<< "$2" || (( $2 > 100 ))
 		then
 			echo "Error: Invalid LEVEL '$2'" >&2
 			usage
-			exit $err_vargs
+			exit $ERR_VARGS
 		fi
 		arg="$sdevice ${2}%"
 	else
 		echo "Error: Invalid argument '$1'" >&2
 		usage
-		exit $err_vargs
+		exit $ERR_VARGS
 	fi
 }
 
 ##----MAIN----##
-chkargs $*
-doargs $*
+chkargs "$@"
 
-$command $coption $arg
+amixer -q set $arg
 
 exit 0
