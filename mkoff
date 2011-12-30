@@ -30,7 +30,7 @@ chkfile()
 strsub()
 {
 	cp "$1" "$1"~
-	sed "s|${string}||g" "$1" | sponge "$1"
+	sed -i "s|${string}||g" "$1"
 }
 
 relsub()

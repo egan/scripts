@@ -36,6 +36,6 @@ do
 done
 
 num=$(($(wc -l $pwsfile | cut -d " " -f 1)-1))
-< $pwsfile sed -e "1s/ [0-9]* / $num /" | sponge $pwsfile
+sed -i "1s/ [0-9]* / $num /" "$pwsfile"
 
 exit 0
