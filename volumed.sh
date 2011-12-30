@@ -1,21 +1,24 @@
 #!/bin/bash
 
 ##
-# volumed.sh -- print volume changes to stdout
+# volumed.sh	-- print changes in volume to stdout
 #
-# usage -- designed for use with xmobar
+# usage		-- volumed.sh
 #
-# notes -- depends on inotify-tools and volume script
+# notes		-- requires inotify-tools and volume
+#		-- designed for use from xmobar
 #
-# written -- 14 June, 2010 by Egan McComb
+# written	-- 14 June, 2010 by Egan McComb
 #
-# revised --
+# revised	--
 ##
 
-sdevice="/dev/snd/controlC0"
+sdevice=/dev/snd/controlC0
 
-while [[ $(ps s $PPID | grep xmobar) ]]
+while $(ps s $PPID | grep -q xmobar)
 do
 	volume
-	inotifywait $sdevice -e ACCESS -e CLOSE_WRITE > /dev/null 2> /dev/null
+	inotifywait $sdevice -e ACCESS -e CLOSE_WRITE &> /dev/null
 done
+
+exit 0
