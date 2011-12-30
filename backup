@@ -41,7 +41,7 @@ echo "Attempting sync..."
 
 if mountpoint -q "$dsk" || [[ -d "$dsk/$dir" ]]
 then
-	rsync $HOME "$dsk/$dir" || { echo "Error: rsync encountered an error" >&2; exit 1; }
+	rsync $HOME "$dsk/$dir" || { echo "Errors occured!" >&2; exit 1; }
 else
 	echo "Error: Invalid destination '$dsk/$dir'"
 	echo "       Ensure the medium is mounted properly"
