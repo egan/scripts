@@ -33,7 +33,7 @@ usage()
 
 opendevice()
 {
-	command mplayer $coption $vdevice
+	mplayer $coption $vdevice
 }
 
 chkargs()
@@ -43,6 +43,10 @@ chkargs()
 		echo "Error: Too many arguments" >&2
 		usage
 		exit $ERR_NARGS
+	elif (( $# )) && [[ $1 = -h ]]
+	then
+		usage
+		exit 0
 	elif (( $# )) && ! grep -q [[:digit:]]x[[:digit:]] <<< "$1"
 	then
 		echo "Error: Invalid resolution" >&2
@@ -55,7 +59,7 @@ chkargs()
 	fi
 }
 
-###----MAIN----###
+##----MAIN----##
 chkargs "$@"
 
 echo "Wait a few seconds for the device to be opened" >&2
