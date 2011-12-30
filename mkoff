@@ -1,17 +1,16 @@
 #!/bin/bash
 
 ##
-# mkoff -- prepare a website for offline use
+# mkoff		-- prepare a website for offline use
 #
-# usage -- mkoff -s STRING [FILE]
+# usage		-- mkoff [-s STRING] FILE
 #
-# notes -- obviously the resources should be downloaded
+# notes		-- obviously the resources should be downloaded
 #
-# written -- 4 July, 2009 by Egan McComb
+# written	-- 4 July, 2009 by Egan McComb
+#
+# revised	--
 ##
-
-err_nargs=3
-err_nargs=5
 
 usage()
 {
@@ -20,45 +19,52 @@ usage()
 
 chkfile()
 {
-	if [ -z "$1" ]
+	if [[ ! -f "$1" ]]
+	then
+		echo "Error: Invalid file '$1'" >&2
+		usage
+		exit $ERR_VARGS
+	fi
+}
+
+strsub()
+{
+	cp "$1" "$1"~
+	sed "s|${string}||g" "$1" | sponge "$1"
+}
+
+relsub()
+{
+	cp "$1" "$1"~
+	perl -p0e 's|<a href="(.*://.*?/)(.*")|<a href="./$2|g' "$1" | sponge "$1"
+}
+
+chkargs()
+{
+	if (( ! $# ))
 	then
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $err_nargs
-	elif [ ! -e "$1" ]
+		exit $ERR_NARGS
+	elif [[ $1 = "-s" ]]
 	then
-		echo "Error: Nonexistent file: $1" >&2
-		usage
-		exit $err_vargs
-	elif [ ! -f "$1" ]
-	then
-		echo "Error: Wrong type of file: $1" >&2
-		usage
-		exit $err_vargs
+		if [[ ! -z "$2" ]]
+		then
+			string="$2"
+			chkfile "$3"
+			strsub "$3"
+		else
+			echo "Error: Too few arguments" >&2
+			usage
+			exit $ERR_NARGS
+		fi
 	else
-		FILE="$1"
+		chkfile "$1"
+		relsub "$1"
 	fi
 }
 
 ##----MAIN----##
-
-if [ $1 = "-s" ]
-then
-	if [ ! -z "$2" ]
-	then
-		string="$2"
-		chkfile "$3"
-		cp "$file" "$file"~
-		sed "s|${string}||g" "$file" | sponge "$file"
-	else
-		echo "Error: Too few arguments" >&2
-		usage
-		exit $err_nargs
-	fi
-else
-	chkfile "$1"
-	cp "$file" "$file"~
-	perl -p0e 's|<a href="(.*://.*?/)(.*")|<a href="./$2|g' "$file" | sponge "$file"
-fi
+chkargs "$@"
 
 exit 0
