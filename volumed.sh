@@ -13,7 +13,7 @@
 # revised	--
 ##
 
-sdevice=/dev/snd/controlC0
+sdevice="/dev/snd/controlC0"
 
 while $(ps s $PPID | grep -q xmobar)
 do
