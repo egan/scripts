@@ -33,7 +33,7 @@ convert()
 check()
 {
 	read -d "" reply
-	if (( $(grep -c "$") == 0 ))
+	if (( $(grep -c "$" <<< "$reply") == 1 ))
 	then
 		echo "Error: Invalid LOCID '$locid'" >&2
 		exit 1
