@@ -1,54 +1,40 @@
 #!/bin/bash
 
 ##
-# tablize -- convert labeled tsv files to latex tables
+# tablize	-- convert labeled tsv files to latex tables
 #
-# usage -- tablize [[-e ENVIRONMENT] [-c COLUMNSPEC] [-f FIELDSEP]] [FILE ...]
+# usage		-- tablize [FILE ...]
 #
-# written -- 30 April, 2010 by Egan McComb
+# todo		-- add options for $TE and $CS as well as headers
 #
-# revised --
+# written	-- 30 April, 2010 by Egan McComb
+#
+# revised	--
 ##
 
-ERR_NARGS=3
-ERR_VARGS=5
-
-TE="tabular"
-CS="l"
-FS="	"
+te="tabular"
+cs="l"
 
 usage()
 {
-	echo "$(basename $0) [[-e ENVIRONMENT] [-c COLUMNSPEC] [-f FIELDSEP]] [FILE ...]" >&2
+	echo "$(basename $0) [FILE ...]" >&2
 }
 
 chkargs()
 {
-	if [ -z "$1" ]
+	if (( ! $# ))
 	then
 		echo "Error: Too few arguments" >&2
 		usage
 		exit $ERR_NARGS
 	fi
-	if [ $# -gt 1 ]
-	then
-		while getopt "e:c:f:" OPT
-		do
-			case $OPT in
-				e) TE=$OPTARG;;
-				c) CS=$OPTARG;;
-				f) FS=$OPTARG;;
-				?) except $OPTARG;;
-			esac
-		done
-	fi
 }
 
 chkfile()
 {
-	if [ ! -e "$1" ]
+	if [[ ! -f "$1" ]]
 	then
-		echo "Error: Invalid file: '$1'" >&2
+		echo "Error: Invalid file '$1'" >&2
 		usage
 		exit $ERR_VARGS
 	fi
@@ -56,30 +42,29 @@ chkfile()
 
 column()
 {
-	NF=$(awk 'END{printf "%s", NF}' < $IN)
-	CSP=" |"$CS
-	i="1"
-	while [ $i -lt $NF ]
+	nf=$(awk 'END{printf "%s", NF}' < "$1")
+	csp=$cs
+	for ((i=1; i<$nf; i++))
 	do
-		CSP=${CSP}$CS
-		let i+=1
+		csp=$csp$cs
 	done
 }
 
 convert()
 {
-	echo -e "\\\begin{$TE}{$CSP}\n\\toprule" > ${1/%.*/.tex}
-	sed "s/$FS/ \& /g;s/$/ \\\\\\\\\n\\\\midrule/g" < $1 >> ${1/%.*/.tex}
-	echo "\end{$TE}" >> ${1/%.*/.tex}
+	echo -e "\\\begin{$te}{$csp}\n\\topline" > "${1/%.*/.tex}"
+	sed "s/	/ \& /g;s/$/ \\\\\\\\\n\\\\midline/g" < "$1" >> "${1/%.*/.tex}"
+	sed "$s/midrule/bottomrule/g" < "${1/%.*/.tex}" | sponge "${1/%.*/.tex}"
+	echo "\end{$te}" >> "${1/%.*/.tex}"
 }
 
 ##---MAIN---##
 chkargs "$@"
-for FILE in "$@"
+for file in "$@"
 do
-	chkfile "$FILE"
-	column "$FILE"
-	convert "$FILE"
+	chkfile "$file"
+	column "$file"
+	convert "$file"
 done
 
 exit 0
