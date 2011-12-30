@@ -1,28 +1,26 @@
 #!/bin/bash
 
 ##
-# pless -- pipes stdout of arbitrary commands into less.
+# pless		-- pipes output of arbitrary commands into less
 #
-# usage -- pless [COMMAND]
+# usage		-- pless [COMMAND]
 #
-# written -- 1 August, 2009 by Egan McComb
+# written	-- 1 August, 2009 by Egan McComb
 #
-# revised -- 31 July, 2010 by author
+# revised	-- 31 July, 2010 by author
 ##
-
-err_nargs=3
 
 usage()
 {
 	echo "Usage: $(basename $0) [COMMAND]" >&2
 }
 
-if [ -z "$1" ]
+if (( ! $# ))
 then
 	usage
-	exit $err_nargs
+	exit $ERR_NARGS
 fi
 
 "$@" | less
 
-exit 0
+exit $?
