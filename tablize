@@ -35,8 +35,7 @@ chkfile()
 	if [[ ! -f "$1" ]]
 	then
 		echo "Error: Invalid file '$1'" >&2
-		usage
-		exit $ERR_VARGS
+		echo "Continuing..." >&2
 	fi
 }
 
