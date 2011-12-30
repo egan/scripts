@@ -1,17 +1,17 @@
 #!/bin/bash
 
 ##
-# downstr -- return down string
+# downstr.sh	-- return down string
 #
-# usage -- downstr [REGEX]
+# usage		-- downstr.sh [GLOB]
 #
-# written -- 13 March, 2011 by Egan McComb
+# todo		-- move away from locate
+#		-- add menu for ambiguous globs
 #
-# revised --
+# written.sh	-- 13 March, 2011 by Egan McComb
+#
+# revised	--
 ##
-
-err_nargs=3
-err_vargs=5
 
 usage()
 {
@@ -20,14 +20,14 @@ usage()
 
 chkargs()
 {
-	if [ -z "$1" ]
+	if (( ! $# ))
 	then
 		dir=.
-	elif [ $# -gt 1 ]
+	elif [[ $# > 1 ]]
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $err_nargs
+		exit $ERR_NARGS
 	else
 		dir=$(locate -n 1 -r $PWD.*/"$1"$)
 	fi
@@ -36,10 +36,10 @@ chkargs()
 ##----MAIN----##
 chkargs "$@"
 
-if [ -z "$dir" ]
+if [[ -z "$dir" ]]
 then
 	echo "Error: No match found for '$1'" >&2
-	exit $err_vargs
+	exit $ERR_VARGS
 else
 	echo "$dir"
 fi
