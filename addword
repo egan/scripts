@@ -1,16 +1,14 @@
 #!/bin/bash
 
 ##
-# addword -- add words to aspell personal dictionary
+# addword	-- add words to aspell personal dictionary
 #
-# usage -- addword WORD [WORD...]
+# usage		-- addword WORD [WORD...]
 #
-# written -- 19 December, 2011 by Egan McComb
+# written	-- 19 December, 2011 by Egan McComb
 #
 # revised --
 ##
-
-err_nargs=3
 
 pwsfile="$HOME/.aspell.en.pws"
 
@@ -21,24 +19,23 @@ usage()
 
 chkargs()
 {
-	if [ -z $1 ]
+	if (( ! $# ))
 	then
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $err_nargs
+		exit $ERR_NARGS
 	fi
 }
 
-chkargs $@
-words=($@)
+chkargs "$@"
+words=("$@")
 
-for word in ${words[@]}
+for word in "${words[@]}"
 do
-	echo $word >> $pwsfile
+	echo "$word" >> $pwsfile
 done
 
 num=$(($(wc -l $pwsfile | cut -d " " -f 1)-1))
-echo $num
 < $pwsfile sed -e "1s/ [0-9]* / $num /" | sponge $pwsfile
 
 exit 0
