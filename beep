@@ -1,21 +1,16 @@
 #!/bin/bash
 
 ##
-# beep -- beep continuously or n times
+# beep		-- beep continuously or n times
 #
-# usage -- beep [-t NUMBER]
+# usage		-- beep [-t NUMBER]
 #
-# written -- 27 July, 2010 by Egan McComb
+# written	-- 27 July, 2010 by Egan McComb
 #
 # revised --
 ##
 
-err_nargs=3
-err_vargs=5
-
 sndfile="$HOME/bin/.beep.wav"
-command="aplay"
-coption="$SNDFILE &>/dev/null"
 sdevice="Master"
 
 usage()
@@ -23,75 +18,82 @@ usage()
 	echo "Usage: $(basename $0) [-t NUMBER]" >&2
 }
 
+play()
+{
+	aplay $sndfile &> /dev/null
+}
+
 chkargs()
 {
-	if [ -z "$1" ]
+	if (( ! $# ))
 	then
 		bcfunct="loop"
-	elif [ $1 = "-t" ]
+	elif [[ $1 = "-t" ]]
 	then
-		if [ -z "$2" ]
+		if [[ -z $2 ]]
 		then
 			echo "Error: Too few arguments" >&2
 			usage
-			exit $err_nargs
-		elif $(echo $2 | grep -q [^[:digit:]])
+			exit $ERR_NARGS
+		elif grep -q [^[:digit:]] <<< "$2"
 		then
 			echo "Error: Invalid NUMBER '$2'" >&2
 			usage
-			exit $err_vargs
-		elif [ $# -gt 2 ]
+			exit $ERR_VARGS
+		elif [[ $# > 2 ]]
 		then
 			echo "Error: Too many arguments" >&2
 			usage
-			exit $err_nargs
+			exit $ERR_NARGS
 		else
 			bcfunct="loop $2"
 		fi
 	else
 		echo "Error: Invalid argument '$1'" >&2
 		usage
-		exit $err_vargs
+		exit $ERR_VARGS
 	fi
 }
 
 loop()
 {
-	if [ -z "$1" ]
+	if (( ! $# ))
 	then
 		while true
 		do
-			eval $command $coption
+			play
 		done &
 		trap "kill $! && echo 'Caught SIGINT: Break'; exit 1" SIGINT SIGKILL
 		read -sn 1
 		kill $!
 	else
 		i=$1
-		while [ $i -gt 0 ]
+		while [[ $i > 0 ]]
 		do
-			eval $command $coption
-			let i-=1
+			play
+			((i--))
 		done
 	fi
 }
 
 unmute()
 {
-	if $(amixer | grep -A 4 \'$sdevice\' | awk {'print $6'} | grep -q  "\[off\]")
+	if amixer | grep -A 4 \'$sdevice\' | awk {'print $6'} | grep -q  "\[off\]"
 	then
 		amixer -q set $sdevice toggle
 	fi
 }
 
 ##----MAIN----##
-if [ ! -e $sndfile ]
+if [[ ! -e $sndfile ]]
 then
 	echo "Error: Missing resource '$sndfile'" >&2
-	exit 1
+	echo "       Will generate tone instead" >&2
+	speaker-test -t sine
+	exit 0
 fi
 
-chkargs $*
+chkargs "$@"
 unmute
 $bcfunct
 
