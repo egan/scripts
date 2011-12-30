@@ -49,7 +49,7 @@ chkargs()
 		exit 0
 	elif (( $# )) && ! grep -q [[:digit:]]x[[:digit:]] <<< "$1"
 	then
-		echo "Error: Invalid resolution" >&2
+		echo "Error: Invalid resolution '$1'" >&2
 		usage
 		exit $ERR_VARGS
 	elif (( $# ))
