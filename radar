@@ -1,20 +1,30 @@
 #!/bin/bash
 
 ##
-# radar -- obtain radar reflectivity data using nws
+# radar		-- obtain radar reflectivity data from NWS
 #
-# usage -- radar
+# usage		-- radar
 #
-# written -- 11 December, 2010 by Egan McComb
+# notes		-- requires qiv
+#		-- uses DAX station
 #
-# revised --
+# todo		-- allow changeable LOCID
+#
+# written	-- 11 December, 2010 by Egan McComb
+#
+# revised	--
 ##
 
-err_nargs=3
-err_vargs=5
+curl()
+{
+	command curl -so "$@"
+}
 
-curl="curl -so"
-merge="convert -layers merge"
+merge()
+{
+	convert -layers merge "$@"
+}
+
 
 locid="dax"
 m_dir="$HOME/bin/.radar"
@@ -36,13 +46,22 @@ m_warn_u="http://radar.weather.gov/Warnings/Short/DAX_Warnings_0.gif"
 m_radr_u="http://radar.weather.gov/ridge/RadarImg/N0R/DAX_N0R_0.gif"
 m_over_u="http://radar.weather.gov/Legend/N0R/DAX_N0R_Legend_0.gif"
 
-$curl $m_warn $m_warn_u &
+##----MAIN----##
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor" >&2
+	exit 1
+fi
+
+curl $m_warn $m_warn_u &
 pids=$!
-$curl $m_radr $m_radr_u &
+curl $m_radr $m_radr_u &
 pids="$pids $!"
-$curl $m_over $m_over_u &
+curl $m_over $m_over_u &
 pids="$pids $!"
 
 wait $pids
-$merge $m_evry $m_warn $m_radr $m_over $m_out
+merge $m_evry $m_warn $m_radr $m_over $m_out
 qiv $m_out
+
+exit 0
