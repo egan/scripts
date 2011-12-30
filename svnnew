@@ -1,28 +1,40 @@
 #!/bin/bash
 
 ##
-# svnnew -- obtain fresh svn commit logs and view them
+# svnnew	-- obtain fresh svn commit logs and view them
 #
-# usage -- svnlog
+# usage		-- svnlog
 #
-# notes -- finds last revision in file $PWD/.svn/revision.info
+# notes		-- intended for use with aliases for specific repos
 #
-# written -- 1 March 2009 by Egan McComb
+# written	-- 1 March 2009 by Egan McComb
 #
-# revised -- 22 August, 2010 by author
+# revised	-- 11 July, 2009 by author
+#		-- 22 August, 2010 by author
 ##
 
-nfile=".svn/revision.info"
-lfile=".svn/revision.log"
+nfile="./.svn/revision.info"
 
-if [ ! -s $nfile ]
+if [[ ! -s "$nfile" ]]
 then
-	echo "Error: No revision file found, exiting" >&2
-	exit 1
+	echo "Error: Revision information unavailable: Creating" >&2
+	while true
+	do
+		echo -n "Enter an initial revision number: " >&2
+		read response
+		if grep -q [^[:digit:]] <<< $response
+		then
+			echo "Error: Invalid revision number '$response'" >&2
+		else
+			break
+		fi
+	done
+	echo $response > "$nfile"
+	echo "Created $pwd/$nfile" >&2
 fi
 
-read=$(($(cat $nfile)+1))
-svn log --incremental -r $read:BASE | tee -a $lfile | less
-svn info | grep 'Revision' | cut -d " " -f 2 > $nfile
+read=$(($(cat "$nfile")+1))
+svn log --incremental -r $read:BASE | less
+svn info | grep 'Revision' | cut -d " " -f 2 > "$nfile"
 
 exit 0
