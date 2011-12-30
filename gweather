@@ -7,7 +7,7 @@
 #			-LOCID can be given as a string or zip code
 #			-When unspecified, LOCID=$locid
 #
-# notes		-- no protection against invalid LOCID
+# notes		-- designed for use from aliases
 #
 # written	-- 12 September, 2010 by Egan McComb
 #
@@ -16,14 +16,30 @@
 
 current="$HOME/bin/.current.xslt"
 forecast="$HOME/bin/.forecast.xslt"
-locid="Mountain+View"
-#locid="95616"
+locid="Mountain+View" #"95616"
 
 usage()
 {
 	echo "Usage: $(basename $0) [-c|--current]|[-f|--forecast] [LOCID]" >&2
 	echo -e "\t-LOCID can be given as a string or zip code" >&2
 	echo -e "\t-When unspecified, LOCID=$locid" >&2
+}
+
+convert()
+{
+	iconv -f ISO-8859-1 -t UTF-8
+}
+
+check()
+{
+	read -d "" reply
+	if (( $(grep -c "$") == 0 ))
+	then
+		echo "Error: Invalid LOCID '$locid'" >&2
+		exit 1
+	else
+		echo "$reply"
+	fi
 }
 
 chkargs()
@@ -57,6 +73,5 @@ chkargs()
 
 ##----MAIN---##
 chkargs "$@"
-curl -s "http://www.google.com/ig/api?weather=$locid" | iconv -f ISO-8859-1 -t UTF-8 | xsltproc $filter -
-
-exit 0
+qurl="http://www.google.com/ig/api?weather=$locid"
+curl -s "$qurl" | convert | xsltproc $filter - | check
