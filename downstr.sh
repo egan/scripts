@@ -15,7 +15,7 @@
 
 usage()
 {
-	echo "Usage: $(basename $0) [REGEX]" >&2
+	echo "Usage: $(basename $0) [GLOB]" >&2
 }
 
 chkargs()
