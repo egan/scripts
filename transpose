@@ -1,37 +1,37 @@
 #!/bin/bash
 
 ##
-# transpose -- transpose a table
+# transpose	-- transpose a table
 #
-# usage -- transpose FILE, accepts stdin
+# usage		-- transpose FILE
+#			-Accepts stdin
 #
-# notes -- very rudimentary, needs revision
+# notes		-- very rudimentary, needs revision
 #
-# written -- 18 July, 2011 by Egan McComb
+# written	-- 18 July, 2011 by Egan McComb
 #
-# revised --
+# revised	--
 ##
-
-err_nargs=3
 
 usage()
 {
 	echo "Usage: $(basename $0) FILE" >&2
+	echo -e "\t-Accepts stdin" >&2
 }
 
 chkargs()
 {
-	if [ -z "$1" ] && [ -t 0 ]
+	if (( ! $# )) && [[ -t 0 ]]
 	then
 		echo "Error: No input given" >&2
 		usage
-		exit $err_nargs
-	elif [ $# -gt 1 ] || [ ! -z "$1" ] && [ ! -t 0 ]
+		exit $ERR_NARGS
+	elif (( $# > 1 )) || [[ ! -z "$1" ]] && [[ ! -t 0 ]]
 	then
 		echo "Error: Excess input" >&2
 		usage
-		exit $err_nargs
-	elif [ ! -z "$1" ]
+		exit $ERR_NARGS
+	elif [[ ! -z "$1" ]]
 	then
 		awk -F "\t" '
 		{
