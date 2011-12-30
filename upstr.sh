@@ -1,42 +1,39 @@
 #!/bin/bash
 
 ##
-# upstr -- return up string
+# upstr.sh	-- return up string
 #
-# usage -- upstr [N|REGEX]
+# usage		-- upstr.sh [N|UPDIR]
 #
-# written -- 13 March, 2011 by Egan McComb
+# written	-- 13 March, 2011 by Egan McComb
 #
-# revised --
+# revised	--
 ##
-
-err_nargs=3
-err_vargs=5
 
 usage()
 {
-	echo "Usage: $(basename $0) [N|REGEX]" >&2
+	echo "Usage: $(basename $0) [N|UPDIR]" >&2
 }
 
 chkargs()
 {
-	if [ -z "$1" ]
+	if (( ! $# ))
 	then
 		dir=../
-	elif [ $# -gt 1 ]
+	elif [[ $# > 1 ]]
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $err_nargs
-	elif $(grep -q [^[:digit:]] <<< $1)
+		exit $ERR_NARGS
+	elif $(grep -q [^[:digit:]] <<< "$1")
 	then
-		dir=${PWD%/$1/*}/$1
+		dir="${PWD%/$1/*}/$1"
 	else
 		x=0
-		while [ $x -lt ${1:-1} ]
+		while [[ $x < ${1:-1} ]]
 		do
-			dir=${DIR}../
-			x=$(($x+1))
+			dir="${dir}../"
+			((x++))
 		done
 	fi
 }
@@ -44,10 +41,10 @@ chkargs()
 ##----MAIN----##
 chkargs "$@"
 
-if [ ! -e "$dir" ]
+if [[ ! -d "$dir" ]]
 then
 	echo "Error: No match found for '$1'" >&2
-	exit $err_vargs
+	exit $ERR_VARGS
 else
 	echo "$dir"
 fi
