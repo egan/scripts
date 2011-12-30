@@ -1,22 +1,19 @@
 #!/bin/bash
 
 ##
-# turl -- shorten a url using tinyurl.com
+# turl		-- shorten a url using tinyurl.com
 #
-# usage -- turl URL, accepts stdin
+# usage		-- turl URL
+#			-Alternatively, accepts stdin
 #
-# notes -- watch out for problematic characters
+# notes		-- watch out for ampersands
+#		   and other special characters
 #
-# written -- 4 July, 2010 by Egan McComb
+# written	-- 4 July, 2010 by Egan McComb
 #
-# revised -- 20 June, 2011 by author
+# revised	-- 20 June, 2011 by author
 ##
 
-err_nargs=3
-
-command="curl"
-coption=" -s -d"
-pstdata='url="$URL"'
 service="http://tinyurl.com/create.php"
 
 usage()
@@ -27,19 +24,24 @@ usage()
 	echo -e "\t and other special characters" >&2
 }
 
+posturl()
+{
+	curl -s -d url="$url" "$service" 2> /dev/null || { echo "Error: Transmission failed" >&2; exit 1; }
+}
+
 chkargs()
 {
-	if [ -z "$1" ] && [ -t 0 ] 
+	if (( ! $# )) && [[ -t 0 ]] 
 	then
 		echo "Error: No input given" >&2
 		usage
-		exit $err_nargs
-	elif [ $# -gt 1 ] || [ ! -z "$1" ] && [ ! -t 0 ]
+		exit $ERR_NARGS
+	elif [[ $# > 1 ]] || { (( $# )) && [[ ! -t 0 ]]; }
 	then
 		echo "Error: Excess input" >&2
 		usage
-		exit $err_nargs
-	elif [ ! -z "$1" ]
+		exit $ERR_NARGS
+	elif (( $# ))
 	then
 		url="$1"
 	else
@@ -48,10 +50,14 @@ chkargs()
 }
 
 ##----MAIN----##
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor"
+	exit 1
+fi
+
 chkargs "$@"
 
-out=$(eval $command $coption $pstdata $service | sed -n 's/.*\(http:\/\/tinyurl.com\/[a-z0-9][a-z0-9]*\).*/\1/p' | uniq)
-echo -n $out | xclip
-echo $out
+posturl | sed -n 's/.*\(http:\/\/tinyurl.com\/[a-z0-9][a-z0-9]*\).*/\1/p' | uniq | tclip
 
 exit 0
