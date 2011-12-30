@@ -1,19 +1,20 @@
 #!/bin/bash
 
 ##
-# svnup -- sync svn source trees to svn server
+# svnup		-- sync svn source trees to svn server
 #
-# usage -- svnup [-h|--help]|[-o|--only][DIR...]
+# usage		-- svnup [-h|--help]|[-o|--only][DIR...]
+#			-Directory arguments are concatenated
+#			 to newline-delimited default list $lfile
+#			 unless the -o option is passed
 #
-# notes -- default repos are newline-delimited in ~/bin/.svnlist
+# notes		-- default repos are newline-delimited in $lfile
 #
-# written -- 2008 by Egan McComb
+# written	-- 2008 by Egan McComb
 #
-# revised -- 22 August, 2010 by author
+# revised	-- 11 July, 2009 by author
+#		-- 22 August, 2010 by author
 ##
-
-ifs=":"
-err_vargs=5
 
 lfile="$HOME/bin/.svnlist"
 sline="\E[01;34m::\033[0m Updating:"
@@ -29,54 +30,69 @@ usage()
 
 chkfile()
 {
-	if [ ! -d "$1" ]
+	if [[ ! -d "$1" ]]
 	then
-		echo "Error: Nonexistent directory '$1'" >&2
-		exit $err_vargs
+		echo "Warning: Invalid directory '$1'" >&2
+		echo "Continuing..." >&2
+		continue
 	else
-		if [ ! -d "$1"/.svn ]
+		if [[ ! -d "$1"/.svn ]]
 		then
-			echo "Error: Invalid svn repo '$1'" >&2
-			exit $err_vargs
+			echo "Warning: Invalid svn repo '$1'" >&2
+			exit $ERR_VARGS
 		fi
 	fi
 }
 
 chkargs()
 {
-	if [ $# -ne 0 ]
+	if (( $# ))
 	then
-		if [ $1 = "-h" ] || [ $1 = "--help" ]
+		if [[ $1 = "-h" ]] || [[ $1 = "--help" ]]
 		then
 			usage
 			exit 0
-		elif [ $1 = "-o" ] || [ $1 = "--only" ]
+		elif [[ $1 = "-o" ]] || [[ $1 = "--only" ]]
 		then
 			shift
-			for arg in "$@"
+			for dir in "$@"
 			do
-				chkfile "$arg"
-				repos="$repos $arg"
+				chkfile "$dir"
+				repos+=("$dir")
 			done
 		else
-			repos="$(cat $lfile | tr '\n' ' ')"
-			for arg in "$@"
+			while read dir
 			do
-				chkfile "$arg"
-				repos="$repos $arg"
+				repos+=("$dir")
+			done < "$lfile"
+			for dir in "$@"
+			do
+				chkfile "$dir"
+				repos+=("$dir")
 			done
 		fi
 	else
-		repos=$(cat $lfile | tr '\n' ':')
+		while read dir
+		do
+			chkfile "$dir"
+			repos+=("$dir")
+		done < "$lfile"
 	fi
 }
 
 ##----MAIN----##
 chkargs "$@"
 
-for dir in "$repos"
+if [[ -z "${repos[@]}" ]]
+then
+	echo "Error: No valid repositories" >&2
+	usage
+	exit $ERR_VARGS
+fi
+
+for dir in "${repos[@]}"
 do
-	echo -e "$sline ${dir/\/home\/egan/~}"
+	echo -e "$sline ${dir/$HOME/~}"
 	cd "$dir" && svn up && cd
 	echo -ne "$tline "
 	date +%T\ on\ %D
