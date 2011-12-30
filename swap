@@ -1,17 +1,14 @@
 #!/bin/bash
 
 ##
-# swap -- swap file names
+# swap		-- swap file names
 #
-# usage -- swap FILE1 FILE2
+# usage		-- swap FILE1 FILE2
 #
-# written -- 12 Dec, 2009 by Egan McComb
+# written	-- 12 Dec, 2009 by Egan McComb
 #
-# revised -- 25 Dec, 2010 by author
+# revised	-- 25 Dec, 2010 by author
 ##
-
-err_nargs=3
-err_vargs=5
 
 usage()
 {
@@ -20,11 +17,11 @@ usage()
 
 chkargs()
 {
-	if [ $# -ne 2 ]
+	if [[ $# != 2 ]]
 	then
 		echo "Error: Wrong number of arguments" >&2
 		usage
-		exit $err_nargs
+		exit $ERR_NARGS
 	fi
 }
 
@@ -32,11 +29,11 @@ chkfile()
 {
 	for file in "$@"
 	do
-		if [ ! -e "$1" ]
+		if [[ ! -e "$file" ]]
 		then
-			echo "Error: File '$1' does not exist" >&2
+			echo "Error: Invalid file '$1'" >&2
 			usage
-			exit $err_vargs
+			exit $ERR_VARGS
 		fi
 	done
 }
@@ -45,5 +42,6 @@ chkfile()
 chkargs "$@"
 chkfile "$@"
 
-temp=$(mktemp swap.XXX)
-mv "$1" $temp && mv "$2" "$1" && mv $temp "$2" && exit 0
+temp=$(mktemp swap.XXXXXXXXXX)
+mv "$1" $temp && mv "$2" "$1" && mv $temp "$2" || { echo "Errors occured!"; exit 1; }
+exit 0
