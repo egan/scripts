@@ -1,31 +1,51 @@
 #!/bin/bash
 
 ##
-# backup -- rsync home directory to external hard disk
+# backup	-- sync home directory to external hard disk
 #
-# usage -- backup
+# usage		-- backup
 #
-# notes -- pertinent partition must be mounted
+# notes		-- requires rsync
+#		-- pertinent partition must be mounted
+#		-- additional files specified in $lst
+#		   will be copied to $etc before syncing
+#		-- exclusions and inclusions thereto are
+#		   specified in $exc and $inc, respectively
 #
-# written -- 2008 by Egan McComb
+# written	-- 2008 by Egan McComb
 #
-# revised -- 11 July, 2009 by author
+# revised	-- 11 July, 2009 by author
+#		-- 19 December, 2011 by author
+#		-- 29 December, 2011 by author
 ##
 
-dsk="Pangolin"
 dir="arch-backup"
+dsk="/media/Pangolin"
 etc="$HOME/code/config/etc"
+exc="$HOME/.rsync/exclude"
+inc="$HOME/.rsync/include"
+lst="$HOME/bin/.backup"
 
-cp -R $(< $HOME/bin/.backup tr '\n' ' ')  $etc
+rsync()
+{
+	command rsync -av --delete --exclude-from="$exc" --include-from="$inc" "$1" "$2"
+}
 
-# Check that $dsk is mounted
-if mountpoint -q /media/$dsk
+##----MAIN----##
+while read file
+do
+	cp -R "$file" "$etc"
+done < "$lst"
+echo "Copied files listed in '$(basename "$lst")'"
+echo "Attempting sync..."
+
+if mountpoint -q "$dsk" || [[ -d "$dsk/$dir" ]]
 then
-	# sync recursively, deleting old files
-	rsync -av --delete --exclude-from="/home/egan/.rsync/exclude" --include-from="/home/egan/.rsync/include" $HOME /media/$dsk/$dir
+	rsync $HOME "$dsk/$dir" || { echo "Error: rsync encountered an error"; exit 1; }
 else
-	echo "Error: '$dsk' is not mounted"
-	exit 1
+	echo "Error: Invalid destination '$dsk/$dir'"
+	echo "       Ensure the medium is mounted properly"
+	exit 2
 fi
 
 exit 0
