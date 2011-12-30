@@ -30,7 +30,7 @@ chkargs()
 		bcfunct="loop"
 	elif [[ $1 = "-t" ]]
 	then
-		if [[ -z $2 ]]
+		if [[ -z "$2" ]]
 		then
 			echo "Error: Too few arguments" >&2
 			usage
