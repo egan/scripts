@@ -1,58 +1,77 @@
 #!/bin/bash
 
 ##
-# upaur -- check arch user repository for updates to foreign packages
+# upaur		-- check arch user repository for updates to foreign packages
 #
-# usage -- upaur
+# usage		-- upaur
 #
-# written -- 2 October, 2010 by Egan McComb
+# notes		-- requires jshon, netbool.sh, and userbool.sh
 #
-# revised -- 7 November, 2010 by author
-#            6 June, 2011 by author
+# written	-- 2 October, 2010 by Egan McComb
+#
+# revised	-- 7 November, 2010 by author
+#		-- 6 June, 2011 by author
 ##
 
 aurl="http://aur.archlinux.org/packages"
-aurq="http://aur.archlinux.org/rpc.php?type=info&arg="
-pacq=$(pacman -Qm | tr " " ";")
-dest="$HOME/src/aur"
-curl="curl -s"
-wget="wget -qP $DEST"
+qurl="http://aur.archlinux.org/rpc.php?type=info&arg="
+pkglist=$(pacman -Qm | tr " " ";")
+destdir="$HOME/src/aur"
 
-extern()
+curl()
 {
-	extrn=$($curl ${aurq}$pkgnm | jshon -e results -e Version -u)
+	command curl -s "$@"
+}
+
+wget()
+{
+	command wget -qP "$@"
+}
+
+getversion()
+{
+	curl "${qurl}$pkgname" | jshon -e results -e Version -u 2> /dev/null || echo "UNKNOWN"
 }
 
 output()
 {
-	printf "%-30s -- %s\n" $pkgnm $status
-	if [ $status = "OUTDATED" ]
+	printf "%-30s -- %s\n" $pkgname $status
+	if [[ $status = OUTDATED ]]
 	then
 		echo -ne "\E[01;34m::\033[0m Retrieve tarball? [Y/n] "
 		read reply
-		if [ $reply = "Y" ] || [ $reply = "y" ]
+		if userbool.sh $reply
 		then
-			$wget $aurl/$pkgnm/$pkgnm.tar.gz
+			wget $destdir $aurl/$pkgname/$pkgname.tar.gz
 		fi
 	fi
 }
 
 ##----MAIN----##
-for pkg in $pacq
-do
-	pkgnm=$(cut -d ";" -f 1 <<< $pkg)
-	local=$(cut -d ";" -f 2 <<< $pkg)
-	extern
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor"
+	exit 1
+fi
 
-	if $(grep -q "git" <<< "$pkgnm")
+for pkg in $pkglist
+do
+	pkgname=$(cut -d ";" -f 1 <<< $pkg)
+
+	if grep -q git <<< $pkgname
 	then
 		status="UNKNOWN"
 	else
-		if [ $local = "$EXTRN" ]
+		localversion=$(cut -d ";" -f 2 <<< $pkg)
+		extrnversion=$(getversion)
+		if [[ $localversion = $extrnversion ]]
 		then
 			status="CURRENT"
-		else
+		elif [[ $localversion < $extrnversion ]]
+		then
 			status="OUTDATED"
+		else
+			status="UNKNOWN"
 		fi
 	fi
 	output
