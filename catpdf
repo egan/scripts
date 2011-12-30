@@ -17,7 +17,7 @@ usage()
 	echo "Usage: $(basename $0) INFILES OUTFILE" >&2
 }
 
-gs()
+writepdf()
 {
 	command gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite "$@"
 }
@@ -54,5 +54,5 @@ chkargs()
 
 ##----MAIN----##
 chkargs "$@"
-gs  -sOutputFile="${!#}" "${@:1:$(($#-1))}" || { echo "Errors occurred!" >&2; exit 1; }
+writepdf  -sOutputFile="${!#}" "${@:1:$(($#-1))}" || { echo "Errors occurred!" >&2; exit 1; }
 exit 0

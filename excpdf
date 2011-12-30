@@ -1,20 +1,17 @@
 #!/bin/bash
 
 ##
-# excpdf -- remove pages from pdfs with ghostscript
+# excpdf	-- remove pages from pdfs with ghostscript
 #
-# usage -- excpdf PAGERANGE INFILE OUTFILE
+# usage		-- excpdf PAGERANGE INFILE OUTFILE
+#			-PAGERANGE is given with ranges
+#			 e.g. 3-5:7:9-15 keeps those pages
+#			-Pages must be in numerical order
 #
-# written -- 19 December, 2011 by Egan McComb
+# written	-- 19 December, 2011 by Egan McComb
 #
-# revised --
+# revised	--
 ##
-
-err_nargs=3
-err_vargs=5
-
-trimcom="tr ':\-,' '\n'"
-command="gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite"
 
 usage()
 {
@@ -24,35 +21,45 @@ usage()
 	echo -e "\t-Pages must be in numerical order" >&2
 }
 
+trim()
+{
+	tr ":\-," "\n"
+}
+
+writepdf()
+{
+	gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dFirstPage=${subrange[0]} -dLastPage=${subrange[-1]} "$@"
+}
+
 chkargs()
 {
-	if [ $# -ne 3 ]
+	if (( $# != 3 ))
 	then
 		echo "Error: Wrong number of arguments" >&2
 		usage
-		exit $err_nargs
+		exit $ERR_NARGS
 	fi
 	chkfile "$2" && in="$2"
 	out="$3"
-	if $(grep -q "[^[:digit:]:-]" <<< "$1")
+	if grep -q [^[:digit:]:-] <<< "$1"
 	then
 		echo "Error: Invalid page range syntax" >&2
 		usage
-		exit $err_vargs
-	elif ! $(sort -nC <(eval $trimcom <<< $1)) || [ ! -z $(uniq -d <(eval $trimcom <<< $1)) ]
+		exit $ERR_VARGS
+	elif ! trim <<< $1 | sort -nC || [[ ! -z "$(trim <<< $1 | uniq -d)" ]]
 	then
 		echo "Error: Invalid page range collation" >&2
 		usage
-		exit $err_vargs
+		exit $ERR_VARGS
 	fi
 }
 
 chkfile()
 {
-	if [ ! -f "$1" ] || ! $(grep -q "PDF" <<< $(file "$1"))
+	if [[ ! -f "$1" ]] || ! grep -q "PDF" <<< $(file "$1")
 	then
 		echo "Error: Invalid input file '$1'" >&2
-		exit $err_vargs
+		exit $ERR_VARGS
 	fi
 }
 
@@ -63,21 +70,23 @@ range()
 	tfiles=()
 	for range in ${ranges[@]}
 	do
-		if [ $(awk 'BEGIN { FS="-"} ; { print NF }' <<< $range) -gt 2 ]
+		if (( $(awk 'BEGIN { FS="-"} ; { print NF }' <<< $range) > 2 ))
 		then
 			echo "Error: Invalid subrange '$range'" >&2
 			usage
-			exit $err_vargs
+			exit $ERR_VARGS
 		fi
 		IFS="-"
 		subrange=(${range[@]})
 		tfiles[${#tfiles[@]}]=$(mktemp)
 		IFS=" "
-		eval $command -dFirstPage=${subrange[0]} -dLastPage=${subrange[-1]} -sOutputFile="${tfiles[-1]}" "$in"
+		writepdf -sOutputFile="${tfiles[-1]}" "$in" || { echo "Errors occurred!" >&2; exit 1; }
 	done
 	catpdf ${tfiles[@]} "$out"
 	rm ${tfiles[@]}
 }
+
+##----MAIN----##
 
 chkargs "$@"
 range $1
