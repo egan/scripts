@@ -54,5 +54,5 @@ chkargs()
 
 ##----MAIN----##
 chkargs "$@"
-gs  -sOutputFile="${!#}" "${@:1:$(($#-1))}" || { echo "Errors occured!" >&2; exit 1; }
+gs  -sOutputFile="${!#}" "${@:1:$(($#-1))}" || { echo "Errors occurred!" >&2; exit 1; }
 exit 0
