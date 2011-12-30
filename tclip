@@ -1,18 +1,27 @@
 #!/bin/bash
 
 ##
-# tclip -- tee stdin to clipboard and stdout
+# tclip		-- tee stdin to clipboard and stdout
 #
-# usage -- tclip
+# usage		-- tclip
 #
-# written -- 7 July, 2010 by Egan McComb
+# notes		-- not safe for large data 
 #
-# revised --
+# todo		-- remove intermediate variable
+#
+# written	-- 7 July, 2010 by Egan McComb
+#
+# revised	--
 ##
 
-input=$(cat -)
+if [[ -t 0 ]]
+then
+	echo "Error: No input given" >&2
+	exit
+fi
 
-echo -n "$input" | xclip
-echo "$input"
+read -r input
+echo -n $input | xclip
+echo $input
 
 exit 0
