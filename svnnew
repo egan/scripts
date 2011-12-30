@@ -15,7 +15,11 @@
 
 nfile="./.svn/revision.info"
 
-if [[ ! -s "$nfile" ]]
+if [[ ! -d ./.svn ]]
+then
+	echo "Error: Invalid svn repo '$PWD'" >&2
+	exit $ERR_VARGS
+elif [[ ! -s "$nfile" ]]
 then
 	echo "Error: Revision information unavailable: Creating" >&2
 	while true
