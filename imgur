@@ -26,7 +26,7 @@ usage()
 
 chkargs()
 {
-	if [[ $# != 1 ]]
+	if (( $# != 1 ))
 	then
 		if (( ! $# ))
 		then
@@ -59,11 +59,11 @@ chkargs "$@"
 
 response=$(curl -sF "key=$apikey" -F "image=@$image" http://imgur.com/api/upload.xml)
 
-if [[ $? != 0 ]]
+if (( $? != 0 ))
 then
 	echo "Error: Upload failed" >&2
 	exit 1
-elif [[ $(grep -c "<error_msg>" <<< $response) > 0 ]]
+elif (( $(grep -c "<error_msg>" <<< $response) > 0 ))
 then
 	echo "Error: imgur says:" >&2
 	echo $response | sed -r 's/.*<error_msg>(.*)<\/error_msg>.*/\1/' >&2

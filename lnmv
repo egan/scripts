@@ -22,7 +22,7 @@ usage()
 
 chkargs()
 {
-	if [[ $# != 2 ]]
+	if (( $# != 2 ))
 	then
 		echo "Error: Wrong number of arguments" >&2
 		usage

@@ -23,7 +23,7 @@ chkargs()
 	if (( ! $# ))
 	then
 		dir=.
-	elif [[ $# > 1 ]]
+	elif (( $# > 1 ))
 	then
 		echo "Error: Too many arguments" >&2
 		usage

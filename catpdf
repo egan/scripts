@@ -24,7 +24,7 @@ gs()
 
 chkargs()
 {
-	if [[ $# < 3 ]]
+	if (( $# < 3 ))
 	then
 		echo "Error: Too few arguments" >&2
 		usage

@@ -40,7 +40,7 @@ chkargs()
 			echo "Error: Invalid NUMBER '$2'" >&2
 			usage
 			exit $ERR_VARGS
-		elif [[ $# > 2 ]]
+		elif (( $# > 2 ))
 		then
 			echo "Error: Too many arguments" >&2
 			usage
@@ -68,7 +68,7 @@ loop()
 		kill $!
 	else
 		i=$1
-		while [[ $i > 0 ]]
+		while (( $i > 0 ))
 		do
 			play
 			((i--))

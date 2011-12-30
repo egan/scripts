@@ -20,7 +20,7 @@ chkargs()
 	if (( ! $# ))
 	then
 		dir=../
-	elif [[ $# > 1 ]]
+	elif (( $# > 1 ))
 	then
 		echo "Error: Too many arguments" >&2
 		usage
@@ -30,7 +30,7 @@ chkargs()
 		dir="${PWD%/$1/*}/$1"
 	else
 		x=0
-		while [[ $x < ${1:-1} ]]
+		while (( $x < ${1:-1} ))
 		do
 			dir="${dir}../"
 			((x++))

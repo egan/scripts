@@ -38,7 +38,7 @@ opendevice()
 
 chkargs()
 {
-	if [[ $# > 1 ]]
+	if (( $# > 1 ))
 	then
 		echo "Error: Too many arguments" >&2
 		usage
