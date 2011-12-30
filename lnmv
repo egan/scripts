@@ -1,17 +1,17 @@
 #!/bin/bash
 
 ##
-# lnmv -- replace a file with a symbolic link to its new location
+# lnmv		-- replace a file with a symbolic link to its new location
 #
-# usage -- lnmv OLDFILE NEWFILE
+# usage		-- lnmv OLDFILE NEWFILE
 #
-# written -- 7 April, 2011 by Egan McComb
+# notes		-- the new filename must be given
+#		   even if it is not to be renamed
 #
-# revised --
+# written	-- 7 April, 2011 by Egan McComb
+#
+# revised	--
 ##
-
-err_nargs=3
-err_vargs=5
 
 usage()
 {
@@ -22,17 +22,16 @@ usage()
 
 chkargs()
 {
-	if [ $# -ne 2 ]
+	if [[ $# != 2 ]]
 	then
 		echo "Error: Wrong number of arguments" >&2
 		usage
-		exit $err_nargs
-	fi
-	if [ -d "$2" ]
+		exit $ERR_NARGS
+	elif [[ ! -f "$2" ]]
 	then
 		echo "Error: Invalid filename '$2'">&2
 		usage
-		exit $err_vargs
+		exit $ERR_VARGS
 	fi
 }
 
@@ -42,12 +41,6 @@ chkargs "$@"
 oldfile="$1"
 newfile=$(readlink -f "$2")
 
-mv "$1" "$2" && ln -s "$newfile" "$oldfile"
-
-if [ $? -ne 0 ]
-then
-	echo "Error: Unable to make link." >&2
-	exit 1
-fi
+mv "$1" "$2" && ln -s "$newfile" "$oldfile" || { echo "Errors occurred!" >&2; exit 1; }
 
 exit 0
