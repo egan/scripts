@@ -7,7 +7,7 @@
 #			-LOCID can be given as a string or zip code
 #			-When unspecified, LOCID=$locid
 #
-# note		-- no protection against invalid LOCID
+# notes		-- no protection against invalid LOCID
 #
 # written	-- 12 September, 2010 by Egan McComb
 #
