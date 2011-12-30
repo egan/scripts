@@ -1,0 +1,77 @@
+#!/bin/bash
+
+##
+# transpose -- transpose a table
+#
+# usage -- transpose FILE, accepts stdin
+#
+# notes -- very rudimentary, needs revision
+#
+# written -- 18 July, 2011 by Egan McComb
+#
+# revised --
+##
+
+err_nargs=3
+
+usage()
+{
+	echo "Usage: $(basename $0) FILE" >&2
+}
+
+chkargs()
+{
+	if [ -z "$1" ] && [ -t 0 ]
+	then
+		echo "Error: No input given" >&2
+		usage
+		exit $err_nargs
+	elif [ $# -gt 1 ] || [ ! -z "$1" ] && [ ! -t 0 ]
+	then
+		echo "Error: Excess input" >&2
+		usage
+		exit $err_nargs
+	elif [ ! -z "$1" ]
+	then
+		awk -F "\t" '
+		{
+		    for (i=1; i<=NF; i++)  {
+			a[NR,i] = $i
+		    }
+		}
+		NF>p { p = NF }
+		END {    
+		    for(j=1; j<=p; j++) {
+			str=a[1,j]
+			for(i=2; i<=NR; i++){
+			    str=str" "a[i,j];
+			}
+			print str
+		    }
+		}' < "$1"
+
+	else
+		read -r table
+		awk -F  "\t" '
+		{
+		    for (i=1; i<=NF; i++)  {
+			a[NR,i] = $i
+		    }
+		}
+		NF>p { p = NF }
+		END {    
+		    for(j=1; j<=p; j++) {
+			str=a[1,j]
+			for(i=2; i<=NR; i++){
+			    str=str" "a[i,j];
+			}
+			print str
+		    }
+		}' <<< $table
+	fi
+}
+
+##----MAIN----##
+chkargs "$@"
+
+exit 0
