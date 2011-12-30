@@ -1,55 +1,58 @@
 #!/bin/bash
 
 ##
-# catpdf -- cat pdfs together with ghostscript
+# catpdf	-- concatenate pdfs together
 #
-# usage -- catpdf INFILES OUTFILE
+# usage		-- catpdf INFILES OUTFILE
 #
-# written -- 6 June, 2011 by Egan McComb
+# notes		-- requires ghostscript and userbool.sh
 #
-# revised -- 19 December, 2011 by author
+# written	-- 6 June, 2011 by Egan McComb
+#
+# revised	-- 19 December, 2011 by author
 ##
-
-err_nargs=3
-err_vargs=5
-
-command="gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite"
 
 usage()
 {
 	echo "Usage: $(basename $0) INFILES OUTFILE" >&2
 }
 
+gs()
+{
+	command gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite "$@"
+}
+
 chkargs()
 {
-	if [ $# -lt 3 ]
+	if [[ $# < 3 ]]
 	then
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $err_nargs
-	fi
-	if [ -f "${!#}" ]
+		exit $ERR_NARGS
+	elif [[ -f "${!#}" ]]
 	then
 		echo "Warning: Output file exists" >&2
 		echo -n "Continue? [y/N] " >&2
 		read response
-		if [ "$response" != "y" ]
+		if ! userbool.sh $response
 		then
+			echo "Aborting..." >&2
 			exit 1
+		else
+			echo "Continuing..." >&2
 		fi
 	fi
-	out="${!#}"
 	for file in "${@:1:$(($#-1))}"
 	do
-		if [ ! -e "$file" ]
+		if [[ ! -e "$file" ]]
 		then
 			echo "Error: Invalid file '$file'" >&2
-			exit $err_vargs
+			exit $ERR_VARGS
 		fi
 	done
 }
 
 ##----MAIN----##
 chkargs "$@"
-$command  -sOutputFile="$out" "${@:1:$(($#-1))}"
+gs  -sOutputFile="${!#}" "${@:1:$(($#-1))}" || { echo "Errors occured!" >&2; exit 1; }
 exit 0
