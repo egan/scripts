@@ -1,25 +1,22 @@
 #!/bin/bash
 
 ##
-# wcshot -- take live webcam shots via mplayer
+# wcshot	-- take live webcam shots via mplayer
 #
-# usage -- wcshot [WxH]
-#		-Press s to take a shot
-#		-Press S to start/stop taking
-#		 continuous shots
-#		-Press q to quit
+# usage		-- wcshot [WxH]
+#			-Press s to take a shot
+#			-Press S to start/stop taking
+#			 continuous shots
+#			-Press q to quit
 #
-# notes -- assumes webcam is at /dev/video0
+# notes		-- expects webcam at /dev/video0
+#		-- default aspect ratio is 640x480
 #
-# written -- 20 June, 2011 by Egan McComb
+# written	-- 20 June, 2011 by Egan McComb
 #
-# revised --
+# revised	--
 ##
 
-err_nargs=3
-err_vargs=5
-
-command="mplayer"
 coption="-msglevel all=-1:cplayer=-1:statusline=-1 -vf screenshot"
 vdevice="tv:// -tv driver=v4l2:width=640:height=480:device=/dev/video0"
 
@@ -30,23 +27,28 @@ usage()
 	echo -e "\t-Press S to start/stop taking" >&2
 	echo -e "\t continuous shots" >&2
 	echo -e "\t-Press q to quit" >&2
-	echo "Note: Assumes webcam is at /dev/video0" >&2
+	echo "Note: Expects webcam at /dev/video0" >&2
 	echo -e "\t-Default resolution is 640x480" >&2
+}
+
+opendevice()
+{
+	command mplayer $coption $vdevice
 }
 
 chkargs()
 {
-	if [ $# -gt 1 ]
+	if [[ $# > 1 ]]
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $err_nargs
-	elif [ ! -z $1 ] && [ ! $(grep [[:digit:]]x[[:digit:]] <<< $1) ]
+		exit $ERR_NARGS
+	elif (( $# )) && ! grep -q [[:digit:]]x[[:digit:]] <<< "$1"
 	then
 		echo "Error: Invalid resolution" >&2
 		usage
-		exit $err_vargs
-	elif [ ! -z $1 ]
+		exit $ERR_VARGS
+	elif (( $# ))
 	then
 		vdevice=${vdevice/640/$(cut -d x -f 1 <<< $1)}
 		vdevice=${vdevice/480/$(cut -d x -f 2 <<< $1)}
@@ -62,6 +64,6 @@ echo "Press s to take a shot, or S to start/stop taking continuous shots" >&2
 echo "Shots will be saved in current directory as shotNNNN.png" >&2
 echo
 echo "Press q to quit" >&2
-$command $coption $vdevice &> /dev/null || echo "Error: Mplayer crashed" >&2 && exit 1
+opendevice &> /dev/null || { echo "Error: MPlayer crashed" >&2; exit 1; }
 
 exit 0
