@@ -1,3 +1,4 @@
+/etc/cron.weekly/ntpsync
 /etc/modprobe.d/modprobe.conf
 /etc/network.d/
 /etc/rc.conf
