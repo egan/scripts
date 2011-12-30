@@ -1,19 +1,18 @@
 #!/bin/bash
 
 ##
-# gweather -- obtain weather data using google api
+# gweather	-- obtain weather data using google api
 #
-# usage -- gweather [-c|--current]|[-f|--forecast][LOCID]
+# usage		-- gweather [-c|--current]|[-f|--forecast][LOCID]
+#			-LOCID can be given as a string or zip code
+#			-When unspecified, LOCID=$locid
 #
-# note -- no protection against invalid LOCID
+# note		-- no protection against invalid LOCID
 #
-# written -- 12 September, 2010 by Egan McComb
+# written	-- 12 September, 2010 by Egan McComb
 #
-# revised --
+# revised	--
 ##
-
-err_nargs=3
-err_vargs=5
 
 current="$HOME/bin/.current.xslt"
 forecast="$HOME/bin/.forecast.xslt"
@@ -23,34 +22,34 @@ locid="Mountain+View"
 usage()
 {
 	echo "Usage: $(basename $0) [-c|--current]|[-f|--forecast] [LOCID]" >&2
-	echo -e "\t-When unspecified, LOCID=$locid" >&2
 	echo -e "\t-LOCID can be given as a string or zip code" >&2
+	echo -e "\t-When unspecified, LOCID=$locid" >&2
 }
 
 chkargs()
 {
-	if [ $# == 0 ]
+	if (( ! $# ))
 	then
 		echo "Error: Too few arguments" >&2
 		usage
-		exit $err_nargs
-	elif [ $1 = "-f" ] || [ $1 = "--forecast" ]
+		exit $ERR_NARGS
+	elif [[ $1 = "-f" ]] || [[ $1 = "--forecast" ]]
 	then
 		FILTER=$forecast
-	elif [ $1 = "-c" ] || [ $1 = "--current" ]
+	elif [[ $1 = "-c" ]] || [[ $1 = "--current" ]]
 	then
 		FILTER=$current
-	elif [ $# -gt 1 ]
+	elif (( $# > 1 ))
 	then
 		echo "Error: Too many arguments" >&2
 		usage
-		exit $err_nargs
+		exit $ERR_NARGS
 	else
 		echo "Error: Invalid arguments" >&2
 		usage
-		exit $err_vargs
+		exit $ERR_VARGS
 	fi
-	if [ ! -z "$2" ]
+	if [[ ! -z "$2" ]]
 	then
 		locid="$2"
 	fi
@@ -58,6 +57,6 @@ chkargs()
 
 ##----MAIN---##
 chkargs "$@"
-curl -s http://www.google.com/ig/api?weather="$locid" | iconv -f ISO-8859-1 -t UTF-8 | xsltproc $filter -
+curl -s "http://www.google.com/ig/api?weather=$locid" | iconv -f ISO-8859-1 -t UTF-8 | xsltproc $filter -
 
 exit 0
