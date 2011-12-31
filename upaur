@@ -30,7 +30,7 @@ wget()
 
 getversion()
 {
-	curl "${qurl}$pkgname" | jshon -e results -e Version -u 2> /dev/null || echo "UNKNOWN"
+	curl -s "${qurl}$pkgname" | jshon -e results -e Version -u 2> /dev/null #|| echo "UNKNOWN"
 }
 
 output()
@@ -57,21 +57,18 @@ fi
 for pkg in $pkglist
 do
 	pkgname=$(cut -d ";" -f 1 <<< $pkg)
-
 	if grep -q git <<< $pkgname
 	then
 		status="UNKNOWN"
 	else
 		localversion=$(cut -d ";" -f 2 <<< $pkg)
 		extrnversion=$(getversion)
-		if (( $localversion = $extrnversion ))
+		if [[ $localversion == $extrnversion ]]
 		then
 			status="CURRENT"
-		elif (( $localversion < $extrnversion ))
+		elif [[ $localversion < $extrnversion ]]
 		then
 			status="OUTDATED"
-		else
-			status="UNKNOWN"
 		fi
 	fi
 	output
