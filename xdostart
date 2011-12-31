@@ -31,7 +31,7 @@ xdotool key --delay $delay super+j type ':e todo.txt
 '
 xdotool key --delay $delay super+k super+3 type 'exec ssh paijanne
 '
-xdotool key --delay $delay super+j type 'exec mutt
+xdotool key --delay $delay super+j type 'mutt
 '
 xdotool key --delay $delay super+k super+5 type 'cd music/rec/
 '
