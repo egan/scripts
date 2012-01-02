@@ -42,6 +42,5 @@ xdotool key --delay $delay super+j type 'cd var/
 xdotool key --delay $delay super+k type 'ls
 '
 xdotool key --delay $delay super+k super+1
-'
 
 exit 0
