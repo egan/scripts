@@ -5,7 +5,7 @@
 #
 # usage		-- imgur FILE
 #
-# notes		-- requires tclip
+# notes		-- requires netbool.sh and tclip
 #		-- stores history in $hfile
 #
 # todo		-- thumbnail link?

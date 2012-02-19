@@ -16,7 +16,7 @@
 
 current="$HOME/bin/.current.xslt"
 forecast="$HOME/bin/.forecast.xslt"
-locid="Mountain+View" #"95616"
+locid="95616"
 
 usage()
 {

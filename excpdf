@@ -8,6 +8,8 @@
 #			 e.g. 3-5:7:9-15 keeps those pages
 #			-Pages must be in numerical order
 #
+# notes		-- requires catpdf
+#
 # written	-- 19 December, 2011 by Egan McComb
 #
 # revised	--
@@ -87,7 +89,6 @@ range()
 }
 
 ##----MAIN----##
-
 chkargs "$@"
 range $1
 
