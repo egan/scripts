@@ -1,0 +1,20 @@
+#!/bin/bash
+
+##
+# sleeptill	-- sleep till specified time
+#
+# usage		-- sleeptill HH:MM
+#
+# todo		-- more options, error checking
+#
+# written	-- 18 February, 2012 by Egan McComb
+#
+# revised	--
+##
+
+while [[ $(date +%R) != "$1" ]];
+do
+	sleep 1;
+done
+
+exit 0
