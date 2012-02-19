@@ -1,0 +1,42 @@
+#!/bin/bash
+
+##
+# upmirrors	-- updates and ranks new pacman mirror list
+#
+# usage		-- upmirrors
+#
+# notes		-- requires netbool.sh and rankmirrors
+#
+# written 	-- 18 February by Egan McComb
+#
+# revised 	--
+##
+
+listpacnew="/etc/pacman.d/mirrorlist.pacnew"
+listorig="/etc/pacman.d/mirrorlist.orig"
+list="/etc/pacmand.d/mirrorlist"
+
+
+##----MAIN----##
+if [[ $EUID != "0" ]]
+then
+	echo "Error: Must be root"
+	exit 1
+fi
+
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor" >&2
+	exit 2
+fi
+
+echo "Installing pacnew file..."
+mv "$listpacnew" "$listorig" &> /dev/null || { echo "Error: Could not install pacnew file" >&2; exit $ERR_VARGS; }
+
+echo "Enabling 'Any' and 'United States' mirrors..."
+sed -i '/## \(United States\|Any\)/,/^$/s/#Server/Server/g' "$listorig"
+
+echo "Ranking mirrors..."
+rankmirrors "$listorig" > "$list"
+
+exit 0
