@@ -30,7 +30,7 @@ trim()
 
 writepdf()
 {
-	gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dFirstPage=${subrange[0]} -dLastPage=${subrange[-1]} "$@"
+	gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite -dFirstPage=${subrange[0]} -dLastPage=${subrange[-1]} "$@" &> /dev/null
 }
 
 chkargs()

@@ -19,7 +19,7 @@ usage()
 
 writepdf()
 {
-	command gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite "$@"
+	command gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite "$@" &> /dev/null
 }
 
 chkargs()
