@@ -72,6 +72,12 @@ chkargs()
 }
 
 ##----MAIN---##
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor" >&2
+	exit 1
+fi
+
 chkargs "$@"
 qurl="http://www.google.com/ig/api?weather=$locid"
 curl -s "$qurl" | convert | xsltproc $filter - | check
