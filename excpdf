@@ -84,8 +84,26 @@ range()
 		IFS=" "
 		writepdf -sOutputFile="${tfiles[-1]}" "$in" || { echo "Errors occurred!" >&2; exit 1; }
 	done
-	catpdf ${tfiles[@]} "$out"
-	rm ${tfiles[@]}
+	if (( ${#tfiles[@]} > 1 ))
+	then
+		catpdf ${tfiles[@]} "$out"
+		rm ${tfiles[@]}
+	else
+		if [[ -f "$out" ]]
+		then
+			echo "Warning: Output file exists" >&2
+			echo -n "Continue? [y/N] " >&2
+			read response
+			if ! userbool.sh $response
+			then
+				echo "Aborting..." >&2
+				exit 1
+			else
+				echo "Continuing..." >&2
+			fi
+		fi
+		mv ${tfiles[@]} "$out"
+	fi
 }
 
 ##----MAIN----##
