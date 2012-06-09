@@ -40,5 +40,7 @@ fi
 
 echo "Ranking mirrors..."
 rankmirrors "$listorig" > "$list"
+echo "Cleaning up output file..."
+sed -i '/^#[^ ]/d' "$list"
 
 exit 0
