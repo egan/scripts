@@ -14,7 +14,7 @@
 
 listpacnew="/etc/pacman.d/mirrorlist.pacnew"
 listorig="/etc/pacman.d/mirrorlist.orig"
-list="/etc/pacmand.d/mirrorlist"
+list="/etc/pacman.d/mirrorlist"
 
 
 ##----MAIN----##
@@ -30,11 +30,13 @@ then
 	exit 2
 fi
 
-echo "Installing pacnew file..."
-mv "$listpacnew" "$listorig" &> /dev/null || { echo "Error: Could not install pacnew file" >&2; exit $ERR_VARGS; }
-
-echo "Enabling 'Any' and 'United States' mirrors..."
-sed -i '/## \(United States\|Any\)/,/^$/s/#Server/Server/g' "$listorig"
+if [[ -e "$listpacnew" ]]
+then
+	echo "Installing pacnew file..."
+	mv "$listpacnew" "$listorig" &> /dev/null || { echo "Error: Could not install pacnew file" >&2; exit $ERR_VARGS; }
+	echo "Enabling 'Any' and 'United States' mirrors..."
+	sed -i '/## \(United States\|Any\)/,/^$/s/#Server/Server/g' "$listorig"
+fi
 
 echo "Ranking mirrors..."
 rankmirrors "$listorig" > "$list"
