@@ -1,0 +1,1 @@
+exec /usr/bin/gtk-chtheme "$@" &>/dev/null
