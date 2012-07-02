@@ -8,6 +8,7 @@ Full descriptions of each can be found inside their respective files.
 # backup	-- sync home directory to external hard disk
 # beep		-- beep continuously or n times
 # catpdf	-- concatenate pdfs together
+# cflush.c	-- flush memory cache; requires SETUID bit
 # cconvert	-- convert numbers between bases
 # colors	-- preview terminal colors
 # downstr.sh	-- return down string
@@ -34,10 +35,11 @@ Full descriptions of each can be found inside their respective files.
 # transpose	-- transpose a table
 # turl		-- shorten a url using tinyurl.com
 # upaur		-- check arch user repository for updates to foreign packages
+# upmirrors	-- update Arch mirror list
 # upstr.sh	-- return up string
 # userbool.sh	-- parse boolean user input
 # volume	-- control alsa mixer levels
 # volumed.sh	-- print changes in volume to stdout
 # wcshot	-- take live webcam shots via mplayer
 # xdostart	-- rudimentary startup routine implemented with xdotool
-# xmobar-nettoggle.sh	-- toggle active network interface in xmobar
+# xmotoggle.sh	-- toggle active network interface in xmobar
