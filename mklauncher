@@ -1,0 +1,57 @@
+#!/bin/bash
+
+##
+# mklauncher	-- write a script to launch graphical applications silently
+#
+# usage		-- mklauncher APPLICATION
+#
+# notes		--
+#
+# written	-- 2 July, 2012 by Egan McComb
+#
+# revised	--
+##
+
+ldir="$HOME/bin/.launch"
+
+usage()
+{
+	echo "Usage: $(basename $0) APPLICATION" >&2
+}
+
+locate()
+{
+	whereis -b "$@" | cut -d " " -f 2
+}
+
+chkargs()
+{
+	if (( $# != 1 ))
+	then
+		if (( ! $# ))
+		then
+			echo "Error: Too few arguments" >&2
+			usage
+			exit $ERR_NARGS
+		else
+			echo "Error: Too many arguments" >&2
+			usage
+			exit $ERR_NARGS
+		fi
+	else
+		apath=$(locate "$1")
+		if [[ ! -f "$apath" ]]
+		then
+			echo "Error: Unknown application '$1'" >&2
+			exit $ERR_VARGS
+		fi
+	fi
+}
+
+##----MAIN----##
+chkargs "$@"
+
+echo "exec $apath" '"@"' "&>/dev/null" > $ldir/"$1"
+chmod 744 $ldir/"$1"
+
+exit 0
