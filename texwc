@@ -1,0 +1,63 @@
+#!/bin/bash
+
+##
+# texwc		-- word count for LaTeX files
+#
+# usage		-- texwc FILE
+#
+# notes		-- requires pdflatex and pdftotext
+#		-- leaves behind pdf and compile files
+#
+# todo		-- process multiple files?
+#
+# written	-- 29 February by Jesse McClure
+#
+# revised	-- 3 July by Egan McCom
+##
+
+usage()
+{
+	echo "Usage: $(basename $0) FILE" >&2
+}
+
+chkargs()
+{
+	if (( $# != 1 ))
+	then
+		if (( ! $# ))
+		then
+			echo "Error: Too few arguments" >&2
+			usage
+			exit $ERR_NARGS
+		else
+			echo "Error: Too many arguments" >&2
+			usage
+			exit $ERR_NARGS
+		fi
+	fi
+}
+
+chkfile()
+{
+	if [[ ! -f "$1" ]] || ! grep -q "LaTeX" <<< $(file "$1")
+	then
+		echo "Error: Invalid input file '$1'" >&2
+		exit $ERR_VARGS
+	fi
+}
+
+convert()
+{
+	pdflatex -interaction batchmode "$1" &> /dev/null || { echo "Error: Unable to compile LaTeX code" >&2; exit 2; }
+	pdftotext -raw "$2" &> /dev/null || { echo "Errors occured in conversion" >&2; rm -f "${1/%tex/txt}"; exit 2; }
+}
+
+##----MAIN----##
+chkargs "$@"
+chkfile "$@"
+convert "$1" "${1/%tex/pdf}"
+wc "${1/%tex/txt}" | sed 's/txt$/tex/'
+rm -f "${1/%tex/txt}"
+
+exit 0
+

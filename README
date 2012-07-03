@@ -18,6 +18,7 @@ Full descriptions of each can be found inside their respective files.
 # gweather	-- obtain weather data using Google API
 # imgur		-- upload image to imgur.com
 # lnmv		-- replace a file with a symbolic link to its new location
+# mklauncher	-- write an application launcher script
 # mkoff		-- prepare a website for offline use
 # mkwcfg	-- creates wireless network profile
 # netbool.sh	-- check for proper Internet connectivity
@@ -31,6 +32,7 @@ Full descriptions of each can be found inside their respective files.
 # tablize	-- convert labeled tsv files to latex tables
 # tclip		-- tee stdin to clipboard and stdout
 # tex2img	-- quickly get png output from latex code (for math)
+# texwc		-- word count for LaTeX files
 # translate	-- translate files or strings using Google API
 # transpose	-- transpose a table
 # turl		-- shorten a url using tinyurl.com
