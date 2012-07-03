@@ -89,7 +89,7 @@ chkargs()
 
 clean()
 {
-	rm -f ${file/%tex/aux} ${file/%tex/dvi} ${file/%tex/log} $file
+	rm -f "${file/%tex/aux}" "${file/%tex/dvi}" "${file/%tex/log}" "$file"
 }
 
 ##----MAIN----##
