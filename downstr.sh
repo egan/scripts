@@ -29,7 +29,7 @@ chkargs()
 		usage
 		exit $ERR_NARGS
 	else
-		dir=$(locate -n 1 -r $PWD.*/"$1"$)
+		dir=$(locate -n 1 -r $PWD.\*/"$1"$)
 	fi
 }
 
