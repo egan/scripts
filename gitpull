@@ -1,0 +1,102 @@
+#!/bin/bash
+
+##
+# gitpull	-- sync git source trees to git servers
+#
+# usage		-- git [-h|--help]|[-o|--only][DIR...]
+#			-Directory arguments are concatenated
+#			 to newline-delimited default list $lfile
+#			 unless the -o option is passed
+#
+# notes		-- default repos are newline-delimited in $lfile
+#
+# written	-- 2008 by Egan McComb
+#
+# revised	-- 11 July, 2009 by author
+#		-- 22 August, 2010 by author
+#		-- 7 July, 2012
+##
+
+lfile="$HOME/bin/.gitlist"
+sline="\E[01;34m::\033[0m Updating:"
+tline="\E[01;34m>\033[0m"
+
+usage()
+{
+	echo "Usage: $(basename $0) [-h|--help]|[-o|--only][DIR...]" >&2
+	echo -e "\t-Directory arguments are concatenated" >&2
+	echo -e "\t to newline-delimited default list $lfile" >&2
+	echo -e "\t unless the '-o' option is passed" >&2
+}
+
+chkfile()
+{
+	if [[ ! -d "$1" ]]
+	then
+		echo "Warning: Invalid directory '$1'" >&2
+		echo "Continuing..." >&2
+		continue
+	else
+		if [[ ! -d "$1"/.git ]]
+		then
+			echo "Warning: Invalid git repo '$1'" >&2
+			exit $ERR_VARGS
+		fi
+	fi
+}
+
+chkargs()
+{
+	if (( $# ))
+	then
+		if [[ $1 = "-h" ]] || [[ $1 = "--help" ]]
+		then
+			usage
+			exit 0
+		elif [[ $1 = "-o" ]] || [[ $1 = "--only" ]]
+		then
+			shift
+			for dir in "$@"
+			do
+				chkfile "$dir"
+				repos+=("$dir")
+			done
+		else
+			while read dir
+			do
+				repos+=("$dir")
+			done < "$lfile"
+			for dir in "$@"
+			do
+				chkfile "$dir"
+				repos+=("$dir")
+			done
+		fi
+	else
+		while read dir
+		do
+			chkfile "$dir"
+			repos+=("$dir")
+		done < "$lfile"
+	fi
+}
+
+##----MAIN----##
+chkargs "$@"
+
+if [[ -z "${repos[@]}" ]]
+then
+	echo "Error: No valid repositories" >&2
+	usage
+	exit $ERR_VARGS
+fi
+
+for dir in "${repos[@]}"
+do
+	echo -e "$sline ${dir/$HOME/~}"
+	cd "$dir" && git pull && cd
+	echo -ne "$tline "
+	date +%T\ on\ %D
+done
+
+exit 0
