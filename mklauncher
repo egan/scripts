@@ -51,7 +51,7 @@ chkargs()
 ##----MAIN----##
 chkargs "$@"
 
-echo "exec $apath" '"@"' "&>/dev/null" > $ldir/"$1"
+echo "exec $apath" '"$@"' "&>/dev/null" > $ldir/"$1"
 chmod 744 $ldir/"$1"
 
 exit 0
