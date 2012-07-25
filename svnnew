@@ -3,7 +3,7 @@
 ##
 # svnnew	-- obtain fresh svn commit logs and view them
 #
-# usage		-- svnlog
+# usage		-- svnnew
 #
 # notes		-- intended for use with aliases for specific repos
 #
