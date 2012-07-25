@@ -3,13 +3,13 @@
 ##
 # mkwcfg	-- creates wireless network profile
 #
-# usage		-- mkwcfg ESSID [wep|wpa] [KEY]
+# usage		-- mkwcfg ESSID [WEP|WPA|WPA2] [KEY]
 #			-Will detect network type and prompt
 #			 for a key if given only one argument
 #
 # notes		-- requires piwlist.py and userbool.sh
 #
-# todo		-- support more security types
+# todo		-- support WPA2
 #
 # written	-- 1 January, 2011 by Greg Dwulet
 #
@@ -45,7 +45,7 @@ magic()
 	if ! grep -q "$essid[[:print:]]*|Open|$" <<< "$iwscan"
 	then
 		iwscan=$(grep -m 1 "$essid" <<< "$iwscan")
-		security=$(cut -d "|" -f 5 <<< "$iwscan" | cut -d " " -f 1 | tr "[A-Z]" "[a-z]")
+		security=$(cut -d "|" -f 5 <<< "$iwscan" | cut -d " " -f 1)
 		echo -n "Please enter $security key for '$essid' network: "
 		read key
 	else
@@ -124,8 +124,13 @@ makeprofile()
 			echo "Continuing..." >&2
 		fi
 	fi
+	if [[ $security = "WPA2" ]]
+		$security = "wpa-configsection"
+	else
+		$security = $(tr "[A-Z]" "[a-z]" <<< $security)
+	fi
 	cp $netdir/examples/wireless-$security $file
-	editprofile "$essid" $security "$key"
+	editprofile
 	echo "Successfully created profile '$file'"
 	[[ -x /usr/bin/xclip ]] && echo -n "$file" | xclip
 }
@@ -140,6 +145,8 @@ editprofile()
 	elif [[ $security = "wpa" ]]
 	then
 		sed -i "s/WirelessKey/$key/" "$file"
+	else
+		echo "Additional configuration required" >&2
 	fi
 	echo "DHCP_TIMEOUT='3000'" >> "$file"
 }
