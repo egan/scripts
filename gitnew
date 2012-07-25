@@ -1,0 +1,40 @@
+#!/bin/bash
+
+##
+# svnnew	-- obtain fresh git commit logs and view them
+#
+# usage		-- gitnew
+#
+# notes		-- intended for use with aliases for specific repos
+#
+# written	-- 25 July, 2012 by Egan McComb
+#
+# revised	--
+##
+
+nfile="./.git/revision.info"
+
+if [[ ! -d ./.git ]]
+then
+	echo "Error: Invalid git repo '$PWD'" >&2
+	exit $ERR_VARGS
+elif [[ ! -s "$nfile" ]]
+then
+	echo "Error: Revision information unavailable: Creating" >&2
+	echo -n "Enter an initial revision name: " >&2
+	read response
+	echo $response > "$nfile"
+	echo "Created $pwd/$nfile" >&2
+fi
+
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor" >&2
+	exit 1
+fi
+
+read=$(cat "$nfile")
+git log --reverse $read..HEAD | less
+git show | grep 'commit' | cut -d " " -f 2 > "$nfile"
+
+exit 0
