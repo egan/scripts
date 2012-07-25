@@ -5,9 +5,6 @@
 #
 # usage		-- downstr.sh [GLOB]
 #
-# todo		-- move away from locate
-#		-- add menu for ambiguous globs
-#
 # written.sh	-- 13 March, 2011 by Egan McComb
 #
 # revised	--
@@ -29,14 +26,14 @@ chkargs()
 		usage
 		exit $ERR_NARGS
 	else
-		dir=$(locate -n 1 -r $PWD.\*/"$1"$)
+		dir=$(locate -n 1 -r $PWD.\*/$1$)
 	fi
 }
 
 ##----MAIN----##
 chkargs "$@"
 
-if [[ -z "$dir" ]]
+if [[ -z "$dir" ]] || [[ ! -d "$dir" ]]
 then
 	echo "Error: No match found for '$1'" >&2
 	exit $ERR_VARGS
