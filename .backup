@@ -2,3 +2,5 @@
 /etc/network.d/
 /etc/X11/xorg.conf.d/
 /etc/rc.conf
+/etc/rc.local
+/etc/rc.local.shutdown
