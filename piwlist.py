@@ -31,8 +31,6 @@ def get_quality(cell):
 def get_channel(cell):
 	return matching_line(cell,"Channel:")
 
-# XXX: Check WPA version determination efficacy
-#      and WEP identification accuracy.
 def get_encryption(cell):
 	enc = None
 	if matching_line(cell,"Encryption key:") == "off":
@@ -41,9 +39,13 @@ def get_encryption(cell):
 		for line in cell:
 			matching = match(line,"IE:")
 			if matching != None:
-				wpa = match(matching,"WPA Version ")
+				wpa = match(matching,"IEEE 802.11i/WPA2 Version ")
 				if wpa != None:
-					enc="WPA v." + wpa
+					enc = "WPA2"
+				else:
+					wpa = match(matching,"WPA Version ")
+					if wpa != None:
+						enc = "WPA"
 		if enc == None:
 			enc = "WEP"
 	return enc
