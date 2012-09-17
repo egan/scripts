@@ -1,0 +1,53 @@
+#!/bin/bash
+
+##
+# gurl		-- make a good URL, i.e. truncate after first parameter
+#
+# usage		-- gurl URL
+#			-Alternatively, accepts stdin
+#
+# notes		-- watch out for ampersands
+#		   and other special characters
+#		-- mainly useful for cleaning Youtube links
+#
+# todo		-- allow specification of parameters
+#
+# written	-- 17 September, 2012 by Egan McComb
+#
+# revised	--
+##
+
+usage()
+{
+	echo "Usage: $(basename $0) URL" >&2
+	echo -e "\t-Alternatively, accepts stdin" >&2
+	echo -e "\t-Watch out for ampersands" >&2
+	echo -e "\t and other special characters" >&2
+}
+
+chkargs()
+{
+	if (( ! $# )) && [[ -t 0 ]] 
+	then
+		echo "Error: No input given" >&2
+		usage
+		exit $ERR_NARGS
+	elif (( $# > 1 )) || { (( $# )) && [[ ! -t 0 ]]; }
+	then
+		echo "Error: Excess input" >&2
+		usage
+		exit $ERR_NARGS
+	elif (( $# ))
+	then
+		url="$1"
+	else
+		read -r url
+	fi
+}
+
+##----MAIN----##
+chkargs "$@"
+
+cut -d "&" -f 1 <<< $url | tclip
+
+exit 0
