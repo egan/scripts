@@ -14,7 +14,7 @@
 # revised	--
 ##
 
-if ping -c 1 example.com &> /dev/null
+if ping -c 1 $(ip route | awk '/default/ { print $3 }') &> /dev/null
 then
 	exit 0
 else
