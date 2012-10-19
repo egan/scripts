@@ -6,13 +6,11 @@
 # usage		-- radar
 #
 # notes		-- requires qiv
-#		-- uses DAX station
-#
-# todo		-- allow changeable LOCID
+#		-- DAX - Sacramento station
 #
 # written	-- 11 December, 2010 by Egan McComb
 #
-# revised	--
+# revised	-- 13 July, 2012 by Aaron Huffman
 ##
 
 curl()
@@ -26,25 +24,28 @@ merge()
 }
 
 
-locid="dax"
-m_dir="$HOME/bin/.radar"
-m_out="$m_dir/${locid}_comp-t.gif"
+locid="DAX"
+m_dir="$HOME/bin/.radar/${locid}"
+m_every="$m_dir/comp-stat.gif"
+m_out="$m_dir/comp-all.gif"
 
-m_topo="$m_dir/${locid}_topo.gif"
-m_cnty="$m_dir/${locid}_county.gif"
-m_rivr="$m_dir/${locid}_river.gif"
-m_hywy="$m_dir/${locid}_hwy.gif"
-m_city="$m_dir/${locid}_city.gif"
+m_topo="http://radar.weather.gov/Overlays/Topo/Short/${locid}_Topo_Short.jpg"
+m_cnty="http://radar.weather.gov/Overlays/County/Short/${locid}_County_Short.gif"
+m_rivr="http://radar.weather.gov/Overlays/Rivers/Short/${locid}_Rivers_Short.gif"
+m_hywy="http://radar.weather.gov/Overlays/Highways/Short/${locid}_Highways_Short.gif"
+m_city="http://radar.weather.gov/Overlays/Cities/Short/${locid}_City_Short.gif"
+m_warn="http://radar.weather.gov/Warnings/Short/${locid}_Warnings_0.gif"
+m_radr="http://radar.weather.gov/ridge/RadarImg/N0R/${locid}_N0R_0.gif"
+m_over="http://radar.weather.gov/Legend/N0R/${locid}_N0R_Legend_0.gif"
 
-m_warn="$m_dir/${locid}_warn-t.gif"
-m_radr="$m_dir/${locid}_radar-t.gif"
-m_over="$m_dir/${locid}_legend-t.gif"
-
-m_evry="$m_dir/${locid}_all.gif"
-
-m_warn_u="http://radar.weather.gov/Warnings/Short/DAX_Warnings_0.gif"
-m_radr_u="http://radar.weather.gov/ridge/RadarImg/N0R/DAX_N0R_0.gif"
-m_over_u="http://radar.weather.gov/Legend/N0R/DAX_N0R_Legend_0.gif"
+m_topo_f=${m_dir}/statics/topo.jpg
+m_cnty_f=${m_dir}/statics/county.gif
+m_rivr_f=${m_dir}/statics/river.gif
+m_hywy_f=${m_dir}/statics/highways.gif
+m_city_f=${m_dir}/statics/cities.gif
+m_warn_f=${m_dir}/warnings-t.gif
+m_radr_f=${m_dir}/radar-t.gif
+m_over_f=${m_dir}/legend-t.gif
 
 ##----MAIN----##
 if ! netbool.sh
@@ -53,15 +54,34 @@ then
 	exit 1
 fi
 
-curl $m_warn $m_warn_u &
+if [ ! -d "$m_dir" ]
+then
+	mkdir "$m_dir" "$m_dir/statics"
+
+	curl $m_topo_f $m_topo &
+	pids=$!
+	curl $m_cnty_f $m_cnty &
+	pids="$pids $!"
+	curl $m_rivr_f $m_rivr &
+	pids="$pids $!"
+	curl $m_hywy_f $m_hywy &
+	pids="$pids $!"
+	curl $m_city_f $m_city &
+	pids="$pids $!"
+
+	wait $pids
+	merge $m_topo_f $m_hywy_f $m_rivr_f $m_cnty_f $m_city_f $m_every
+fi
+
+curl $m_warn_f $m_warn &
 pids=$!
-curl $m_radr $m_radr_u &
+curl $m_radr_f $m_radr &
 pids="$pids $!"
-curl $m_over $m_over_u &
+curl $m_over_f $m_over &
 pids="$pids $!"
 
 wait $pids
-merge $m_evry $m_warn $m_radr $m_over $m_out
+merge $m_every $m_warn_f $m_radr_f $m_over_f $m_out
 qiv $m_out
 
 exit 0
