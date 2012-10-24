@@ -8,6 +8,9 @@
 # notes		-- requires qiv
 #		-- DAX - Sacramento station
 #
+# todo		-- add locid argument
+#			-potentially automatic determination of station?
+#
 # written	-- 11 December, 2010 by Egan McComb
 #
 # revised	-- 13 July, 2012 by Aaron Huffman
