@@ -48,7 +48,7 @@ dir=$(locate -n 1 -r $glob)
 
 if [[ -z "$dir" ]] || [[ ! -d "$dir" ]]
 then
-	echo "Error: No match found for '$1'" >&2
+	echo "Error: No match found for '$@'" >&2
 	exit $ERR_VARGS
 else
 	echo "$dir"
