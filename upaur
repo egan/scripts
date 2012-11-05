@@ -13,8 +13,8 @@
 #		-- 6 June, 2011 by author
 ##
 
-aurl="http://aur.archlinux.org/packages"
-qurl="http://aur.archlinux.org/rpc.php?type=info&arg="
+aurl="https://aur.archlinux.org/packages"
+qurl="https://aur.archlinux.org/rpc.php?type=info&arg="
 pkglist=$(pacman -Qm | tr " " ";")
 destdir="$HOME/src/aur"
 
@@ -35,14 +35,14 @@ getversion()
 
 output()
 {
-	printf "%-30s -- %s\n" $pkgname $status
+	printf "%-30s -- %s\n" $pkgname "$status"
 	if [[ $status = OUTDATED ]]
 	then
 		echo -ne "\E[01;34m::\033[0m Retrieve tarball? [Y/n] "
 		read response
 		if userbool.sh $response
 		then
-			wget $destdir $aurl/$pkgname/$pkgname.tar.gz
+			wget $destdir $aurl/${pkgname:0:2}/$pkgname/$pkgname.tar.gz
 		fi
 	fi
 }
@@ -56,6 +56,7 @@ fi
 
 for pkg in $pkglist
 do
+	status="ERROR"
 	pkgname=$(cut -d ";" -f 1 <<< $pkg)
 	if grep -q git <<< $pkgname
 	then
