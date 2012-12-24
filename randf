@@ -1,0 +1,46 @@
+#!/bin/bash
+
+##
+# randf		-- select a random file in cwd
+#
+# usage		-- randf [d|f|l]
+#
+# written	-- 24 December, 2012 by Egan McCom
+#
+# revised	--
+##
+
+findcmd="find . -maxdepth 1"
+
+usage()
+{
+	echo "Usage: $(basename $0) [d|f|l]" >&2
+}
+
+chkargs()
+{
+	if (( $# > 1 ))
+	then
+		echo "Error: Too many arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif (( ! $# ))
+	then
+		findcmd="$findmcd -not -name '.*'"
+	elif [[ $1 = "d" ]] || [[ $1 = "f" ]] || [[ $1 = "l" ]]
+	then
+		findcmd="$findcmd -type $1 -not -name '.*'"
+	else
+		echo "Error: Invalid argument" >&2
+		usage
+		exit $ERR_VARGS
+	fi
+}
+
+##----MAIN----##
+chkargs "$@"
+list=($(eval $findcmd))
+num=${#list[@]}
+(( ! $num )) && exit 1
+echo "$(basename ${list[$RANDOM % num]})"
+exit 0
