@@ -29,7 +29,7 @@ xdotool key --delay $delay super+k type 'la
 '
 xdotool key --delay $delay super+j type ':e todo.txt
 '
-xdotool key --delay $delay super+k super+3 type 'exec ssh paijanne
+xdotool key --delay $delay super+k super+3 type 'exec autossh -M 5022 paijanne
 '
 xdotool key --delay $delay super+j type 'mutt
 '
