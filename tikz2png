@@ -1,0 +1,78 @@
+#!/bin/bash
+
+##
+# tikz2png	-- convert TikZ pictures to standalone pngs
+#
+# usage		-- tikz2img [-p PREAMBLE] FILES
+#			-%p% directives in FILE include tikz libraries
+#
+# todo		-- less sloppy naming/placement of files
+#		-- more control over image output
+#
+# written	-- 3 February, 2013 by Egan McComb
+#
+# revised	--
+##
+
+preamble=""
+
+usage()
+{
+	echo "Usage: $(basename $0) [-p PREAMBLE] FILES" >&2
+	echo -e "\t-%p% directives in FILE include tikz libraries" >&2
+}
+
+compile()
+{
+	pdflatex --shell-escape -file-line-error -interaction=nonstopmode "$@"
+}
+
+chkargs()
+{
+	if (( ! $# ))
+	then
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif [[ $1 = "-p" ]]
+	then
+		preamble="$preamble$2"
+		shift 2
+		if (( ! $# ))
+		then
+			echo "Error: Invalid arguments" >&2
+			usage
+			exit $ERR_VARGS
+		fi
+	fi
+	chkfile "$@"
+}
+
+chkfile()
+{
+	if [[ ! -f "$1" ]]
+	then
+		echo "Error: Invalid file '$1'" >&2
+		echo "Continuing..." >&2
+		continue
+	fi
+}
+
+clean()
+{
+	rm -f "${file/%tex/pdf}" "${file/%tex/aux}" "${file/%tex/log}" "$file"
+}
+
+##----MAIN----##
+chkargs "$@"
+for picture in "$@"
+do
+	echo -n "Processing $picture..."
+	file=$(mktemp $(basename $0).XXX.tex)
+	preamble="$preamble$(< "$picture" sed -n '/%p%/s/^...//p')"
+	echo "\documentclass{standalone}\usepackage{tikz}$preamble\begin{document}" > $file
+	echo "\input{$picture}\end{document}" >> $file
+	compile $file > /dev/null && echo " Done." || { echo " Error: Unable to compile LaTeX code" >&2; clean; exit 2; }
+	convert ${file/%tex/pdf} "$picture".png > /dev/null || { echo " Errors occurred in conversion" >&2; clean; exit 2; }
+	clean
+done
