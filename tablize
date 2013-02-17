@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-# tablize	-- convert labeled tsv files to latex tables
+# tablize	-- convert labeled tsv files to LaTeX tables
 #
 # usage		-- tablize [FILE ...]
 #
@@ -52,8 +52,8 @@ column()
 
 convert()
 {
-	echo -e "\\\begin{$te}{$csp}\n\\topline" > "${1/%.*/.tex}"
-	sed "s/	/ \& /g;s/$/ \\\\\\\\\n\\\\midline/g" "$1" >> "${1/%.*/.tex}"
+	echo -e "\\\begin{$te}{$csp}\n\\\toprule" > "${1/%.*/.tex}"
+	sed "s/	/ \& /g;s/$/ \\\\\\\\\n\\\\midrule/g" "$1" >> "${1/%.*/.tex}"
 	sed -i "$s/midrule/bottomrule/g" "${1/%.*/.tex}"
 	echo "\end{$te}" >> "${1/%.*/.tex}"
 	echo "Converted '$1' to '${1/%.*/.tex}'" 

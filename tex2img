@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-# tex2img	-- quickly get png output from latex code (for math)
+# tex2img	-- quickly get png output from LaTeX code (for math)
 #
 # usage		-- tex2img [SIZE] STRING
 #			-SIZE is standard LaTeX size command name
