@@ -1,0 +1,53 @@
+#!/bin/bash
+
+##
+# isup		-- check if host is up via isup.me
+#
+# usage		-- isup URL
+#
+# notes		-- watch out for ampersands
+#		   and other special characters
+#
+# written	-- 6 April 2013 by Egan McComb
+#
+# revised	--
+##
+
+service="http://www.isup.me/"
+
+usage()
+{
+	echo "Usage: $(basename $0) URL" >&2
+	echo -e "\t-Watch out for ampersands" >&2
+	echo -e "\t and other special characters" >&2
+}
+
+chkargs()
+{
+	if (( ! $# ))
+	then
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif (( $# > 1 ))
+	then
+		echo "Error: Too many arguments" >&2
+		usage
+		exit $ERR_NARGS
+	fi
+}
+
+##----MAIN----##
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor" >&2
+	exit 1
+fi
+
+chkargs "$@"
+
+response=$(curl -s "${service}$1" | grep "It's just you.")
+
+[[ -z $response ]] && echo "$1 is down." || echo "$1 is up."
+
+exit 0
