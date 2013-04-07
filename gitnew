@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ##
-# svnnew	-- obtain fresh git commit logs and view them
+# gitnew	-- obtain fresh git commit logs and view them
 #
 # usage		-- gitnew
 #
