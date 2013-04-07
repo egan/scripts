@@ -10,10 +10,14 @@
 #
 # written	-- 3 December, 2010 by Egan McComb
 #
-# revised	--
+# revised	-- 7 April, 2013 by Egan McComb
 ##
 
 delay=100
+
+[[ $(netcfg current) = "U8-wireless" ]] && sshc='exec mosh paijanne
+' || sshc='exec mosh u8
+'
 
 xdotool key --delay $delay super+1 super+x super+x super+x
 xdotool key --delay $delay super+2 super+x super+x super+v super+x
@@ -29,11 +33,10 @@ xdotool key --delay $delay super+k type 'la
 '
 xdotool key --delay $delay super+j type ':e todo.txt
 '
-xdotool key --delay $delay super+k super+3 type 'exec mosh paijanne
-'
+xdotool key --delay $delay super+k super+3 type $sshc
 xdotool key --delay $delay super+j type 'mutt
 '
-xdotool key --delay $delay super+k super+5 super+j type 'cd music/rec/
+xdotool key --delay $delay super+k super+5 j type 'cd music/rec/
 '
 xdotool key --delay $delay super+k type 'cd music/rec/
 '
