@@ -94,6 +94,7 @@ clean()
 
 ##----MAIN----##
 chkargs "$@"
+trap clean EXIT
 file=$(mktemp $(basename $0).XXX.tex)
 cat > $file <<- EOF
 	\documentclass{article}
@@ -111,7 +112,6 @@ cat > $file <<- EOF
 	EOF
 compile $file > /dev/null || { echo "Error: Unable to compile LaTeX code" >&2; clean; exit 2; }
 convert ${file/%tex/png} ${file/%tex/dvi} > /dev/null || { echo "Errors occurred in conversion" >&2; clean; exit 2; }
-clean
 
 echo "${file/%tex/png}" | tclip
 

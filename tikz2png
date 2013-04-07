@@ -65,6 +65,7 @@ clean()
 
 ##----MAIN----##
 chkargs "$@"
+trap clean EXIT
 for picture in "$@"
 do
 	echo -n "Processing $picture..."

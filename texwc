@@ -52,12 +52,17 @@ convert()
 	pdftotext -raw "$2" &> /dev/null || { echo "Errors occured in conversion" >&2; rm -f "${1/%tex/txt}"; exit 2; }
 }
 
+clean()
+{
+	rm -f "${1/%tex/txt}"
+}
+
 ##----MAIN----##
 chkargs "$@"
 chkfile "$@"
+trap clean EXIT
 convert "$1" "${1/%tex/pdf}"
 wc "${1/%tex/txt}" | sed 's/txt$/tex/'
-rm -f "${1/%tex/txt}"
 
 exit 0
 
