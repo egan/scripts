@@ -15,8 +15,8 @@
 
 delay=100
 
-[[ $(netcfg current) = "U8-wireless" ]] && sshc='exec mosh paijanne
-' || sshc='exec mosh u8
+[[ $(wpa_cli -i wlan0 status | sed -n 's/^id_str=//p') = "U8-wireless" ]] && sshc='exec mosh paijanne
+' || sshc='exec ssh u8
 '
 
 xdotool key --delay $delay super+1 super+x super+x super+x
