@@ -18,7 +18,7 @@
 ##
 
 interface="wlan0"
-netdir="/etc/network.d"
+netdir="/etc/netctl"
 
 usage()
 {
@@ -141,14 +141,13 @@ editprofile()
 	sed -i "s/MyNetwork/$essid/" "$file"
 	if [[ $security = "wep" ]]
 	then
-		sed -i "s/123456789/$key/" "$file"
+		sed -i "s/\\\\\"1234567890abcdef/$key/" "$file"
 	elif [[ $security = "wpa" ]]
 	then
 		sed -i "s/WirelessKey/$key/" "$file"
 	else
 		echo "Additional configuration required" >&2
 	fi
-	echo "DHCP_TIMEOUT='3000'" >> "$file"
 }
 
 ##----MAIN----##
