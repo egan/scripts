@@ -23,6 +23,7 @@ xdotool key --delay $delay super+1 super+x super+x super+x
 xdotool key --delay $delay super+2 super+x super+x super+v super+x
 xdotool key --delay $delay super+3 super+x super+x super+x
 xdotool key --delay $delay super+5 super+x super+x
+:
 xdotool key --delay $delay super+1 super+j type 'nettest
 '
 xdotool key --delay $delay super+k super+2 type 'ls
