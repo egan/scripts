@@ -125,9 +125,10 @@ makeprofile()
 		fi
 	fi
 	if [[ $security = "WPA2" ]]
-		$security = "wpa-configsection"
+	then
+		security="wpa-configsection"
 	else
-		$security = $(tr "[A-Z]" "[a-z]" <<< $security)
+		security=$(tr "[A-Z]" "[a-z]" <<< $security)
 	fi
 	cp $netdir/examples/wireless-$security $file
 	editprofile
