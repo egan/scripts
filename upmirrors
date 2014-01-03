@@ -38,6 +38,14 @@ then
 	sed -i '/## \(United States\|Any\)/,/^$/s/#Server/Server/g' "$listorig"
 fi
 
+if [[ ! -e "$listorig" ]]
+then
+	echo "Original mirrorlist missing" >&2
+	echo "Backing up current mirrorlist..."
+	cp "$list" "$listorig" &> /dev/null || { echo "Error: Could not back up mirrorlist" >&2; exit $ERR_VARGS; }
+	echo "Please check that $listorig is complete" >&2
+fi
+
 echo "Ranking mirrors..."
 rankmirrors "$listorig" > "$list"
 echo "Cleaning up output file..."
