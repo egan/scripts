@@ -6,6 +6,7 @@ Full descriptions of each can be found inside their respective files.
 
 	addword		-- add words to aspell personal dictionary
 	backup		-- sync home directory to external hard disk
+	bashmarks	-- shell bookmarks from <https://github.com/huyng/bashmarks>
 	beep		-- beep continuously or n times
 	catpdf		-- concatenate pdfs together
 	cconvert	-- convert numbers between bases
