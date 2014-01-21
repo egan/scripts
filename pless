@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ##
-# pless		-- pipes output of arbitrary commands into less
+# pless   -- pipes output of arbitrary commands into less
 #
-# usage		-- pless [COMMAND]
+# usage   -- pless [COMMAND]
 #
-# written	-- 1 August, 2009 by Egan McComb
+# written -- 1 August, 2009 by Egan McComb
 #
-# revised	-- 31 July, 2010 by author
+# revised -- 31 July, 2010 by author
 ##
 
 usage()

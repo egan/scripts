@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ##
-# addword	-- add words to aspell personal dictionary
+# addword -- add words to aspell personal dictionary
 #
-# usage		-- addword WORD [WORD...]
+# usage   -- addword WORD [WORD...]
 #
-# written	-- 19 December, 2011 by Egan McComb
+# written -- 19 December, 2011 by Egan McComb
 #
 # revised --
 ##

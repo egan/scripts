@@ -1,17 +1,17 @@
 #!/bin/bash
 
 ##
-# tikz2png	-- convert TikZ pictures to standalone pngs
+# tikz2png -- convert TikZ pictures to standalone pngs
 #
-# usage		-- tikz2img [-p PREAMBLE] FILES
-#			-%p% directives in FILE include tikz libraries
+# usage    -- tikz2img [-p PREAMBLE] FILES
+#             %p% directives in FILE include tikz libraries
 #
-# todo		-- less sloppy naming/placement of files
-#		-- more control over image output
+# todo     -- less sloppy naming/placement of files
+#          -- more control over image output
 #
-# written	-- 3 February, 2013 by Egan McComb
+# written  -- 3 February, 2013 by Egan McComb
 #
-# revised	--
+# revised  --
 ##
 
 preamble=""

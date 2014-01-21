@@ -1,22 +1,23 @@
 #!/bin/bash
 
 ##
-# tex2img	-- quickly get png output from LaTeX code (for math)
+# tex2img -- quickly get png output from LaTeX code (for math)
 #
-# usage		-- tex2img [SIZE] STRING
-#			-SIZE is standard LaTeX size command name
-#			 without any substring 'size'
-#			-Few measures preventing stupidity
-#			-Single-quoting is recommended
+# usage   -- tex2img [SIZE] STRING
+#         -- SIZE is standard LaTeX size command name
+#            without any substring 'size'
+#         -- Few measures preventing stupidity
+#            are in place
+#         -- Single-quoting is recommended
 #
-# notes		-- requires tclip
-#		-- uses $$ environment only
+# notes   -- requires tclip
+#         -- uses $$ environment only
 #
-# todo		-- add safeguards
+# todo    -- add safeguards
 #
-# written	-- 25 August, 2010 by Egan McComb
+# written -- 25 August, 2010 by Egan McComb
 #
-# revised	--
+# revised --
 ##
 
 size="\LARGE"

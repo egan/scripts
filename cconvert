@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 
 ##
-# cconvert	-- convert numbers between bases
+# cconvert -- convert numbers between bases
 #
-# written	-- unknown
+# written  -- unknown
 #
-# revised	-- 29 December, 2011 by Egan McComb
+# revised  -- 29 December, 2011 by Egan McComb
 ##
 
 use strict;
@@ -15,12 +15,12 @@ use Getopt::Long;
 usage() unless(@ARGV);
 
 our ($opt_d2b, $opt_d2o, $opt_d2h, $opt_hd, $opt_od, $opt_bd, @to_ascii);
-GetOptions(	'db'   =>  \$opt_d2b,
-		'do'   =>  \$opt_d2o,
-		'dh'   =>  \$opt_d2h,
-		'hd'   =>  \$opt_hd,
-		'od'   =>  \$opt_od,
-		'bd'   =>  \$opt_bd,
+GetOptions( ' db ' = >  \$opt_d2b,
+		    ' do ' = >  \$opt_d2o,
+		    ' dh ' = >  \$opt_d2h,
+		    ' hd ' = >  \$opt_hd,
+		    ' od ' = >  \$opt_od,
+		    ' bd ' = >  \$opt_bd,
 );
 
 my $int = shift;

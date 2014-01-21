@@ -1,16 +1,16 @@
 #!/bin/bash
 
 ##
-# isup		-- check if host is up via isup.me
+# isup    -- check if host is up via isup.me
 #
-# usage		-- isup URL
+# usage   -- isup URL
 #
-# notes		-- watch out for ampersands
-#		   and other special characters
+# notes   -- watch out for ampersands
+#            and other special characters
 #
-# written	-- 6 April 2013 by Egan McComb
+# written -- 6 April 2013 by Egan McComb
 #
-# revised	--
+# revised --
 ##
 
 service="http://www.isup.me/"

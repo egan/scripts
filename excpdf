@@ -1,18 +1,18 @@
 #!/bin/bash
 
 ##
-# excpdf	-- remove pages from pdfs with ghostscript
+# excpdf  -- remove pages from pdfs with ghostscript
 #
-# usage		-- excpdf PAGERANGE INFILE OUTFILE
-#			-PAGERANGE is given with ranges
-#			 e.g. 3-5:7:9-15 keeps those pages
-#			-Pages must be in numerical order
+# usage   -- excpdf PAGERANGE INFILE OUTFILE
+#         -- PAGERANGE is given with ranges
+#            e.g. 3-5:7:9-15 keeps those pages
+#         -- Pages must be in numerical order
 #
-# notes		-- requires catpdf
+# notes   -- requires catpdf
 #
-# written	-- 19 December, 2011 by Egan McComb
+# written -- 19 December, 2011 by Egan McComb
 #
-# revised	--
+# revised --
 ##
 
 usage()

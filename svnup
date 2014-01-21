@@ -1,19 +1,19 @@
 #!/bin/bash
 
 ##
-# svnup		-- sync svn source trees to svn server
+# svnup   -- sync svn source trees to svn server
 #
-# usage		-- svnup [-h|--help]|[-o|--only][DIR...]
-#			-Directory arguments are concatenated
-#			 to newline-delimited default list $lfile
-#			 unless the -o option is passed
+# usage   -- svnup [-h|--help]|[-o|--only][DIR...]
+#         -- Directory arguments are concatenated
+#            to newline-delimited default list $lfile
+#            unless the -o option is passed
 #
-# notes		-- default repos are newline-delimited in $lfile
+# notes   -- default repos are newline-delimited in $lfile
 #
-# written	-- 2008 by Egan McComb
+# written -- 2008 by Egan McComb
 #
-# revised	-- 11 July, 2009 by author
-#		-- 22 August, 2010 by author
+# revised -- 11 July, 2009 by author
+#         -- 22 August, 2010 by author
 ##
 
 lfile="$HOME/bin/.svnlist"

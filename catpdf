@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ##
-# catpdf	-- concatenate pdfs together
+# catpdf  -- concatenate pdfs together
 #
-# usage		-- catpdf INFILES OUTFILE
+# usage   -- catpdf INFILES OUTFILE
 #
-# notes		-- requires ghostscript and userbool.sh
+# notes   -- requires ghostscript and userbool.sh
 #
-# written	-- 6 June, 2011 by Egan McComb
+# written -- 6 June, 2011 by Egan McComb
 #
-# revised	-- 19 December, 2011 by author
+# revised -- 19 December, 2011 by author
 ##
 
 usage()

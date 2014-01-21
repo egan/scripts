@@ -1,19 +1,19 @@
 #!/bin/bash
 
 ##
-# radar		-- obtain radar reflectivity data from NWS
+# radar   -- obtain radar reflectivity data from NWS
 #
-# usage		-- radar
+# usage   -- radar
 #
-# notes		-- requires qiv
-#		-- DAX - Sacramento station
+# notes   -- requires qiv
+#         -- DAX - Sacramento station
 #
-# todo		-- add locid argument
-#			-potentially automatic determination of station?
+# todo    -- add locid argument
+#         -- potentially automatic determination of station?
 #
-# written	-- 11 December, 2010 by Egan McComb
+# written -- 11 December, 2010 by Egan McComb
 #
-# revised	-- 13 July, 2012 by Aaron Huffman
+# revised -- 13 July, 2012 by Aaron Huffman
 ##
 
 curl()

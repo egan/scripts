@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ##
-# mklauncher	-- write a script to launch graphical applications silently
+# mklauncher -- write a script to launch graphical applications silently
 #
-# usage		-- mklauncher APPLICATION
+# usage      -- mklauncher APPLICATION
 #
-# notes		--
+# notes      --
 #
-# written	-- 2 July, 2012 by Egan McComb
+# written    -- 2 July, 2012 by Egan McComb
 #
-# revised	--
+# revised    --
 ##
 
 ldir="$HOME/bin/.launch"

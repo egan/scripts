@@ -1,18 +1,18 @@
 #!/bin/bash
 
 ##
-# volume	-- control alsa mixer levels
+# volume  -- control alsa mixer levels
 #
-# usage		-- volume [[toggle|up|down|level LEVEL]|[t|u|d|l LEVEL]]
-#			-With no arguments, print volume level
-#			-LEVEL is given as a percentage
-#			-Default step for up/down is $volstep
+# usage   -- volume [[toggle|up|down|level LEVEL]|[t|u|d|l LEVEL]]
+#         -- With no arguments, print volume level
+#         -- LEVEL is given as a percentage
+#         -- Default step for up/down is $volstep
 #
-# notes		-- complex volume control can be done with alsamixer
+# notes   -- complex volume control can be done with alsamixer
 #
-# written	-- 30 July, 2009 by Egan McComb
+# written -- 30 July, 2009 by Egan McComb
 #
-# revised	-- 15 June, 2010 by author
+# revised -- 15 June, 2010 by author
 ##
 
 sdevice="Master"

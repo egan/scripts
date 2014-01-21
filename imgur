@@ -1,16 +1,16 @@
 #!/bin/bash
 
 ##
-# imgur		-- upload image to imgur.com
+# imgur   -- upload image to imgur.com
 #
-# usage		-- imgur FILE
+# usage   -- imgur FILE
 #
-# notes		-- requires netbool.sh and tclip
-#		-- stores history in $hfile
+# notes   -- requires netbool.sh and tclip
+#         -- stores history in $hfile
 #
-# todo		-- thumbnail link?
+# todo    -- thumbnail link?
 #
-# written	-- 25 August, 2010 by Egan McComb
+# written -- 25 August, 2010 by Egan McComb
 #
 # revised --
 ##

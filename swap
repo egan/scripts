@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ##
-# swap		-- swap file names
+# swap    -- swap file names
 #
-# usage		-- swap FILE1 FILE2
+# usage   -- swap FILE1 FILE2
 #
-# written	-- 12 Dec, 2009 by Egan McComb
+# written -- 12 Dec, 2009 by Egan McComb
 #
-# revised	-- 25 Dec, 2010 by author
+# revised -- 25 Dec, 2010 by author
 ##
 
 usage()

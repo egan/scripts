@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ##
-# sleeptill	-- sleep till specified time
+# sleeptill -- sleep till specified time
 #
-# usage		-- sleeptill HH:MM
+# usage     -- sleeptill HH:MM
 #
-# todo		-- more options, error checking
+# todo      -- more options, error checking
 #
-# written	-- 18 February, 2012 by Egan McComb
+# written   -- 18 February, 2012 by Egan McComb
 #
-# revised	--
+# revised   --
 ##
 
 while [[ $(date +%R) != "$1" ]];

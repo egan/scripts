@@ -1,16 +1,16 @@
 #!/bin/bash
 
 ##
-# volumed.sh	-- print changes in volume to stdout
+# volumed.sh -- print changes in volume to stdout
 #
-# usage		-- volumed.sh
+# usage      -- volumed.sh
 #
-# notes		-- requires inotify-tools and volume
-#		-- designed for use from xmobar
+# notes      -- requires inotify-tools and volume
+#            -- designed for use from xmobar
 #
-# written	-- 14 June, 2010 by Egan McComb
+# written    -- 14 June, 2010 by Egan McComb
 #
-# revised	--
+# revised    --
 ##
 
 sdevice="/dev/snd/controlC0"

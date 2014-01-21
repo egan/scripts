@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ##
-# upmirrors	-- updates and ranks new pacman mirror list
+# upmirrors -- updates and ranks new pacman mirror list
 #
-# usage		-- upmirrors
+# usage     -- upmirrors
 #
-# notes		-- requires netbool.sh and rankmirrors
+# notes     -- requires netbool.sh and rankmirrors
 #
-# written 	-- 18 February 2012 by Egan McComb
+# written   -- 18 February 2012 by Egan McComb
 #
-# revised 	--
+# revised   --
 ##
 
 listpacnew="/etc/pacman.d/mirrorlist.pacnew"

@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ##
-# beep		-- beep continuously or n times
+# beep    -- beep continuously or n times
 #
-# usage		-- beep [-t NUMBER]
+# usage   -- beep [-t NUMBER]
 #
-# written	-- 27 July, 2010 by Egan McComb
+# written -- 27 July, 2010 by Egan McComb
 #
 # revised --
 ##

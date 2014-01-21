@@ -1,14 +1,14 @@
 #!/bin/bash
 
 ##
-# colors	-- preview terminal colors
+# colors  -- preview terminal colors
 #
-# usage		-- colors.sh
+# usage   -- colors.sh
 #
-# written	-- 20 January, 2006 by Wolfgang Frisch
+# written -- 20 January, 2006 by Wolfgang Frisch
 #
-# revised	-- 2008 by Aaron Griffin
-#		-- 29 December by Egan McComb
+# revised -- 2008 by Aaron Griffin
+#         -- 29 December by Egan McComb
 ##
 
 

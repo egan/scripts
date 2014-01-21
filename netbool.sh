@@ -1,17 +1,17 @@
 #!/bin/bash
 
 ##
-# netbool.sh	-- check for proper Internet connectivity
+# netbool.sh -- check for proper Internet connectivity
 #
-# usage		-- netbool.sh
+# usage      -- netbool.sh
 #
-# notes		-- designed for use in other scripts
+# notes      -- designed for use in other scripts
 #
-# todo		-- more elegant way to do this?
+# todo       -- more elegant way to do this?
 #
-# written	-- 29 December, 2011 by Egan McComb
+# written    -- 29 December, 2011 by Egan McComb
 #
-# revised	--
+# revised    --
 ##
 
 if ping -c 1 $(ip route | awk '/default/ { print $3 }') &> /dev/null

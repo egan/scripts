@@ -1,16 +1,16 @@
 #!/bin/bash
 
 ##
-# xdostart	-- rudimentary startup routine implemented with xdotool
+# xdostart -- rudimentary startup routine implemented with xdotool
 #
-# usage		-- xdostart
-# 
-# notes		-- designed for use from run dialog
-#		-- very specialized for personal use
+# usage    -- xdostart
 #
-# written	-- 3 December, 2010 by Egan McComb
+# notes    -- designed for use from run dialog
+#          -- very specialized for personal use
 #
-# revised	-- 7 April, 2013 by Egan McComb
+# written  -- 3 December, 2010 by Egan McComb
+#
+# revised  -- 7 April, 2013 by Egan McComb
 ##
 
 delay=100

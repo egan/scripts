@@ -1,20 +1,20 @@
 #!/bin/bash
 
 ##
-# wcshot	-- take live webcam shots via mplayer
+# wcshot  -- take live webcam shots via mplayer
 #
-# usage		-- wcshot [WxH]
-#			-Press s to take a shot
-#			-Press S to start/stop taking
-#			 continuous shots
-#			-Press q to quit
+# usage   -- wcshot [WxH]
+#         -- Press s to take a shot
+#         -- Press S to start/stop taking
+#            continuous shots
+#         -- Press q to quit
 #
-# notes		-- expects webcam at /dev/video0
-#		-- default aspect ratio is 640x480
+# notes   -- expects webcam at /dev/video0
+#         -- default aspect ratio is 640x480
 #
-# written	-- 20 June, 2011 by Egan McComb
+# written -- 20 June, 2011 by Egan McComb
 #
-# revised	--
+# revised --
 ##
 
 coption="-msglevel all=-1:cplayer=-1:statusline=-1 -vf screenshot"

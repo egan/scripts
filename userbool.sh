@@ -1,17 +1,17 @@
 #!/bin/bash
 
 ##
-# userbool.sh	-- parse boolean user input
+# userbool.sh -- parse boolean user input
 #
-# usage		-- userbool INPUT
+# usage       -- userbool INPUT
 #
-# notes		-- designed for use in other scripts
+# notes       -- designed for use in other scripts
 #
-# todo		-- add safeguards
+# todo        -- add safeguards
 #
-# written	-- 29 December, 2011 by Egan McComb
+# written     -- 29 December, 2011 by Egan McComb
 #
-# revised	--
+# revised     --
 ##
 
 ##----MAIN----##

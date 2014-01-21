@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ##
-# gitnew	-- obtain fresh git commit logs and view them
+# gitnew  -- obtain fresh git commit logs and view them
 #
-# usage		-- gitnew
+# usage   -- gitnew
 #
-# notes		-- intended for use with aliases for specific repos
+# notes   -- intended for use with aliases for specific repos
 #
-# written	-- 25 July, 2012 by Egan McComb
+# written -- 25 July, 2012 by Egan McComb
 #
-# revised	--
+# revised --
 ##
 
 nfile="./.git/revision.info"

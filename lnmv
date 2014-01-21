@@ -1,16 +1,16 @@
 #!/bin/bash
 
 ##
-# lnmv		-- replace a file with a symbolic link to its new location
+# lnmv    -- replace a file with a symbolic link to its new location
 #
-# usage		-- lnmv OLDFILE NEWFILE
+# usage   -- lnmv OLDFILE NEWFILE
 #
-# notes		-- the new filename must be given
-#		   even if it is not to be renamed
+# notes   -- the new filename must be given
+#            even if it is not to be renamed
 #
-# written	-- 7 April, 2011 by Egan McComb
+# written -- 7 April, 2011 by Egan McComb
 #
-# revised	--
+# revised --
 ##
 
 usage()

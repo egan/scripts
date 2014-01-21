@@ -1,18 +1,18 @@
 #!/bin/bash
 
 ##
-# texwc		-- word count for LaTeX files
+# texwc   -- word count for LaTeX files
 #
-# usage		-- texwc FILE
+# usage   -- texwc FILE
 #
-# notes		-- requires pdflatex and pdftotext
-#		-- leaves behind pdf and compile files
+# notes   -- requires pdflatex and pdftotext
+#         -- leaves behind pdf and compile files
 #
-# todo		-- process multiple files?
+# todo    -- process multiple files?
 #
-# written	-- 29 February by Jesse McClure
+# written -- 29 February by Jesse McClure
 #
-# revised	-- 3 July by Egan McCom
+# revised -- 3 July by Egan McCom
 ##
 
 usage()

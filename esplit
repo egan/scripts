@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ##
-# esplit	-- split a file into pieces
+# esplit  -- split a file into pieces
 #
-# usage		-- esplit -m | -c COUNT FILE...
+# usage   -- esplit -m | -c COUNT FILE...
 #
-# written	-- 27 May, 2009 by Egan McComb
+# written -- 27 May, 2009 by Egan McComb
 #
-# revised	-- 12 July, 2009 by author
+# revised -- 12 July, 2009 by author
 ##
 
 size=16777216

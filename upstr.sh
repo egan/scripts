@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ##
-# upstr.sh	-- return up string
+# upstr.sh -- return up string
 #
-# usage		-- upstr.sh [N|UPDIR]
+# usage    -- upstr.sh [N|UPDIR]
 #
-# written	-- 13 March, 2011 by Egan McComb
+# written  -- 13 March, 2011 by Egan McComb
 #
-# revised	--
+# revised  --
 ##
 
 usage()

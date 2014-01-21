@@ -1,20 +1,20 @@
 #!/bin/bash
 
 ##
-# gurl		-- make a good URL, i.e. truncate after first parameter
+# gurl    -- make a good URL, i.e. truncate after first parameter
 #
-# usage		-- gurl URL
-#			-Alternatively, accepts stdin
+# usage   -- gurl URL
+#         -- Alternatively, accepts stdin
 #
-# notes		-- watch out for ampersands
-#		   and other special characters
-#		-- mainly useful for cleaning Youtube links
+# notes   -- watch out for ampersands
+#            and other special characters
+#         -- mainly useful for cleaning Youtube links
 #
-# todo		-- allow specification of parameters
+# todo    -- allow specification of parameters
 #
-# written	-- 17 September, 2012 by Egan McComb
+# written -- 17 September, 2012 by Egan McComb
 #
-# revised	--
+# revised --
 ##
 
 usage()

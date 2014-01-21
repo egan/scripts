@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ##
-# mkoff		-- prepare a website for offline use
+# mkoff   -- prepare a website for offline use
 #
-# usage		-- mkoff [-s STRING] FILE
+# usage   -- mkoff [-s STRING] FILE
 #
-# notes		-- obviously the resources should be downloaded
+# notes   -- obviously the resources should be downloaded
 #
-# written	-- 4 July, 2009 by Egan McComb
+# written -- 4 July, 2009 by Egan McComb
 #
-# revised	-- 29 December, 2011 by author
+# revised -- 29 December, 2011 by author
 ##
 
 usage()

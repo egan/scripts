@@ -1,20 +1,20 @@
 #!/bin/bash
 
 ##
-# mkwcfg	-- creates wireless network profile
+# mkwcfg  -- creates wireless network profile
 #
-# usage		-- mkwcfg ESSID [WEP|WPA|WPA2] [KEY]
-#			-Will detect network type and prompt
-#			 for a key if given only one argument
+# usage   -- mkwcfg ESSID [WEP|WPA|WPA2] [KEY]
+#         -- Will detect network type and prompt
+#            for a key if given only one argument
 #
-# notes		-- requires piwlist.py and userbool.sh
+# notes   -- requires piwlist.py and userbool.sh
 #
-# todo		-- support WPA2
+# todo    -- support WPA2
 #
-# written	-- 1 January, 2011 by Greg Dwulet
+# written -- 1 January, 2011 by Greg Dwulet
 #
-# revised	-- 6 July, 2011 by Egan McComb
-#		-- 30 December, 2011 by Egan McComb
+# revised -- 6 July, 2011 by Egan McComb
+#         -- 30 December, 2011 by Egan McComb
 ##
 
 interface="wlan0"

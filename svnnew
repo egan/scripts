@@ -1,16 +1,16 @@
 #!/bin/bash
 
 ##
-# svnnew	-- obtain fresh svn commit logs and view them
+# svnnew  -- obtain fresh svn commit logs and view them
 #
-# usage		-- svnnew
+# usage   -- svnnew
 #
-# notes		-- intended for use with aliases for specific repos
+# notes   -- intended for use with aliases for specific repos
 #
-# written	-- 1 March 2009 by Egan McComb
+# written -- 1 March 2009 by Egan McComb
 #
-# revised	-- 11 July, 2009 by author
-#		-- 22 August, 2010 by author
+# revised -- 11 July, 2009 by author
+#         -- 22 August, 2010 by author
 ##
 
 nfile="./.svn/revision.info"

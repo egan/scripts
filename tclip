@@ -1,17 +1,17 @@
 #!/bin/bash
 
 ##
-# tclip		-- tee stdin to clipboard and stdout
+# tclip   -- tee stdin to clipboard and stdout
 #
-# usage		-- tclip
+# usage   -- tclip
 #
-# notes		-- not safe for large data 
+# notes   -- not safe for large data
 #
-# todo		-- remove intermediate variable
+# todo    -- remove intermediate variable
 #
-# written	-- 7 July, 2010 by Egan McComb
+# written -- 7 July, 2010 by Egan McComb
 #
-# revised	--
+# revised --
 ##
 
 if [[ -t 0 ]]

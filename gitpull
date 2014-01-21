@@ -1,20 +1,20 @@
 #!/bin/bash
 
 ##
-# gitpull	-- sync git source trees to git servers
+# gitpull -- sync git source trees to git servers
 #
-# usage		-- git [-h|--help]|[-o|--only][DIR...]
-#			-Directory arguments are concatenated
-#			 to newline-delimited default list $lfile
-#			 unless the -o option is passed
+# usage   -- gitpull [-h| --help]|[-o| --only][DIR...]
+#         -- Directory arguments are concatenated
+#            to newline-delimited default list $lfile
+#            unless the -o option is passed
 #
-# notes		-- default repos are newline-delimited in $lfile
+# notes   -- default repos are newline-delimited in $lfile
 #
-# written	-- 2008 by Egan McComb
+# written -- 2008 by Egan McComb
 #
-# revised	-- 11 July, 2009 by author
-#		-- 22 August, 2010 by author
-#		-- 7 July, 2012
+# revised -- 11 July, 2009 by author
+#         -- 22 August, 2010 by author
+#         -- 7 July, 2012
 ##
 
 lfile="$HOME/bin/.gitlist"

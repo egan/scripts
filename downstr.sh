@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ##
-# downstr.sh	-- return down string
+# downstr.sh -- return down string
 #
-# usage		-- downstr.sh [SEARCH]
-#			-SEARCH is a string of regexes
-#			 specifying parts of the desired path
+# usage      -- downstr.sh [SEARCH]
+#               SEARCH is a string of regexes
+#               specifying parts of the desired path
 #
-# written.sh	-- 13 March, 2011 by Egan McComb
+# written.sh -- 13 March, 2011 by Egan McComb
 #
-# revised	--
+# revised    --
 ##
 
 usage()

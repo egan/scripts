@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ##
-# statmirrors	-- output update status of pacman mirrors
+# statmirrors -- output update status of pacman mirrors
 #
-# usage		-- statmirrors
+# usage       -- statmirrors
 #
-# written	-- 26 July, 2010 by Egan McComb
+# written     -- 26 July, 2010 by Egan McComb
 #
-# revised	-- 9 April, 2011 by author
+# revised     -- 9 April, 2011 by author
 ##
 
 staturl="https://www.archlinux.de/?page=MirrorStatusReflector"

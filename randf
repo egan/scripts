@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ##
-# randf		-- select a random file in cwd
+# randf   -- select a random file in cwd
 #
-# usage		-- randf [d|f|l]
+# usage   -- randf [d|f|l]
 #
-# written	-- 24 December, 2012 by Egan McCom
+# written -- 24 December, 2012 by Egan McCom
 #
-# revised	--
+# revised --
 ##
 
 findcmd="find . -maxdepth 1"

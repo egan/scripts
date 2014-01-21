@@ -1,17 +1,17 @@
 #!/bin/bash
 
 ##
-# turl		-- shorten a url using tinyurl.com
+# turl    -- shorten a url using tinyurl.com
 #
-# usage		-- turl URL
-#			-Alternatively, accepts stdin
+# usage   -- turl URL
+#         -- Alternatively, accepts stdin
 #
-# notes		-- watch out for ampersands
-#		   and other special characters
+# notes   -- watch out for ampersands
+#            and other special characters
 #
-# written	-- 4 July, 2010 by Egan McComb
+# written -- 4 July, 2010 by Egan McComb
 #
-# revised	-- 20 June, 2011 by author
+# revised -- 20 June, 2011 by author
 ##
 
 service="http://tinyurl.com/create.php"

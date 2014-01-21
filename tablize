@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ##
-# tablize	-- convert labeled tsv files to LaTeX tables
+# tablize -- convert labeled tsv files to LaTeX tables
 #
-# usage		-- tablize [FILE ...]
+# usage   -- tablize [FILE ...]
 #
-# todo		-- add options for $te and $cs as well as headers
+# todo    -- add options for $te and $cs as well as headers
 #
-# written	-- 30 April, 2010 by Egan McComb
+# written -- 30 April, 2010 by Egan McComb
 #
-# revised	--
+# revised --
 ##
 
 te="tabular"

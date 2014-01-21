@@ -3,13 +3,13 @@
 ##
 # piwlist.py -- parses output of iwlist scan into table
 #
-# usage -- sudo iwlist wlan0 scan | piwlist.py [-n|--nopretty]
+# usage      -- sudo iwlist wlan0 scan | piwlist.py [-n|--nopretty]
 #
-# notes -- originally written in python v2.x
+# notes      -- originally written in python v2.x
 #
-# written -- 17 January, 2010 by Hugo Chargois
+# written    -- 17 January, 2010 by Hugo Chargois
 #
-# revised -- 5 July, 2011 by Egan McComb
+# revised    -- 5 July, 2011 by Egan McComb
 ##
 
 import sys

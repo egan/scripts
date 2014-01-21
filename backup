@@ -1,22 +1,22 @@
 #!/bin/bash
 
 ##
-# backup	-- sync home directory to external hard disk
+# backup  -- sync home directory to external hard disk
 #
-# usage		-- backup
+# usage   -- backup
 #
-# notes		-- requires rsync
-#		-- pertinent partition must be mounted
-#		-- additional files specified in $lst
-#		   will be copied to $etc before syncing
-#		-- exclusions and inclusions thereto are
-#		   specified in $exc and $inc, respectively
+# notes   -- requires rsync
+#         -- pertinent partition must be mounted
+#         -- additional files specified in $lst
+#            will be copied to $etc before syncing
+#         -- exclusions and inclusions thereto are
+#            specified in $exc and $inc, respectively
 #
-# written	-- 2008 by Egan McComb
+# written -- 2008 by Egan McComb
 #
-# revised	-- 11 July, 2009 by author
-#		-- 19 December, 2011 by author
-#		-- 29 December, 2011 by author
+# revised -- 11 July, 2009 by author
+#         -- 19 December, 2011 by author
+#         -- 29 December, 2011 by author
 ##
 
 dir="arch-backup"
