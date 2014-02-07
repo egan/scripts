@@ -22,7 +22,7 @@ delay=100
 xdotool key --delay $delay super+1 super+x super+x super+x
 xdotool key --delay $delay super+2 super+x super+x super+v super+x
 xdotool key --delay $delay super+3 super+x super+x super+x
-xdotool key --delay $delay super+5 super+x super+x
+xdotool key --delay $delay super+5 super+v super+x super+x
 :
 xdotool key --delay $delay super+1 super+j type 'nettest
 '
@@ -37,12 +37,16 @@ xdotool key --delay $delay super+j type ':e todo.txt
 xdotool key --delay $delay super+k super+3 type "$sshc"
 xdotool key --delay $delay super+j type 'mutt
 '
-xdotool key --delay $delay super+k super+5 super+j type 'cd music/rec/
+xdotool key --delay $delay super+k super+5 type 'cd music/rec/
 '
-xdotool key --delay $delay super+k type 'cd music/rec/
+xdotool key --delay $delay super+j type 'cd music/rec/
 '
-xdotool key --delay $delay super+j type 'ls
+xdotool key --delay $delay super+j type ':cd notes/
 '
-xdotool key --delay $delay super+k super+1
+xdotool key --delay $delay super+k type 'ls
+'
+xdotool key --delay $delay super+j type ':e music.txt
+'
+xdotool key --delay $delay super+j super+1
 
 exit 0
