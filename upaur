@@ -58,7 +58,7 @@ for pkg in $pkglist
 do
 	status="ERROR"
 	pkgname=$(cut -d ";" -f 1 <<< $pkg)
-	if grep -q git <<< $pkgname
+	if grep -q 'git\|svn' <<< $pkgname
 	then
 		status="UNKNOWN"
 	else
