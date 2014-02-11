@@ -3,7 +3,7 @@
 ##
 # backup  -- sync home directory to external hard disk
 #
-# usage   -- backup
+# usage   -- backup [DEVICE]
 #
 # notes   -- requires rsync
 #         -- pertinent partition must be mounted
@@ -17,14 +17,43 @@
 # revised -- 11 July, 2009 by author
 #         -- 19 December, 2011 by author
 #         -- 29 December, 2011 by author
+#         -- 10 February, 2014 by author
 ##
 
-dir="arch-backup"
+dir="$HOSTNAME-backup"
 dsk="/media/Pangolin"
 etc="$HOME/code/config/etc"
 exc="$HOME/.rsync/exclude"
 inc="$HOME/.rsync/include"
 lst="$HOME/bin/.backup"
+
+usage()
+{
+	echo "Usage: $(basename $0) [DEVICE]" >&2
+	echo -e "\t-Uses device specified in \$dsk" >&2
+	echo -e "\t if none specified" >&2
+}
+
+chkargs()
+{
+	if (( $# > 1 ))
+	then
+		echo "Error: Too many arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif (( $# == 1 ))
+	then
+		dsk="/media/$1"
+	fi
+}
+
+prebackup()
+{
+	while read file
+	do
+		cp -R "$file" "$etc"
+	done < "$lst"
+}
 
 rsync()
 {
@@ -32,14 +61,13 @@ rsync()
 }
 
 ##----MAIN----##
-while read file
-do
-	cp -R "$file" "$etc"
-done < "$lst"
+chkargs "$@"
+
+prebackup
 echo "Copied files listed in '$(basename "$lst")'"
 echo "Attempting sync..."
 
-if mountpoint -q "$dsk" || [[ -d "$dsk/$dir" ]]
+if mountpoint -q "$dsk" && [[ -d "$dsk/$dir" ]]
 then
 	rsync $HOME "$dsk/$dir" || { echo "Errors occurred!" >&2; exit 1; }
 else
