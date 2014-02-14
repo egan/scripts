@@ -13,7 +13,7 @@
 ##
 
 # Toggle unclutter.
-pgrep unclutter > /dev/null && pkill unclutter || unclutter -noevents -idle 0 &
+pgrep unclutter > /dev/null && pkill unclutter || unclutter -noevents -root -idle 0 &
 # Toggle touchpad.
 $(synclient -l | grep -q 'Off *= 0') && synclient TouchpadOff=1 || synclient TouchpadOff=0
 
