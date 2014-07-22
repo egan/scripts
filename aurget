@@ -1,0 +1,40 @@
+#!/bin/bash
+
+##
+# aurget  -- download package archives from aur
+#
+# usage   -- aurget PKGS
+#
+# notes   -- netbool.sh
+#
+# written -- 21 July, 2014 by Egan McComb
+#
+# revised --
+##
+
+aurl="https://aur.archlinux.org/packages"
+qurl="https://aur.archlinux.org/rpc.php?type=info&arg="
+destdir="$HOME/src/aur"
+
+wget()
+{
+	command wget -qP "$@"
+}
+
+##----MAIN----##
+if ! netbool.sh
+then
+	echo "Error: Internet connectivity poor" >&2
+	exit 1
+fi
+
+for pkgname in $@
+do
+	wget $destdir $aurl/${pkgname:0:2}/$pkgname/$pkgname.tar.gz
+	if [[ $? != 0 ]]
+	then
+		echo "Error: Unable to download package $pkgname" >&2
+	fi
+done
+
+exit 0
