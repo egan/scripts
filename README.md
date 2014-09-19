@@ -26,6 +26,7 @@ Full descriptions of each can be found inside their respective files.
 	mkoff          -- prepare a website for offline use
 	mkwcfg         -- creates wireless network profile
 	netbool.sh     -- check for proper Internet connectivity
+	passmenu       -- dmenu interface to pass
 	piwlist.py     -- parses output of iwlist scan into table
 	pless          -- pipes output of arbitrary commands into less
 	radar          -- obtain radar reflectivity data from NWS
