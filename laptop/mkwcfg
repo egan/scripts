@@ -1,0 +1,171 @@
+#!/bin/bash
+
+##
+# mkwcfg  -- creates wireless network profile
+#
+# usage   -- mkwcfg ESSID [WEP|WPA|WPA2] [KEY]
+#         -- Will detect network type and prompt
+#            for a key if given only one argument
+#
+# notes   -- requires piwlist.py and userbool.sh
+#
+# todo    -- support WPA2
+#
+# written -- 1 January, 2011 by Greg Dwulet
+#
+# revised -- 6 July, 2011 by Egan McComb
+#         -- 30 December, 2011 by Egan McComb
+##
+
+interface="wlan0"
+netdir="/etc/netctl"
+
+usage()
+{
+	echo "Usage: $(basename $0) ESSID [wep|wpa] [KEY]" >&2
+	echo -e "\t-Will detect network type and prompt" >&2
+	echo -e "\t for a key if given only one argument" >&2
+}
+
+getlist()
+{
+	iwlist wlan0 scan | piwlist.py -n
+}
+
+trim()
+{
+	tr -d "'" <<< "$1" | tr -d '`!#$^&*()=+[]{}\|;"<>/?' | tr " " "_"
+}
+
+magic()
+{
+	essid="$1"
+	ename=$(trim "$essid")
+	file="$netdir/${ename}-wireless"
+	if ! grep -q "$essid[[:print:]]*|Open|$" <<< "$iwscan"
+	then
+		iwscan=$(grep -m 1 "$essid" <<< "$iwscan")
+		security=$(cut -d "|" -f 5 <<< "$iwscan" | cut -d " " -f 1)
+		echo -n "Please enter $security key for '$essid' network: "
+		read key
+	else
+		security="open"
+	fi
+}
+
+manual()
+{
+	if grep -q "$1" <<< "$iwscan"
+	then
+		essid="$1"
+		ename=$(trim "$1")
+		file="$netdir/${ename}-wireless"
+	else
+		echo "Error: Unknown wireless network '$1'" >&2
+		usage
+		exit $ERR_VARGS
+	fi
+	security=$2
+	if [[ -z "$3" ]]
+	then
+		echo -n "Please enter $security key for '$essid' network: "
+		read key
+	else
+		key="$2"
+	fi
+}
+
+chkargs()
+{
+	if (( ! $# ))
+	then
+		echo "Error: Too few arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif (( $# > 3 ))
+	then
+		echo "Error: Too many arguments" >&2
+		usage
+		exit $ERR_NARGS
+	elif (( $# == 1 ))
+	then
+		if grep -q "$1" <<< "$iwscan"
+		then
+			magic "$1"
+		else
+			echo "Error: Unknown wireless network '$1'" >&2
+			usage
+			exit $ERR_VARGS
+		fi
+	else
+		if [[ $2 != "wep" ]] && [[ $2 != "wpa" ]]
+		then
+			echo "Error: Invalid network type '$2'" >&2
+			usage
+			exit $ERR_VARGS
+		else
+			manual "$1" $2 "$3"
+		fi
+	fi
+}
+
+makeprofile()
+{
+	if [[ -e $file ]]
+	then
+		echo "Warning: Profile '$file' exists" >&2
+		echo -n "Continue? [y/N] " >&2
+		read response
+		if ! userbool.sh $response
+		then
+			echo "Aborting..." >&2
+			exit 1
+		else
+			echo "Continuing..." >&2
+		fi
+	fi
+	if [[ $security = "WPA2" ]]
+	then
+		security="wpa-configsection"
+	else
+		security=$(tr "[A-Z]" "[a-z]" <<< $security)
+	fi
+	cp $netdir/examples/wireless-$security $file
+	editprofile
+	echo "Successfully created profile '$file'"
+	[[ -x /usr/bin/xclip ]] && echo -n "$file" | xclip
+}
+
+editprofile()
+{
+	sed -i "1i# Created by mkwcfg on $(date +%T\ on\ %D)." "$file"
+	sed -i "s/MyNetwork/$essid/" "$file"
+	if [[ $security = "wep" ]]
+	then
+		sed -i "s/\\\\\"1234567890abcdef/$key/" "$file"
+	elif [[ $security = "wpa" ]]
+	then
+		sed -i "s/WirelessKey/$key/" "$file"
+	else
+		echo "Additional configuration required" >&2
+	fi
+}
+
+##----MAIN----##
+if [[ $EUID != "0" ]]
+then
+	echo "Error: Must be root"
+	exit 1
+fi
+
+if ip link | grep -q "$interface[[:print:]]*DOWN"
+then
+	echo "Bringing up $interface" >&2
+	ip link set dev wlan0 up || { echo "Error: Could not bring up $interface" >&2; exit 2; }
+fi
+
+iwscan=$(getlist)
+chkargs "$@"
+makeprofile
+
+exit 0
