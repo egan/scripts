@@ -24,10 +24,8 @@ Full descriptions of each can be found inside their respective files.
 	lnmv           -- replace a file with a symbolic link to its new location
 	mklauncher     -- write an application launcher script
 	mkoff          -- prepare a website for offline use
-	mkwcfg         -- creates wireless network profile
 	netbool.sh     -- check for proper Internet connectivity
 	passmenu       -- dmenu interface to pass
-	piwlist.py     -- parses output of iwlist scan into table
 	pless          -- pipes output of arbitrary commands into less
 	radar          -- obtain radar reflectivity data from NWS
 	randf          -- select a random file in cwd
@@ -40,7 +38,6 @@ Full descriptions of each can be found inside their respective files.
 	tex2img        -- quickly get png output from LaTeX code (for math)
 	texwc          -- word count for LaTeX files
 	tikz2png       -- convert TikZ pictures to standalone pngs
-	touchtoggle.sh -- toggle touchpad and unclutter
 	translate      -- translate files or strings using Google API
 	transpose      -- transpose a table
 	turl           -- shorten a url using tinyurl.com
@@ -50,5 +47,4 @@ Full descriptions of each can be found inside their respective files.
 	userbool.sh    -- parse boolean user input
 	volume         -- control alsa mixer levels
 	volumed.sh     -- print changes in volume to stdout
-	wcshot         -- take live webcam shots via mplayer
 	xdostart       -- rudimentary startup routine implemented with xdotool
