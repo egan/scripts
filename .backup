@@ -1,5 +1,0 @@
-/etc/modprobe.d/modprobe.conf
-/etc/hosts
-/etc/netctl/
-/etc/systemd/
-/etc/X11/xorg.conf.d/
