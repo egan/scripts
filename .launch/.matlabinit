@@ -1,0 +1,7 @@
+# xinit CONFIGFILE -- /usr/bin/Xnest -geometry 2560x1440+0+0 :1
+# Xnest argument and DISPLAY env variable must match.
+DISPLAY=:1
+
+xrdb -merge ~/.Xresources
+/usr/local/bin/matlab -desktop &>/dev/null &
+exec openbox &>/dev/null

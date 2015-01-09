@@ -1,0 +1,1 @@
+exec /usr/bin/qutebrowser "$@" &>/dev/null

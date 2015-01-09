@@ -1,0 +1,1 @@
+cd $HOME/src/edsim51di && exec /usr/bin/java -jar edsim51di.jar "$@" &>/dev/null
