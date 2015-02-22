@@ -13,7 +13,7 @@
 # revised  -- 7 April, 2013 by Egan McComb
 ##
 
-delay=100
+delay=15
 
 xdotool key --delay $delay super+1 super+x super+x super+x
 xdotool key --delay $delay super+2 super+x super+x super+v super+x
