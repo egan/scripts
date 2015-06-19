@@ -1,0 +1,1 @@
+exec /usr/bin/java -jar $HOME/src/jpdftweak/jpdftweak.jar "$@" &>/dev/null

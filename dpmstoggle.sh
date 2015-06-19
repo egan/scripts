@@ -17,12 +17,10 @@ lockfile="/tmp/dpms.lock"
 
 if [[ ! -e "$lockfile" ]]
 then
-	xset -dpms
-	xset s off
+	xset s off -dpms
 	touch "$lockfile"
 else
-	xset +dpms
-	xset s on
+	xset s on +dpms
 	rm "$lockfile"
 fi
 
