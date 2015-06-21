@@ -10,30 +10,34 @@
 #
 # written  -- 3 December, 2010 by Egan McComb
 #
-# revised  -- 7 April, 2013 by Egan McComb
+# revised  -- 7 April, 2013 by author
+#             21 June, 2015 by author
 ##
 
-delay=15
+delay=10
 
-xdotool key --delay $delay super+1 super+x super+x super+x
-xdotool key --delay $delay super+2 super+x super+x super+v super+x
-xdotool key --delay $delay super+3 super+x super+x super+x
+# Open.
+xdotool key --delay $delay super+KP_Down super+1 super+x super+x super+x
+xdotool key --delay $delay super+KP_End super+2 super+x super+x super+v super+x
+xdotool key --delay $delay super+KP_Down super+3 super+x super+x super+x
 xdotool key --delay $delay super+5 super+v super+x super+x
+
+# Run.
 xdotool key --delay $delay super+1 super+j type 'nettest
 '
-xdotool key --delay $delay super+k super+2 type 'ls
+xdotool key --delay $delay super+m super+KP_End type 'ls
 '
 xdotool key --delay $delay super+j type ':cd notes/
 '
-xdotool key --delay $delay super+k type 'la
+xdotool key --delay $delay super+m type 'la
 '
 xdotool key --delay $delay super+j type ':e todo.txt
 '
-xdotool key --delay $delay super+k super+3 type 'exec mosh paijanne
+xdotool key --delay $delay super+m super+KP_Down super+3 type 'exec mosh paijanne
 '
 xdotool key --delay $delay super+j type 'exec mail
 '
-xdotool key --delay $delay super+k super+5 type 'cd music/rec/
+xdotool key --delay $delay super+m super+5 type 'cd music/rec/
 '
 xdotool key --delay $delay super+j type 'cd music/rec/
 '
@@ -43,6 +47,6 @@ xdotool key --delay $delay super+k type 'ls
 '
 xdotool key --delay $delay super+j type ':e music.txt
 '
-xdotool key --delay $delay super+j super+1
+xdotool key --delay $delay super+m super+1
 
 exit 0
