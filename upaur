@@ -13,7 +13,7 @@
 #         -- 6 June, 2011 by author
 ##
 
-aurl="https://aur.archlinux.org/packages"
+aurl="https://aur.archlinux.org/cgit/aur.git/snapshot"
 qurl="https://aur.archlinux.org/rpc.php?type=info&arg="
 pkglist=$(pacman -Qm | tr " " ";")
 destdir="$HOME/src/aur"
@@ -42,7 +42,7 @@ output()
 		read response
 		if userbool.sh $response
 		then
-			wget $destdir $aurl/${pkgname:0:2}/$pkgname/$pkgname.tar.gz
+			wget $destdir $aurl/$pkgname.tar.gz
 		fi
 	fi
 }

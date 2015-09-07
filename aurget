@@ -12,7 +12,7 @@
 # revised --
 ##
 
-aurl="https://aur.archlinux.org/packages"
+aurl="https://aur.archlinux.org/cgit/aur.git/snapshot"
 qurl="https://aur.archlinux.org/rpc.php?type=info&arg="
 destdir="$HOME/src/aur"
 
@@ -30,7 +30,7 @@ fi
 
 for pkgname in $@
 do
-	wget $destdir $aurl/${pkgname:0:2}/$pkgname/$pkgname.tar.gz
+	wget $destdir $aurl/$pkgname.tar.gz
 	if [[ $? != 0 ]]
 	then
 		echo "Error: Unable to download package $pkgname" >&2
