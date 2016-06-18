@@ -14,7 +14,7 @@
 #             21 June, 2015 by author
 ##
 
-delay=10
+delay=15
 
 # Open.
 xdotool key --delay $delay super+KP_Down super+1 super+x super+x super+x
