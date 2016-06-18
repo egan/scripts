@@ -21,7 +21,7 @@
 ##
 
 dir="$HOSTNAME-backup"
-dsk="/media/Pangolin"
+dsk="/media/Kharkiv"
 etc="$HOME/code/config/etc"
 exc="$HOME/.rsync/exclude"
 inc="$HOME/.rsync/include"
