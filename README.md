@@ -40,8 +40,6 @@ Full descriptions of each can be found inside their respective files.
 	tex2img          -- quickly get png output from LaTeX code (for math)
 	texwc            -- word count for LaTeX files
 	tikz2png         -- convert TikZ pictures to standalone pngs
-	translate        -- translate files or strings using Google API
-	transpose        -- transpose a table
 	turl             -- shorten a url using tinyurl.com
 	upaur            -- check arch user repository for updates to foreign packages
 	upmirrors        -- update Arch mirror list
