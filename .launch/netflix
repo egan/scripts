@@ -1,0 +1,1 @@
+MOZ_DISABLE_GMP_SANDBOX=1 exec /usr/bin/firefox netflix.com "$@" &>/dev/null
