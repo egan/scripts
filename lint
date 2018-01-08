@@ -1,0 +1,19 @@
+#!/bin/bash
+
+##
+# lint    -- invoke PC-lint
+#
+# notes   -- this script assumes Lint is in your $PATH
+#
+# usage   -- lint ARGS
+#
+# written -- 1 January, 2018 by Egan McComb
+#
+# revised --
+##
+
+CONFIGDIR='/c/Users/eganmccomb/.lint/'
+CONFIG='std.lnt'
+
+Lint-nt +v -i$CONFIGDIR $CONFIG $@ | less
+
