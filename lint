@@ -14,5 +14,5 @@
 
 CONFIGDIR='/c/Users/eganmccomb/.lint/'
 
-Lint-nt +v -i$CONFIGDIR $1 $@ | less
+Lint-nt +v -i$CONFIGDIR $@ | less
 
