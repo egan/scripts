@@ -33,9 +33,7 @@ xdotool key --delay $delay super+m type 'la
 '
 xdotool key --delay $delay super+j type ':e todo.txt
 '
-xdotool key --delay $delay super+m super+KP_Down super+3 type 'exec mosh paijanne
-'
-xdotool key --delay $delay super+j type 'exec mail
+xdotool key --delay $delay super+m super+KP_Down super+3 super+j type 'exec mail
 '
 xdotool key --delay $delay super+m super+5 type 'cd music/rec/
 '
