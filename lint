@@ -12,7 +12,7 @@
 # revised --
 ##
 
-CONFIGDIR='/c/Users/eganmccomb/.lint/'
+CONFIGDIR='/c/Users/$USER/.lint/'
 
 Lint-nt +v -i$CONFIGDIR $@ | less
 
