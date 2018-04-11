@@ -1,0 +1,64 @@
+#!/bin/bash
+
+##
+# getdwg  -- open a drawing
+#
+# usage   -- getdwg NUMBER
+#
+# written -- 22 August, 2016 by Egan McComb
+#
+# revised --
+##
+
+prefix="/r"
+
+usage()
+{
+	echo "Usage $(basename $0) NUMBER" >&2
+}
+
+chkargs()
+{
+	if (( $# != 1 ))
+	then
+		echo "Error: Improper arguments" >&2
+		usage
+		exit $ERR_NARGS
+	else
+		dwg=$1
+	fi
+}
+
+parse()
+{
+	if [[ $dwg == C* ]]
+	then
+		number=${dwg:1}
+	elif [[ $dwg == G* ]]
+	then
+		number=${dwg:2}
+	else
+		number=$dwg
+	fi
+	dir1=${number:0:1}000000
+	dir2=${number:0:3}XXXX
+}
+
+##---MAIN---##
+chkargs "$@"
+parse
+
+list=( $prefix/$dir1/$dir2/$dwg*.{pdf,PDF} )
+
+file=${list:-1}
+echo $file
+if [[ -f $file ]]
+then
+	mupdf "$file" &
+else
+	echo "Error: Invalid drawing number" >&2
+	exit 1
+fi
+
+exit 0
+
