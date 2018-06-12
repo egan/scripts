@@ -1,0 +1,50 @@
+#!/bin/bash
+
+##
+# easyformat -- run astyle in place with standard format options
+#
+# usage      -- easyformat FILES
+#
+# notes      -- requires the format program to specify options
+#               requires dos2unix to ensure correct line endings
+#
+# written    -- 12 June, 2018 by Egan McComb
+#
+# revised    --
+##
+
+usage()
+{
+	echo "Usage: $(basename $0) FILES" >&2
+}
+
+if (( ! $# ))
+then
+	usage
+	exit 1
+fi
+
+for file in "$@"
+do
+	if [[ ! -e "$file" ]]
+	then
+		echo "Error: Invalid file '$file'" >&2
+		continue
+	fi
+
+	tmpfile=$(mktemp)
+	< "$file" format > "$tmpfile"
+
+	if [[ $? != 0 ]]
+	then
+		echo "Error: Processing failed on file '$file'" >&2
+		echo "       See '$tmpfile' for output data" >&2
+		exit 2
+	else
+		mv "$tmpfile" "$file" || { echo "Error: Relocation failed on file '$file', data may be lost!" >&2; exit 2; }
+		dos2unix "$file" > /dev/null 2>&1 || { echo "Error: dos2unix failed on file '$file'!" >&2; exit 2; }
+	fi
+done
+
+exit 0
+
