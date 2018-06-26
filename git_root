@@ -1,0 +1,41 @@
+#!/bin/bash
+
+##
+# git_root -- return the absolute root directory of a repository
+#
+# usage    -- git_root
+#
+# notes    -- attempts to escape submodules
+#
+# written  -- 26 June, 2018 by Egan McComb
+#
+# revised  --
+##
+
+local_root=$(git rev-parse --show-toplevel 2> /dev/null)
+
+# Return the current directory if we are not in a repository.
+if [[ $? != 0 ]]
+then
+	pwd
+	exit 1
+fi
+
+cd "$local_root"
+
+while true
+do
+	# Check if parent directory is also a repository.
+	cd ..
+	candidate_root=$(git rev-parse --show-toplevel 2> /dev/null)
+	if [[ $? != 0 ]]
+	then
+		# It was not, so return the immediate directory.
+		echo $local_root
+		exit 0
+	fi
+	# Recurse up the tree.
+	local_root="$candidate_root"
+	cd "$local_root"
+done
+
