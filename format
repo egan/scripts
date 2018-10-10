@@ -1,3 +1,13 @@
 #!/bin/bash
 
-astyle -t4A1jScHUxgpk3
+astyle --indent=tab=4       \
+	   --style=allman       \
+	   --add-braces         \
+	   --indent-switches    \
+	   --convert-tabs       \
+	   --pad-header         \
+	   --unpad-paren        \
+	   --pad-comma          \
+	   --pad-oper           \
+	   --align-pointer=name
+
