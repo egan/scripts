@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+##
+# gitname -- Create a filename from the the git information.
+#
+# usage   -- gitname
+#
+# notes   -- Requires git_root to escape submodules
+#
+# written -- 1 November, 2018 by Egan McComb
+#
+# revised --
+##
+
+which git &> /dev/null
+if [[ $? != 0 ]]
+then
+	echo "Error: could not find git" >&2
+	exit 3
+fi
+
+# If git_root is available, use that to determine the repository root.
+which git_root &> /dev/null
+if [[ $? != 0 ]]
+then
+	gitRoot="$(git rev-parse --show-toplevel 2> /dev/null)"
+	if [[ $? != 0 ]]
+	then
+		exit 1 # Not a git repository.
+	fi
+	cd "$gitRoot"
+else
+	gitRoot="$(git_root)"
+	cd "$gitRoot"
+
+	if git rev-parse --git-dir > /dev/null 2>&1
+	then
+		:
+	else
+		exit 1 # Not a git repository.
+	fi
+fi
+
+# Develop strings.
+branchName=$(git rev-parse --abbrev-ref HEAD | rev | cut -d '/' -f 1 | rev)
+dateString=$(date +%m-%d)
+shaString=$(git rev-parse --short HEAD)
+
+# Append + for uncommitted changes.
+if status=$(git status --porcelain) && [ -z "$status" ]
+then
+	:
+else
+	shaString=$shaString+
+fi
+
+echo $dateString"_"$branchName"_"$shaString
+
+exit 0
