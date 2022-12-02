@@ -14,7 +14,7 @@
 ##
 
 aurl="https://aur.archlinux.org/cgit/aur.git/snapshot"
-qurl="https://aur.archlinux.org/rpc.php?type=info&arg="
+qurl="https://aur.archlinux.org/rpc/v5/info/"
 pkglist=$(pacman -Qm | tr " " ";")
 destdir="$HOME/src/aur"
 
@@ -30,7 +30,7 @@ wget()
 
 getversion()
 {
-	curl -s "${qurl}$pkgname" | jshon -e results -e Version -u 2> /dev/null #|| echo "UNKNOWN"
+	curl -s "${qurl}$pkgname" | jshon -e results -e 0 -e Version -u 2> /dev/null #|| echo "UNKNOWN"
 }
 
 output()
